@@ -54,7 +54,7 @@ package org.flexlite.domUI.components
 		/**
 		 * 文本显示对象
 		 */		
-		private var textField:UITextField;
+		protected var textField:UITextField;
 		
 		/**
 		 * @inheritDoc
@@ -64,9 +64,19 @@ package org.flexlite.domUI.components
 			super.createChildren();
 			drawBackground();
 			createTextField(-1);
-			this.filters = [new DropShadowFilter(1,45,0,0.7,2,2,1,1)];
+			this.filters = getFilters();
 		}
-		
+
+        protected function getFilters():Array
+        {
+            return [new DropShadowFilter(1,45,0,0.7,2,2,1,1)];
+        }
+
+        protected function updateText(text:String):void
+        {
+            textField.text = text;
+        }
+
 		/**
 		 * @inheritDoc
 		 */
@@ -80,8 +90,7 @@ package org.flexlite.domUI.components
 				textFormat.leftMargin = 0;
 				textFormat.rightMargin = 0;
 				textField.defaultTextFormat = textFormat;
-				
-				textField.text = _toolTipData as String;
+				updateText(_toolTipData as String);
 				toolTipDataChanged = false;
 			}
 		}
@@ -92,9 +101,6 @@ package org.flexlite.domUI.components
 		override protected function measure():void
 		{
 			super.measure();
-			
-			var widthSlop:Number = 10;
-			var heightSlop:Number = 10;
 			
 			textField.wordWrap = false;
 			
@@ -107,7 +113,23 @@ package org.flexlite.domUI.components
 			measuredWidth = textField.width + widthSlop;
 			measuredHeight = textField.height + heightSlop;
 		}
-		
+
+        protected function get widthSlop():Number
+        {
+            return 10;
+        }
+
+        protected function get heightSlop():Number
+        {
+            return 10;
+        }
+
+        protected function updateTextFieldPosition():void
+        {
+            textField.x = 5;
+            textField.y = 5;
+        }
+
 		/**
 		 * @inheritDoc
 		 */
@@ -115,15 +137,21 @@ package org.flexlite.domUI.components
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
-			var widthSlop:Number = 10;
-			var heightSlop:Number = 10;
-			
-			textField.x = 5;
-			textField.y = 5;
+            updateTextFieldPosition();
 			textField.width = unscaledWidth - widthSlop;
 			textField.height = unscaledHeight - heightSlop;
 			drawBackground();
 		}
+
+        protected function setupTextFieldTextFormat():void
+        {
+            var tf:TextFormat = textField.getTextFormat();
+            tf.font = "SimSun";
+            tf.color = 0xFFFFFF;
+            tf.leading = 2;
+            textField.defaultTextFormat = tf;
+        }
+
 		/**
 		 * 创建文字
 		 */		
@@ -138,12 +166,7 @@ package org.flexlite.domUI.components
 				textField.multiline = true;
 				textField.selectable = false;
 				textField.wordWrap = false;
-				var tf:TextFormat = textField.getTextFormat();
-				tf.font = "SimSun";
-				tf.color = 0xFFFFFF;
-				tf.leading = 2;
-				textField.defaultTextFormat = tf;
-				
+                setupTextFieldTextFormat();
 				if (childIndex == -1)
 					addChild(textField);
 				else 

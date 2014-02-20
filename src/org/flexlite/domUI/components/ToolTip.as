@@ -164,7 +164,7 @@ package org.flexlite.domUI.components
 		/**
 		 * 绘制背景
 		 */		
-		private function drawBackground():void
+		protected function drawBackground():void
 		{        
 			graphics.clear();
 			graphics.beginFill(0x000000,0.7);

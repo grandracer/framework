@@ -677,8 +677,8 @@ package org.flexlite.domUI.components.supportClasses
 			renderer.removeEventListener(MouseEvent.ROLL_OUT, item_mouseEventHandler);
 		}
 		
-		private static const TYPE_MAP:Object = {rollOver:"itemRollOver",
-			rollOut:"itemRollOut"};
+		private static const TYPE_MAP:Object = {rollOver: ListEvent.ITEM_ROLL_OVER,
+			rollOut: ListEvent.ITEM_ROLL_OUT, doubleClick: ListEvent.ITEM_DOUBLE_CLICK};
 		
 		/**
 		 * 项呈示器鼠标事件

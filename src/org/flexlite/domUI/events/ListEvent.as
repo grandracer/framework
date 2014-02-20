@@ -26,9 +26,10 @@ package org.flexlite.domUI.events
 		 * 指示用户执行了将鼠标在某个项呈示器上单击的操作。 
 		 */		
 		public static const ITEM_CLICK:String = "itemClick";
-		
-		
-		public function ListEvent(type:String, bubbles:Boolean = false,
+
+        public static const ITEM_DOUBLE_CLICK:String = "itemDoubleClick";
+
+        public function ListEvent(type:String, bubbles:Boolean = false,
 								  cancelable:Boolean = false,
 								  localX:Number = NaN,
 								  localY:Number = NaN,

@@ -678,7 +678,7 @@ package org.flexlite.domUI.components.supportClasses
 		}
 		
 		private static const TYPE_MAP:Object = {rollOver: ListEvent.ITEM_ROLL_OVER,
-			rollOut: ListEvent.ITEM_ROLL_OUT, doubleClick: ListEvent.ITEM_DOUBLE_CLICK};
+			rollOut: ListEvent.ITEM_ROLL_OUT, click: ListEvent.ITEM_CLICK, doubleClick: ListEvent.ITEM_DOUBLE_CLICK};
 		
 		/**
 		 * 项呈示器鼠标事件

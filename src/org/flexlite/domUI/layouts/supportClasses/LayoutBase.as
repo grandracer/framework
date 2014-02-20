@@ -4,7 +4,8 @@ package org.flexlite.domUI.layouts.supportClasses
 	import flash.geom.Rectangle;
 	
 	import org.flexlite.domUI.components.supportClasses.GroupBase;
-	import org.flexlite.domUI.core.NavigationUnit;
+    import org.flexlite.domUI.core.IScrollable;
+    import org.flexlite.domUI.core.NavigationUnit;
 	import org.flexlite.domCore.dx_internal;
 	import org.flexlite.domUI.events.PropertyChangeEvent;
 	import org.flexlite.domUI.utils.OnDemandEventDispatcher;
@@ -17,7 +18,7 @@ package org.flexlite.domUI.layouts.supportClasses
 	 * 容器布局基类
 	 * @author DOM
 	 */
-	public class LayoutBase extends OnDemandEventDispatcher
+	public class LayoutBase extends OnDemandEventDispatcher implements IScrollable
 	{
 		public function LayoutBase()
 		{

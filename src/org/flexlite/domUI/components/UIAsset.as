@@ -336,63 +336,63 @@ package org.flexlite.domUI.components
 		{
 			return super.removeChild(child);
 		}
-		
+        /*
 		private static const errorStr:String = "在此组件中不可用，若此组件为容器类，请使用";
-		[Deprecated] 
-		/**
+		[Deprecated]
+		*//**
 		 * @copy org.flexlite.domUI.components.Group#addChild()
-		 */		
+		 *//*
 		override public function addChild(child:DisplayObject):DisplayObject
 		{
 			throw(new Error("addChild()"+errorStr+"addElement()代替"));
 		}
 		[Deprecated] 
-		/**
+		*//**
 		 * @copy org.flexlite.domUI.components.Group#addChildAt()
-		 */		
+		 *//*
 		override public function addChildAt(child:DisplayObject, index:int):DisplayObject
 		{
 			throw(new Error("addChildAt()"+errorStr+"addElementAt()代替"));
 		}
 		[Deprecated] 
-		/**
+		*//**
 		 * @copy org.flexlite.domUI.components.Group#removeChild()
-		 */		
+		 *//*
 		override public function removeChild(child:DisplayObject):DisplayObject
 		{
 			throw(new Error("removeChild()"+errorStr+"removeElement()代替"));
 		}
 		[Deprecated] 
-		/**
+		*//**
 		 * @copy org.flexlite.domUI.components.Group#removeChildAt()
-		 */		
+		 *//*
 		override public function removeChildAt(index:int):DisplayObject
 		{
 			throw(new Error("removeChildAt()"+errorStr+"removeElementAt()代替"));
 		}
 		[Deprecated] 
-		/**
+		*//**
 		 * @copy org.flexlite.domUI.components.Group#setChildIndex()
-		 */		
+		 *//*
 		override public function setChildIndex(child:DisplayObject, index:int):void
 		{
 			throw(new Error("setChildIndex()"+errorStr+"setElementIndex()代替"));
 		}
 		[Deprecated] 
-		/**
+		*//**
 		 * @copy org.flexlite.domUI.components.Group#swapChildren()
-		 */		
+		 *//*
 		override public function swapChildren(child1:DisplayObject, child2:DisplayObject):void
 		{
 			throw(new Error("swapChildren()"+errorStr+"swapElements()代替"));
 		}
 		[Deprecated] 
-		/**
+		*//**
 		 * @copy org.flexlite.domUI.components.Group#swapChildrenAt()
-		 */		
+		 *//*
 		override public function swapChildrenAt(index1:int, index2:int):void
 		{
 			throw(new Error("swapChildrenAt()"+errorStr+"swapElementsAt()代替"));
-		}
+		}*/
 	}
 }

@@ -489,62 +489,62 @@ package org.flexlite.domUI.components
 				super.addChildAt(child, index != -1 ? index : super.numChildren);
 		}
 		
-		private static const errorStr:String = "在此组件中不可用，若此组件为容器类，请使用";
+		/*private static const errorStr:String = "在此组件中不可用，若此组件为容器类，请使用";
 		[Deprecated] 
-		/**
+		*//**
 		 * addChild()在此组件中不可用，若此组件为容器类，请使用addElement()代替
-		 */		
+		 *//*
 		override public function addChild(child:DisplayObject):DisplayObject
 		{
 			throw(new Error("addChild()"+errorStr+"addElement()代替"));
 		}
 		[Deprecated] 
-		/**
+		*//**
 		 * addChildAt()在此组件中不可用，若此组件为容器类，请使用addElementAt()代替
-		 */		
+		 *//*
 		override public function addChildAt(child:DisplayObject, index:int):DisplayObject
 		{
 			throw(new Error("addChildAt()"+errorStr+"addElementAt()代替"));
 		}
 		[Deprecated] 
-		/**
+		*//**
 		 * removeChild()在此组件中不可用，若此组件为容器类，请使用removeElement()代替
-		 */		
+		 *//*
 		override public function removeChild(child:DisplayObject):DisplayObject
 		{
 			throw(new Error("removeChild()"+errorStr+"removeElement()代替"));
 		}
 		[Deprecated] 
-		/**
+		*//**
 		 * removeChildAt()在此组件中不可用，若此组件为容器类，请使用removeElementAt()代替
-		 */		
+		 *//*
 		override public function removeChildAt(index:int):DisplayObject
 		{
 			throw(new Error("removeChildAt()"+errorStr+"removeElementAt()代替"));
 		}
 		[Deprecated] 
-		/**
+		*//**
 		 * setChildIndex()在此组件中不可用，若此组件为容器类，请使用setElementIndex()代替
-		 */		
+		 *//*
 		override public function setChildIndex(child:DisplayObject, index:int):void
 		{
 			throw(new Error("setChildIndex()"+errorStr+"setElementIndex()代替"));
 		}
 		[Deprecated] 
-		/**
+		*//**
 		 * swapChildren()在此组件中不可用，若此组件为容器类，请使用swapElements()代替
-		 */		
+		 *//*
 		override public function swapChildren(child1:DisplayObject, child2:DisplayObject):void
 		{
 			throw(new Error("swapChildren()"+errorStr+"swapElements()代替"));
 		}
 		[Deprecated] 
-		/**
+		*//**
 		 * swapChildrenAt()在此组件中不可用，若此组件为容器类，请使用swapElementsAt()代替
-		 */		
+		 *//*
 		override public function swapChildrenAt(index1:int, index2:int):void
 		{
 			throw(new Error("swapChildrenAt()"+errorStr+"swapElementsAt()代替"));
-		}
+		}*/
 	}
 }

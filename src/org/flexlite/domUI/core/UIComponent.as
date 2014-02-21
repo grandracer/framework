@@ -546,10 +546,12 @@ package org.flexlite.domUI.core
 		/**
 		 * @inheritDoc
 		 */
-		override public function get width():Number
-		{
-			return escapeNaN(_width);
-		}
+        override public function get width():Number
+        {
+            if( isNaN(_width))
+                return super.width;
+            return escapeNaN(_width);
+        }
 		
 		
 		/**
@@ -587,10 +589,12 @@ package org.flexlite.domUI.core
 		/**
 		 * @inheritDoc
 		 */
-		override public function get height():Number
-		{
-			return escapeNaN(_height);
-		}
+        override public function get height():Number
+        {
+            if( isNaN(_height))
+                return super.height;
+            return escapeNaN(_height);
+        }
 		/**
 		 * 过滤NaN数字
 		 */		

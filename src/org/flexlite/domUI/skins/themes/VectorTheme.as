@@ -39,7 +39,7 @@ package org.flexlite.domUI.skins.themes
 			apply();
 		}
 		
-		private function apply():void
+		protected function apply():void
 		{
 			mapSkin("org.flexlite.domUI.components::Alert",AlertSkin);
 			mapSkin("org.flexlite.domUI.components::Button",ButtonSkin);

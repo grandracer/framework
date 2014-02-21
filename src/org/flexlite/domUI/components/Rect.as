@@ -200,7 +200,7 @@ package org.flexlite.domUI.components
 		 */
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
-			super.updateDisplayList(unscaledWidth,unscaledWidth);
+			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			var g:Graphics = graphics;
 			g.clear();
 			g.beginFill(_fillColor,_fillAlpha);

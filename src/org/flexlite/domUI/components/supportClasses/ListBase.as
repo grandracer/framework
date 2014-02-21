@@ -662,7 +662,9 @@ package org.flexlite.domUI.components.supportClasses
 			
 			renderer.addEventListener(MouseEvent.ROLL_OVER, item_mouseEventHandler);
 			renderer.addEventListener(MouseEvent.ROLL_OUT, item_mouseEventHandler);
-		}
+            renderer.addEventListener(MouseEvent.CLICK, item_mouseEventHandler);
+            renderer.addEventListener(MouseEvent.DOUBLE_CLICK, item_mouseEventHandler);
+        }
 		/**
 		 * 项呈示器被移除
 		 */		
@@ -675,7 +677,9 @@ package org.flexlite.domUI.components.supportClasses
 			
 			renderer.removeEventListener(MouseEvent.ROLL_OVER, item_mouseEventHandler);
 			renderer.removeEventListener(MouseEvent.ROLL_OUT, item_mouseEventHandler);
-		}
+            renderer.removeEventListener(MouseEvent.CLICK, item_mouseEventHandler);
+            renderer.removeEventListener(MouseEvent.DOUBLE_CLICK, item_mouseEventHandler);
+        }
 		
 		private static const TYPE_MAP:Object = {rollOver: ListEvent.ITEM_ROLL_OVER,
 			rollOut: ListEvent.ITEM_ROLL_OUT, click: ListEvent.ITEM_CLICK, doubleClick: ListEvent.ITEM_DOUBLE_CLICK};

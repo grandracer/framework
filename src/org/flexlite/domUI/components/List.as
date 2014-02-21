@@ -465,7 +465,7 @@ package org.flexlite.domUI.components
 		/**
 		 * 鼠标在项呈示器上弹起，抛出ItemClick事件。
 		 */	
-		private function item_mouseUpHandler(event:MouseEvent):void
+		protected function item_mouseUpHandler(event:MouseEvent):void
 		{
 			var itemRenderer:IItemRenderer = event.currentTarget as IItemRenderer;
 			if(itemRenderer!=mouseDownItemRenderer)

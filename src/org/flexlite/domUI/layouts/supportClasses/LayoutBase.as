@@ -20,11 +20,28 @@ package org.flexlite.domUI.layouts.supportClasses
 	 */
 	public class LayoutBase extends OnDemandEventDispatcher implements IScrollable
 	{
-		public function LayoutBase()
-		{
-			super();
-		}
-		
+        protected var _mouseWheelSpeed:uint = 20;
+
+        public function LayoutBase()
+        {
+            super();
+        }
+
+        /**
+         * 鼠标滚轮每次滚动时目标容器的verticalScrollPosition
+         * 或horizontalScrollPosition改变的像素距离。必须大于0， 默认值20。
+         */
+        public function get mouseWheelSpeed():uint
+        {
+            return _mouseWheelSpeed;
+        }
+        public function set mouseWheelSpeed(value:uint):void
+        {
+            if(value==0)
+                value = 1;
+            _mouseWheelSpeed = value;
+        }
+
 		private var _target:GroupBase;
 		/**
 		 * 目标容器
@@ -233,73 +250,76 @@ package org.flexlite.domUI.layouts.supportClasses
 		 */		
 		public function getVerticalScrollPositionDelta(navigationUnit:uint):Number
 		{
-			var g:GroupBase = target;
-			if (!g)
-				return 0;     
-			
-			var scrollRect:Rectangle = getScrollRect();
-			if (!scrollRect)
-				return 0;
-			
-			if ((scrollRect.y == 0) && (scrollRect.height >= g.contentHeight))
-				return 0;  
-			
-			var maxDelta:Number = g.contentHeight - scrollRect.bottom;
-			var minDelta:Number = -scrollRect.top;
-			var getElementBounds:Rectangle;
-			switch(navigationUnit)
-			{
-				case NavigationUnit.UP:
-				case NavigationUnit.PAGE_UP:
-					getElementBounds = getElementBoundsAboveScrollRect(scrollRect);
-					break;
-				
-				case NavigationUnit.DOWN:
-				case NavigationUnit.PAGE_DOWN:
-					getElementBounds = getElementBoundsBelowScrollRect(scrollRect);
-					break;
-				
-				case NavigationUnit.HOME: 
-					return minDelta;
-					
-				case NavigationUnit.END: 
-					return maxDelta;
-					
-				default:
-					return 0;
-			}
-			
-			if (!getElementBounds)
-				return 0;
-			
-			var delta:Number = 0;
-			switch (navigationUnit)
-			{
-				case NavigationUnit.UP:
-					delta = Math.max(getElementBounds.top - scrollRect.top, -scrollRect.height);
-					break;    
-				case NavigationUnit.DOWN:
-					delta = Math.min(getElementBounds.bottom - scrollRect.bottom, scrollRect.height);
-					break;    
-				case NavigationUnit.PAGE_UP:
-				{
-					delta = getElementBounds.bottom - scrollRect.bottom;
-					
-					if (delta >= 0)
-						delta = Math.max(getElementBounds.top - scrollRect.top, -scrollRect.height);  
-				}
-					break;
-				case NavigationUnit.PAGE_DOWN:
-				{
-					delta = getElementBounds.top - scrollRect.top;
-					
-					if (delta <= 0)
-						delta = Math.min(getElementBounds.bottom - scrollRect.bottom, scrollRect.height);
-				}
-					break;
-			}
-			
-			return Math.min(maxDelta, Math.max(minDelta, delta));
+            if (_mouseWheelSpeed == 0 || navigationUnit == NavigationUnit.PAGE_DOWN || navigationUnit == NavigationUnit.PAGE_UP) {
+                var g:GroupBase = target;
+                if (!g)
+                    return 0;
+
+                var scrollRect:Rectangle = getScrollRect();
+                if (!scrollRect)
+                    return 0;
+
+                if ((scrollRect.y == 0) && (scrollRect.height >= g.contentHeight))
+                    return 0;
+
+                var maxDelta:Number = g.contentHeight - scrollRect.bottom;
+                var minDelta:Number = -scrollRect.top;
+                var getElementBounds:Rectangle;
+                switch(navigationUnit)
+                {
+                    case NavigationUnit.UP:
+                    case NavigationUnit.PAGE_UP:
+                        getElementBounds = getElementBoundsAboveScrollRect(scrollRect);
+                        break;
+
+                    case NavigationUnit.DOWN:
+                    case NavigationUnit.PAGE_DOWN:
+                        getElementBounds = getElementBoundsBelowScrollRect(scrollRect);
+                        break;
+
+                    case NavigationUnit.HOME:
+                        return minDelta;
+
+                    case NavigationUnit.END:
+                        return maxDelta;
+
+                    default:
+                        return 0;
+                }
+
+                if (!getElementBounds)
+                    return 0;
+
+                var delta:Number = 0;
+                switch (navigationUnit)
+                {
+                    case NavigationUnit.UP:
+                        delta = Math.max(getElementBounds.top - scrollRect.top, -scrollRect.height);
+                        break;
+                    case NavigationUnit.DOWN:
+                        delta = Math.min(getElementBounds.bottom - scrollRect.bottom, scrollRect.height);
+                        break;
+                    case NavigationUnit.PAGE_UP:
+                    {
+                        delta = getElementBounds.bottom - scrollRect.bottom;
+
+                        if (delta >= 0)
+                            delta = Math.max(getElementBounds.top - scrollRect.top, -scrollRect.height);
+                    }
+                        break;
+                    case NavigationUnit.PAGE_DOWN:
+                    {
+                        delta = getElementBounds.top - scrollRect.top;
+
+                        if (delta <= 0)
+                            delta = Math.min(getElementBounds.bottom - scrollRect.bottom, scrollRect.height);
+                    }
+                        break;
+                }
+
+                return Math.min(maxDelta, Math.max(minDelta, delta));
+            }
+            return navigationUnit == NavigationUnit.UP ?  -_mouseWheelSpeed : _mouseWheelSpeed;
 		}
 		
 		/**

@@ -25,21 +25,6 @@ package org.flexlite.domUI.layouts
 		{
 		}
 		
-		private var _mouseWheelSpeed:uint = 20;
-		/**
-		 * 鼠标滚轮每次滚动时目标容器的verticalScrollPosition
-		 * 或horizontalScrollPosition改变的像素距离。必须大于0， 默认值20。
-		 */
-		public function get mouseWheelSpeed():uint
-		{
-			return _mouseWheelSpeed;
-		}
-		public function set mouseWheelSpeed(value:uint):void
-		{
-			if(value==0)
-				value = 1;
-			_mouseWheelSpeed = value;
-		}
 
 		/**
 		 * @inheritDoc

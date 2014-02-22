@@ -36,13 +36,15 @@ package org.flexlite.domUI.components.supportClasses
 	 */	
 	public class DropDownListBase extends List
 	{
+        private var _closeOnItemClick:Boolean;
 		/**
 		 * 构造函数
 		 */		
-		public function DropDownListBase()
+		public function DropDownListBase(closeOnItemClick:Boolean = true)
 		{
 			super();
-			captureItemRenderer = false;
+            _closeOnItemClick = closeOnItemClick;
+            captureItemRenderer = false;
 			dropDownController = new DropDownController();
 		}
 		
@@ -274,7 +276,7 @@ package org.flexlite.domUI.components.supportClasses
 			dispatchListEvent(event,ListEvent.ITEM_CLICK,itemRenderer);
 			
 			userProposedSelectedIndex = selectedIndex;
-			closeDropDown(true);
+			if (_closeOnItemClick) closeDropDown(true);
 		}
 		/**
 		 * 控制器抛出打开列表事件

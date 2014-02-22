@@ -21,9 +21,9 @@ package org.flexlite.domUI.components
 		/**
 		 * 构造函数
 		 */		
-		public function ComboBox()
+		public function ComboBox(closeOnItemClick:Boolean = true)
 		{
-			super();
+			super(closeOnItemClick);
 			
 			allowCustomSelectedItem = true;
 		}

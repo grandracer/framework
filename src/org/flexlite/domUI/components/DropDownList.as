@@ -18,9 +18,9 @@ package org.flexlite.domUI.components
 		/**
 		 * 构造函数
 		 */		
-		public function DropDownList()
+		public function DropDownList(closeOnItemClick:Boolean = true)
 		{
-			super();
+			super(closeOnItemClick);
 		}
 		
 		/**

@@ -504,7 +504,14 @@ package org.flexlite.domUI.components
             if (disposableSkin != null) {
                 disposableSkin.dispose();
             }
-            onGetSkin(null, null);
+
+            detachSkin(_skinObject);
+            if (_skin && _skin.parent == this) {
+                removeFromDisplayList(_skin);
+            } else {
+                _skin = null;
+            }
+            _skinObject = null;
         }
     }
 }

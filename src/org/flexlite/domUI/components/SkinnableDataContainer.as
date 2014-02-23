@@ -363,12 +363,12 @@ package org.flexlite.domUI.components
 
         override public function dispose():void
         {
-            super.dispose();
-
             if (dataGroup != null) {
                 dataGroup.dispose();
                 dataGroup = null;
             }
+
+            super.dispose();
         }
     }
 }

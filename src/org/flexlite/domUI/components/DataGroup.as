@@ -989,15 +989,15 @@ package org.flexlite.domUI.components
         {
             super.dispose();
 
-            dataProvider = null;
             removeAllRenderers();
             for each (var renderers:Dictionary in recyclerDic) {
-                for each (var renderer:IItemRenderer in renderers) {
+                for (var renderer:IItemRenderer in renderers) {
                     renderer.dispose();
                     delete renderers[renderer];
                 }
                 delete recyclerDic[renderers];
             }
+            dataProvider = null;
             recyclerDic = null;
         }
 

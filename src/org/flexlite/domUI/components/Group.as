@@ -489,18 +489,7 @@ package org.flexlite.domUI.components
 			else
 				super.addChildAt(child, index != -1 ? index : super.numChildren);
 		}
-		
-		/*private static const errorStr:String = "在此组件中不可用，若此组件为容器类，请使用";
-		[Deprecated] 
-		*//**
-		 * addChild()在此组件中不可用，若此组件为容器类，请使用addElement()代替
-		 *//*
-		override public function addChild(child:DisplayObject):DisplayObject
-		{
-			throw(new Error("addChild()"+errorStr+"addElement()代替"));
-		}
-		[Deprecated] 
-		*/
+
         override public function dispose():void
         {
             super.dispose();
@@ -512,6 +501,17 @@ package org.flexlite.domUI.components
             removeAllElements();
         }
 
+		/*private static const errorStr:String = "在此组件中不可用，若此组件为容器类，请使用";
+		[Deprecated] 
+		*//**
+		 * addChild()在此组件中不可用，若此组件为容器类，请使用addElement()代替
+		 *//*
+		override public function addChild(child:DisplayObject):DisplayObject
+		{
+			throw(new Error("addChild()"+errorStr+"addElement()代替"));
+		}
+		[Deprecated] 
+		*/
         /**
 		 * addChildAt()在此组件中不可用，若此组件为容器类，请使用addElementAt()代替
 		 *//*

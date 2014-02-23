@@ -984,8 +984,24 @@ package org.flexlite.domUI.components
 				return 0;
 			return _dataProvider.length;
 		}
-		
-		/*private static const errorStr:String = "在此组件中不可用，若此组件为容器类，请使用";
+
+        override public function dispose():void
+        {
+            super.dispose();
+
+            dataProvider = null;
+            removeAllRenderers();
+            for each (var renderers:Dictionary in recyclerDic) {
+                for each (var renderer:IItemRenderer in renderers) {
+                    renderer.dispose();
+                    delete renderers[renderer];
+                }
+                delete recyclerDic[renderers];
+            }
+            recyclerDic = null;
+        }
+
+        /*private static const errorStr:String = "在此组件中不可用，若此组件为容器类，请使用";
 		[Deprecated] 
 		*//**
 		 * addChild()在此组件中不可用，若此组件为容器类，请使用addElement()代替

@@ -6,7 +6,7 @@ package org.flexlite.domUI.components
 	 * 列表类组件的项呈示器接口
 	 * @author DOM
 	 */
-	public interface IItemRenderer extends ILayoutElement
+	public interface IItemRenderer extends ILayoutElement, IDisposable
 	{
 		/**
 		 * 要呈示或编辑的数据。

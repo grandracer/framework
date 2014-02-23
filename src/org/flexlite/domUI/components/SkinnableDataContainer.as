@@ -359,5 +359,16 @@ package org.flexlite.domUI.components
 			removeFromDisplayList(dataGroup);
 			dataGroup = null;
 		}
-	}
+
+
+        override public function dispose():void
+        {
+            super.dispose();
+
+            if (dataGroup != null) {
+                dataGroup.dispose();
+                dataGroup = null;
+            }
+        }
+    }
 }

@@ -8,7 +8,8 @@ package org.flexlite.domUI.core
 	import flash.geom.Point;
 	
 	import org.flexlite.domCore.dx_internal;
-	import org.flexlite.domUI.events.MoveEvent;
+    import org.flexlite.domUI.components.IDisposable;
+    import org.flexlite.domUI.events.MoveEvent;
 	import org.flexlite.domUI.events.PropertyChangeEvent;
 	import org.flexlite.domUI.events.ResizeEvent;
 	import org.flexlite.domUI.events.UIEvent;
@@ -81,7 +82,7 @@ package org.flexlite.domUI.core
 	 * @author DOM
 	 */
 	public class UIComponent extends Sprite 
-		implements IUIComponent,ILayoutManagerClient,ILayoutElement,
+		implements IUIComponent,IDisposable,ILayoutManagerClient,ILayoutElement,
 		IInvalidating,IVisualElement,IToolTipManagerClient
 	{
 		/**
@@ -1396,6 +1397,10 @@ package org.flexlite.domUI.core
 				DomGlobals.stage.focus = this;
 			}
 		}
-		
-	}
+
+        public function dispose():void
+        {
+            // TODO: may contain some generic UIComponent destruction
+        }
+    }
 }

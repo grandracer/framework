@@ -494,5 +494,17 @@ package org.flexlite.domUI.components
 				layout.updateDisplayList(unscaledWidth,unscaledHeight);
 			}
 		}
-	}
+
+
+        override public function dispose():void
+        {
+            super.dispose();
+
+            var disposableSkin:IDisposable = _skin as IDisposable;
+            if (disposableSkin != null) {
+                disposableSkin.dispose();
+            }
+            onGetSkin(null, null);
+        }
+    }
 }

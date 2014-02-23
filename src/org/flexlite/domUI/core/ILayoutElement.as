@@ -2,11 +2,13 @@ package org.flexlite.domUI.core
 {
 	import flash.events.IEventDispatcher;
 
-	/**
+    import org.flexlite.domUI.components.IDisposable;
+
+    /**
 	 * 可布局元素接口
 	 * @author DOM
 	 */
-	public interface ILayoutElement extends IEventDispatcher
+	public interface ILayoutElement extends IEventDispatcher, IDisposable
 	{
 		/**
 		 * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。默认值为true。

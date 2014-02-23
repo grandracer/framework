@@ -7,7 +7,8 @@ package org.flexlite.domUI.components
 	import org.flexlite.domCore.dx_internal;
 	import org.flexlite.domUI.components.supportClasses.GroupBase;
 	import org.flexlite.domUI.core.IContainer;
-	import org.flexlite.domUI.core.IVisualElement;
+    import org.flexlite.domUI.core.IVisualElement;
+    import org.flexlite.domUI.core.IVisualElement;
 	import org.flexlite.domUI.core.IVisualElementContainer;
 	import org.flexlite.domUI.events.DragEvent;
 	import org.flexlite.domUI.events.ElementExistenceEvent;
@@ -499,7 +500,19 @@ package org.flexlite.domUI.components
 			throw(new Error("addChild()"+errorStr+"addElement()代替"));
 		}
 		[Deprecated] 
-		*//**
+		*/
+        override public function dispose():void
+        {
+            super.dispose();
+
+            for each (var element:IVisualElement in _elementsContent) {
+                element.dispose();
+            }
+
+            removeAllElements();
+        }
+
+        /**
 		 * addChildAt()在此组件中不可用，若此组件为容器类，请使用addElementAt()代替
 		 *//*
 		override public function addChildAt(child:DisplayObject, index:int):DisplayObject

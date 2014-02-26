@@ -2,14 +2,14 @@ package org.flexlite.domUI.layouts.supportClasses
 {
 	import flash.events.Event;
 	import flash.geom.Rectangle;
-	
+
 	import org.flexlite.domUI.components.supportClasses.GroupBase;
     import org.flexlite.domUI.core.IScrollable;
     import org.flexlite.domUI.core.NavigationUnit;
 	import org.flexlite.domCore.dx_internal;
 	import org.flexlite.domUI.events.PropertyChangeEvent;
 	import org.flexlite.domUI.utils.OnDemandEventDispatcher;
-	
+
 	use namespace dx_internal;
 	
 	[DXML(show="false")]
@@ -20,7 +20,7 @@ package org.flexlite.domUI.layouts.supportClasses
 	 */
 	public class LayoutBase extends OnDemandEventDispatcher implements IScrollable
 	{
-        protected var _mouseWheelSpeed:uint = 20;
+        protected var _mouseWheelSpeed:uint = 0;//20;
 
         public function LayoutBase()
         {
@@ -247,7 +247,7 @@ package org.flexlite.domUI.layouts.supportClasses
 		 *  返回滚动 delta，它将使 scrollRect 与跨越 scrollRect 的顶边或在其顶边之上的第一个元素顶对齐。 
 		 *  </li>
 		 *  </ul>
-		 */		
+		 */
 		public function getVerticalScrollPositionDelta(navigationUnit:uint):Number
 		{
             if (_mouseWheelSpeed == 0 || navigationUnit == NavigationUnit.PAGE_DOWN || navigationUnit == NavigationUnit.PAGE_UP) {
@@ -335,46 +335,46 @@ package org.flexlite.domUI.layouts.supportClasses
 			return new Rectangle(hsp, vsp, g.width, g.height);
 		}
 		/**
-		 * 返回跨越 scrollRect 的左边或在其左边左侧的第一个布局元素的界限。 
-		 */		
+		 * 返回跨越 scrollRect 的左边或在其左边左侧的第一个布局元素的界限。
+		 */
 		protected function getElementBoundsLeftOfScrollRect(scrollRect:Rectangle):Rectangle
 		{
-			var bounds:Rectangle = new Rectangle();
-			bounds.left = scrollRect.left - 1;
-			bounds.right = scrollRect.left; 
-			return bounds;
-		} 
+            var bounds:Rectangle = new Rectangle();
+            bounds.left = scrollRect.left - _mouseWheelSpeed;
+            bounds.right = scrollRect.left;
+            return bounds;
+		}
 		/**
-		 * 返回跨越 scrollRect 的右边或在其右边右侧的第一个布局元素的界限。 
-		 */		
+		 * 返回跨越 scrollRect 的右边或在其右边右侧的第一个布局元素的界限。
+		 */
 		protected function getElementBoundsRightOfScrollRect(scrollRect:Rectangle):Rectangle
 		{
-			var bounds:Rectangle = new Rectangle();
-			bounds.left = scrollRect.right;
-			bounds.right = scrollRect.right + 1;
-			return bounds;
-		} 
+            var bounds:Rectangle = new Rectangle();
+            bounds.left = scrollRect.right;
+            bounds.right = scrollRect.right + _mouseWheelSpeed;
+            return bounds;
+		}
 		/**
 		 * 返回跨越 scrollRect 的顶边或在其顶边之上的第一个布局元素的界限。
 		 */
-		protected function getElementBoundsAboveScrollRect(scrollRect:Rectangle):Rectangle
-		{
-			var bounds:Rectangle = new Rectangle();
-			bounds.top = scrollRect.top - 1;
-			bounds.bottom = scrollRect.top;
-			return bounds;
-		} 
+        protected function getElementBoundsAboveScrollRect(scrollRect:Rectangle):Rectangle
+        {
+            var bounds:Rectangle = new Rectangle();
+            bounds.top = scrollRect.top - _mouseWheelSpeed;
+            bounds.bottom = scrollRect.top;
+            return bounds;
+        }
 		/**
-		 * 返回跨越 scrollRect 的底边或在其底边之下的第一个布局元素的界限。 
-		 */		
+		 * 返回跨越 scrollRect 的底边或在其底边之下的第一个布局元素的界限。
+		 */
 		protected function getElementBoundsBelowScrollRect(scrollRect:Rectangle):Rectangle
 		{
-			var bounds:Rectangle = new Rectangle();
-			bounds.top = scrollRect.bottom;
-			bounds.bottom = scrollRect.bottom + 1;
-			return bounds;
+            var bounds:Rectangle = new Rectangle();
+            bounds.top = scrollRect.bottom;
+            bounds.bottom = scrollRect.bottom + _mouseWheelSpeed;
+            return bounds;
 		}
-		
+
 		/**
 		 * 滚动条位置改变
 		 */		

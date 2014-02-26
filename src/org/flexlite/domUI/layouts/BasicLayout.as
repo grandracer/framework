@@ -25,48 +25,6 @@ package org.flexlite.domUI.layouts
 		{
 		}
 		
-
-		/**
-		 * @inheritDoc
-		 */
-		override protected function getElementBoundsLeftOfScrollRect(scrollRect:Rectangle):Rectangle
-		{
-			var bounds:Rectangle = new Rectangle();
-			bounds.left = scrollRect.left - _mouseWheelSpeed;
-			bounds.right = scrollRect.left; 
-			return bounds;
-		} 
-		/**
-		 * @inheritDoc
-		 */
-		override protected function getElementBoundsRightOfScrollRect(scrollRect:Rectangle):Rectangle
-		{
-			var bounds:Rectangle = new Rectangle();
-			bounds.left = scrollRect.right;
-			bounds.right = scrollRect.right + _mouseWheelSpeed;
-			return bounds;
-		} 
-		/**
-		 * @inheritDoc
-		 */
-		override protected function getElementBoundsAboveScrollRect(scrollRect:Rectangle):Rectangle
-		{
-			var bounds:Rectangle = new Rectangle();
-			bounds.top = scrollRect.top - _mouseWheelSpeed;
-			bounds.bottom = scrollRect.top;
-			return bounds;
-		} 
-		/**
-		 * @inheritDoc
-		 */
-		override protected function getElementBoundsBelowScrollRect(scrollRect:Rectangle):Rectangle
-		{
-			var bounds:Rectangle = new Rectangle();
-			bounds.top = scrollRect.bottom;
-			bounds.bottom = scrollRect.bottom + _mouseWheelSpeed;
-			return bounds;
-		}
-		
 		/**
 		 * @inheritDoc
 		 */

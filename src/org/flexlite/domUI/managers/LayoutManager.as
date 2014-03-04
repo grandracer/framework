@@ -261,9 +261,10 @@ package org.flexlite.domUI.managers
 			
 			if (targetLevel == int.MAX_VALUE)
 				targetLevel = target.nestLevel;
-			
-			while (!done)
-			{
+
+            var iterations:uint = 0;
+            while (!done && iterations <= 200) {
+                iterations++;
 				done = true;
 				
 				obj = ILayoutManagerClient(invalidatePropertiesQueue.removeSmallestChild(target));

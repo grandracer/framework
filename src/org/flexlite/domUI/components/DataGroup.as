@@ -999,6 +999,11 @@ package org.flexlite.domUI.components
             }
             dataProvider = null;
             recyclerDic = null;
+            if (cleanTimer != null) {
+                cleanTimer.stop();
+                cleanTimer.removeEventListener(TimerEvent.TIMER,cleanAllFreeRenderer);
+                cleanTimer = null;
+            }
         }
 
         /*private static const errorStr:String = "在此组件中不可用，若此组件为容器类，请使用";

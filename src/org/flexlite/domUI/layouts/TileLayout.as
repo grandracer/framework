@@ -1094,6 +1094,15 @@ package org.flexlite.domUI.layouts
 			return Math.min(target.contentHeight, rowIndex * (_rowHeight + verticalGap) +
 				_rowHeight) + paddingT;
 		}
-	
+
+        override public function dispose():void
+        {
+            super.dispose();
+            _columnAlign = null;
+            _horizontalAlign = null;
+            _orientation = null;
+            _rowAlign = null;
+            _verticalAlign = null;
+        }
 	}
 }

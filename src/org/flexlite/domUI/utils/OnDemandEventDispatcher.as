@@ -3,13 +3,15 @@ package org.flexlite.domUI.utils
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
-	
-	/**
+
+    import org.flexlite.domUI.components.IDisposable;
+
+    /**
 	 * 对于分派事件但期望侦听器不常用的类，OnDemandEventDispatcher 用作其基类。
 	 * 只有在附加了监听器时才会初始化一个EventDispatcher实例，而不是每次都实例化一个。
 	 * @author DOM
 	 */	
-	public class OnDemandEventDispatcher implements IEventDispatcher
+	public class OnDemandEventDispatcher implements IEventDispatcher, IDisposable
 	{
 		private var _dispatcher:EventDispatcher;
 		/**
@@ -64,6 +66,10 @@ package org.flexlite.domUI.utils
 				return _dispatcher.willTrigger(type);
 			return false; 
 		}
-		
+
+        public function dispose():void
+        {
+            _dispatcher = null;
+        }
 	}
 }

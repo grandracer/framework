@@ -448,7 +448,11 @@ package org.flexlite.domUI.layouts.supportClasses
 				target.invalidateSize();
 		}
 		
-		
+		override public function dispose():void
+        {
+            super.dispose();
+            _typicalLayoutRect = null;
+        }
 		
 		/**
 		 * 清理虚拟布局缓存的数据
@@ -482,6 +486,6 @@ package org.flexlite.domUI.layouts.supportClasses
 		 */		
 		public function updateDisplayList(width:Number, height:Number):void
 		{
-		} 
+		}
 	}
 }

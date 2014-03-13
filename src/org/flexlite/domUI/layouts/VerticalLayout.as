@@ -983,6 +983,14 @@ package org.flexlite.domUI.layouts
 			}
 			return rect;
 		}
+
+        override public function dispose():void
+        {
+            super.dispose();
+            _horizontalAlign = null;
+            _verticalAlign = null;
+            elementSizeTable = null;
+        }
 	}
 }
 

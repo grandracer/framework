@@ -366,6 +366,8 @@ package org.flexlite.domUI.components
             if (dataGroup != null) {
                 dataGroup.dispose();
                 dataGroup = null;
+
+                dataGroupProperties.dataProvider = null;
             }
 
             super.dispose();

@@ -4,8 +4,10 @@ package org.flexlite.domUI.collections
 	import flash.events.EventDispatcher;
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
-	
-	import org.flexlite.domUI.events.CollectionEvent;
+
+    import org.flexlite.domUI.components.IDisposable;
+
+    import org.flexlite.domUI.events.CollectionEvent;
 	import org.flexlite.domUI.events.CollectionEventKind;
 	
 	/**
@@ -24,7 +26,7 @@ package org.flexlite.domUI.collections
 	 * 可以直接对其使用for in，for each in或ac[i]标方法遍历数据
 	 * @author DOM
 	 */
-	public class ArrayCollection extends Proxy implements ICollection
+	public class ArrayCollection extends Proxy implements ICollection, IDisposable
 	{
 		/**
 		 * 构造函数
@@ -376,7 +378,14 @@ package org.flexlite.domUI.collections
 		{
 			return null;
 		}
-		
-		
-	}
+
+
+        public function dispose():void
+        {
+            if (_source) {
+                _source.splice(0, _source.length);
+                _source = null;
+            }
+        }
+    }
 }

@@ -480,7 +480,6 @@ package org.flexlite.domUI.components
 			updateRenderer(renderer,index,item);
 			dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_ADD, 
 				false, false, renderer, index, item));
-			
 		}
 		
 		/**

@@ -19,6 +19,8 @@ package org.flexlite.domUI.events
 		 */		
 		public static const RENDERER_REMOVE:String = "rendererRemove";
 
+        public static const RENDERER_DATA_CHANGE:String = "rendererDataChange";
+
 		public function RendererExistenceEvent(type:String, bubbles:Boolean = false,
 											   cancelable:Boolean = false,renderer:IItemRenderer = null, 
 											   index:int = -1, data:Object = null)

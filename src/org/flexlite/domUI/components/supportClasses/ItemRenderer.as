@@ -1,10 +1,13 @@
 package org.flexlite.domUI.components.supportClasses
 {
 
-	
-	import org.flexlite.domUI.components.IItemRenderer;
-	
-	[DXML(show="false")]
+
+    import flash.events.Event;
+
+    import org.flexlite.domUI.components.IItemRenderer;
+    import org.flexlite.domUI.events.RendererExistenceEvent;
+
+    [DXML(show="false")]
 	
 	/**
 	 * 项呈示器基类
@@ -61,7 +64,7 @@ package org.flexlite.domUI.components.supportClasses
 		 */		
 		protected function dataChanged():void
 		{
-			
+			dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_DATA_CHANGE, false, false, this, _itemIndex, _data));
 		}
 		
 		private var _selected:Boolean = false;

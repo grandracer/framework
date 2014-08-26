@@ -8,7 +8,8 @@ package org.flexlite.domUI.components.supportClasses
 	import org.flexlite.domUI.collections.ICollection;
 	import org.flexlite.domUI.components.IItemRenderer;
 	import org.flexlite.domUI.components.SkinnableDataContainer;
-	import org.flexlite.domUI.core.IVisualElement;
+    import org.flexlite.domUI.components.TabBar;
+    import org.flexlite.domUI.core.IVisualElement;
 	import org.flexlite.domUI.events.CollectionEvent;
 	import org.flexlite.domUI.events.CollectionEventKind;
 	import org.flexlite.domUI.events.IndexChangeEvent;
@@ -694,7 +695,8 @@ package org.flexlite.domUI.components.supportClasses
 			if (hasEventListener(type))
 			{
 				var itemRenderer:IItemRenderer = event.currentTarget as IItemRenderer;
-				dispatchListEvent(event,type,itemRenderer);
+                if (!(this is TabBar) || type != ListEvent.ITEM_CLICK && type != ListEvent.ITEM_DOUBLE_CLICK)
+				    dispatchListEvent(event,type,itemRenderer);
 			}
 		}
 		/**

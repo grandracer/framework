@@ -21,7 +21,6 @@ package org.flexlite.domUI.components
 	import org.flexlite.domUI.layouts.VerticalLayout;
 	import org.flexlite.domUI.layouts.supportClasses.LayoutBase;
 
-
 	use namespace dx_internal;
 	
 	
@@ -984,27 +983,30 @@ package org.flexlite.domUI.components
 			return _dataProvider.length;
 		}
 
-		override public function dispose():void
-		{
-			super.dispose();
+        override public function dispose():void
+        {
 			if (cleanTimer != null) {
 				cleanTimer.stop();
-				cleanTimer.removeEventListener(TimerEvent.TIMER, cleanAllFreeRenderer);
+				cleanTimer.removeEventListener(TimerEvent.TIMER,cleanAllFreeRenderer);
 				cleanTimer = null;
 			}
 			dataProvider = null;
-			removeAllRenderers();
-			if (recyclerDic) {
-				for each (var renderers:Dictionary in recyclerDic) {
-					for (var renderer:IItemRenderer in renderers) {
-						renderer.dispose();
-						delete renderers[renderer];
-					}
-					delete recyclerDic[renderers];
-				}
-				recyclerDic = null;
-			}
-		}
+			if (recyclerDic != null)
+			{
+            removeAllRenderers();
+				for each (var renderers:Dictionary in recyclerDic)
+				{
+					for (var renderer:IItemRenderer in renderers)
+					{
+                    renderer.dispose();
+                    delete renderers[renderer];
+                }
+                delete recyclerDic[renderers];
+            }
+            recyclerDic = null;
+            }
+			super.dispose();
+        }
 
         /*private static const errorStr:String = "在此组件中不可用，若此组件为容器类，请使用";
 		[Deprecated] 

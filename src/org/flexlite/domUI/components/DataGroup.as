@@ -719,7 +719,7 @@ package org.flexlite.domUI.components
 				if(dataProviderChanged)
 				{
 					dataProviderChanged = false;
-					verticalScrollPosition = horizontalScrollPosition = 0;
+//					verticalScrollPosition = horizontalScrollPosition = 0;
 				}
 			}
 			

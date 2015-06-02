@@ -118,8 +118,8 @@ package org.flexlite.domUI.components.supportClasses
 			
 			_dropDownController = value;
 			
-			_dropDownController.addEventListener(UIEvent.OPEN, dropDownController_openHandler);
-			_dropDownController.addEventListener(UIEvent.CLOSE, dropDownController_closeHandler);
+			eventBinder.addListener(_dropDownController, UIEvent.OPEN, dropDownController_openHandler);
+			eventBinder.addListener(_dropDownController, UIEvent.CLOSE, dropDownController_closeHandler);
 			
 			if (openButton)
 				_dropDownController.openButton = openButton;
@@ -283,7 +283,7 @@ package org.flexlite.domUI.components.supportClasses
 		 */		
 		dx_internal function dropDownController_openHandler(event:UIEvent):void
 		{
-			addEventListener(UIEvent.UPDATE_COMPLETE, open_updateCompleteHandler);
+			eventBinder.addListener(this, UIEvent.UPDATE_COMPLETE, open_updateCompleteHandler);
 			userProposedSelectedIndex = selectedIndex;
 			invalidateSkinState();  
 		}
@@ -292,7 +292,7 @@ package org.flexlite.domUI.components.supportClasses
 		 */		
 		dx_internal function open_updateCompleteHandler(event:UIEvent):void
 		{   
-			removeEventListener(UIEvent.UPDATE_COMPLETE, open_updateCompleteHandler);
+			eventBinder.removeListener(this, UIEvent.UPDATE_COMPLETE, open_updateCompleteHandler);
 			
 			dispatchEvent(new UIEvent(UIEvent.OPEN));
 		}
@@ -301,7 +301,7 @@ package org.flexlite.domUI.components.supportClasses
 		 */		
 		protected function dropDownController_closeHandler(event:UIEvent):void
 		{
-			addEventListener(UIEvent.UPDATE_COMPLETE, close_updateCompleteHandler);
+			eventBinder.addListener(this, UIEvent.UPDATE_COMPLETE, close_updateCompleteHandler);
 			invalidateSkinState();
 			
 			if (!event.isDefaultPrevented())
@@ -318,7 +318,7 @@ package org.flexlite.domUI.components.supportClasses
 		 */		
 		private function close_updateCompleteHandler(event:UIEvent):void
 		{   
-			removeEventListener(UIEvent.UPDATE_COMPLETE, close_updateCompleteHandler);
+			eventBinder.removeListener(this, UIEvent.UPDATE_COMPLETE, close_updateCompleteHandler);
 			
 			dispatchEvent(new UIEvent(UIEvent.CLOSE));
 		}

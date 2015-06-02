@@ -336,10 +336,10 @@ package org.flexlite.domUI.components
 			if (renderer == null)
 				return;
 			
-			renderer.addEventListener(MouseEvent.MOUSE_DOWN, item_mouseDownHandler);
+			eventBinder.addListener(renderer, MouseEvent.MOUSE_DOWN, item_mouseDownHandler);
 			//由于ItemRenderer.mouseChildren有可能不为false，在鼠标按下时会出现切换素材的情况，
 			//导致target变化而无法抛出原生的click事件,所以此处监听MouseUp来抛出ItemClick事件。
-			renderer.addEventListener(MouseEvent.MOUSE_UP, item_mouseUpHandler);
+			eventBinder.addListener(renderer, MouseEvent.MOUSE_UP, item_mouseUpHandler);
 		}
 		
 		/**
@@ -353,8 +353,8 @@ package org.flexlite.domUI.components
 			if (renderer == null)
 				return;
 			
-			renderer.removeEventListener(MouseEvent.MOUSE_DOWN, item_mouseDownHandler);
-			renderer.removeEventListener(MouseEvent.MOUSE_UP, item_mouseUpHandler);
+			eventBinder.addListener(renderer, MouseEvent.MOUSE_DOWN, item_mouseDownHandler);
+			eventBinder.addListener(renderer, MouseEvent.MOUSE_UP, item_mouseUpHandler);
 		}
 		/**
 		 * 是否捕获ItemRenderer以便在MouseUp时抛出ItemClick事件
@@ -387,8 +387,8 @@ package org.flexlite.domUI.components
 			if(!captureItemRenderer)
 				return;
 			mouseDownItemRenderer = itemRenderer;
-			DomGlobals.stage.addEventListener(MouseEvent.MOUSE_UP,stage_mouseUpHandler,false,0,true);
-			DomGlobals.stage.addEventListener(Event.MOUSE_LEAVE,stage_mouseUpHandler,false,0,true);
+			eventBinder.addListener(DomGlobals.stage, MouseEvent.MOUSE_UP,stage_mouseUpHandler,false,0,true);
+			eventBinder.addListener(DomGlobals.stage, Event.MOUSE_LEAVE,stage_mouseUpHandler,false,0,true);
 		}
 		/**
 		 * 计算当前的选中项列表
@@ -478,8 +478,8 @@ package org.flexlite.domUI.components
 		 */		
 		private function stage_mouseUpHandler(event:Event):void
 		{
-			DomGlobals.stage.removeEventListener(MouseEvent.MOUSE_UP,stage_mouseUpHandler);
-			DomGlobals.stage.removeEventListener(Event.MOUSE_LEAVE,stage_mouseUpHandler);
+			eventBinder.removeListener(DomGlobals.stage, MouseEvent.MOUSE_UP,stage_mouseUpHandler);
+			eventBinder.removeListener(DomGlobals.stage, Event.MOUSE_LEAVE,stage_mouseUpHandler);
 			mouseDownItemRenderer = null;
 		}
 	}

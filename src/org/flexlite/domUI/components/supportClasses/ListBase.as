@@ -1,7 +1,8 @@
 package org.flexlite.domUI.components.supportClasses
 {
-	import flash.display.DisplayObject;
-	import flash.events.Event;
+    import corelib.event.EventBinder;
+
+    import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	
 	import org.flexlite.domCore.dx_internal;
@@ -18,7 +19,7 @@ package org.flexlite.domUI.components.supportClasses
 	import org.flexlite.domUI.events.UIEvent;
 	import org.flexlite.domUI.layouts.supportClasses.LayoutBase;
 
-	use namespace dx_internal;
+    use namespace dx_internal;
 	
 	
 	/**
@@ -73,6 +74,7 @@ package org.flexlite.domUI.components.supportClasses
 		{
 			super();
 			focusEnabled = true;
+            eventBinder = new EventBinder();
 		}
 		
 		/**
@@ -81,6 +83,17 @@ package org.flexlite.domUI.components.supportClasses
 		dx_internal var doingWholesaleChanges:Boolean = false;
 		
 		private var dataProviderChanged:Boolean;
+        protected var eventBinder:EventBinder;
+
+        override public function dispose():void
+        {
+            if (eventBinder != null)
+            {
+                eventBinder.dispose();
+                eventBinder = null;
+            }
+            super.dispose();
+        }
 		
 		/**
 		 * @inheritDoc
@@ -88,15 +101,14 @@ package org.flexlite.domUI.components.supportClasses
 		override public function set dataProvider(value:ICollection):void
 		{
 			if (dataProvider)
-				dataProvider.removeEventListener(CollectionEvent.COLLECTION_CHANGE, 
+				eventBinder.removeListener(dataProvider, CollectionEvent.COLLECTION_CHANGE,
 					dataProvider_collectionChangeHandler);
 			
 			dataProviderChanged = true;
 			doingWholesaleChanges = true;
 			
 			if (value)
-				value.addEventListener(CollectionEvent.COLLECTION_CHANGE, 
-					dataProvider_collectionChangeHandler, false, 0, true);
+                eventBinder.addListener(value, CollectionEvent.COLLECTION_CHANGE, dataProvider_collectionChangeHandler, false, 0, true);
 			
 			super.dataProvider = value;
 			invalidateProperties();
@@ -416,10 +428,8 @@ package org.flexlite.domUI.components.supportClasses
 				if (_useVirtualLayout && dataGroup.layout)
 					dataGroup.layout.useVirtualLayout = true;
 				
-				dataGroup.addEventListener(
-					RendererExistenceEvent.RENDERER_ADD, dataGroup_rendererAddHandler);
-				dataGroup.addEventListener(
-					RendererExistenceEvent.RENDERER_REMOVE, dataGroup_rendererRemoveHandler);
+				eventBinder.addListener(dataGroup, RendererExistenceEvent.RENDERER_ADD, dataGroup_rendererAddHandler);
+				eventBinder.addListener(dataGroup, RendererExistenceEvent.RENDERER_REMOVE, dataGroup_rendererRemoveHandler);
 			}
 		}
 		
@@ -432,9 +442,9 @@ package org.flexlite.domUI.components.supportClasses
 			
 			if (instance == dataGroup)
 			{
-				dataGroup.removeEventListener(
+				eventBinder.removeListener(dataGroup,
 					RendererExistenceEvent.RENDERER_ADD, dataGroup_rendererAddHandler);
-				dataGroup.removeEventListener(
+				eventBinder.removeListener(dataGroup,
 					RendererExistenceEvent.RENDERER_REMOVE, dataGroup_rendererRemoveHandler);
 			}
 		}
@@ -661,10 +671,10 @@ package org.flexlite.domUI.components.supportClasses
 			if (renderer == null)
 				return;
 			
-			renderer.addEventListener(MouseEvent.ROLL_OVER, item_mouseEventHandler);
-			renderer.addEventListener(MouseEvent.ROLL_OUT, item_mouseEventHandler);
-            renderer.addEventListener(MouseEvent.CLICK, item_mouseEventHandler);
-            renderer.addEventListener(MouseEvent.DOUBLE_CLICK, item_mouseEventHandler);
+			eventBinder.addListener(renderer, MouseEvent.ROLL_OVER, item_mouseEventHandler);
+			eventBinder.addListener(renderer, MouseEvent.ROLL_OUT, item_mouseEventHandler);
+            eventBinder.addListener(renderer, MouseEvent.CLICK, item_mouseEventHandler);
+            eventBinder.addListener(renderer, MouseEvent.DOUBLE_CLICK, item_mouseEventHandler);
         }
 		/**
 		 * 项呈示器被移除
@@ -676,10 +686,10 @@ package org.flexlite.domUI.components.supportClasses
 			if (renderer == null)
 				return;
 			
-			renderer.removeEventListener(MouseEvent.ROLL_OVER, item_mouseEventHandler);
-			renderer.removeEventListener(MouseEvent.ROLL_OUT, item_mouseEventHandler);
-            renderer.removeEventListener(MouseEvent.CLICK, item_mouseEventHandler);
-            renderer.removeEventListener(MouseEvent.DOUBLE_CLICK, item_mouseEventHandler);
+			eventBinder.removeListener(renderer, MouseEvent.ROLL_OVER, item_mouseEventHandler);
+			eventBinder.removeListener(renderer, MouseEvent.ROLL_OUT, item_mouseEventHandler);
+            eventBinder.removeListener(renderer, MouseEvent.CLICK, item_mouseEventHandler);
+            eventBinder.removeListener(renderer, MouseEvent.DOUBLE_CLICK, item_mouseEventHandler);
         }
 		
 		private static const TYPE_MAP:Object = {rollOver: ListEvent.ITEM_ROLL_OVER,

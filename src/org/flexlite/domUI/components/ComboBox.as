@@ -361,7 +361,7 @@ package org.flexlite.domUI.components
 		{
 			super.partRemoved(partName, instance);
 			
-			if (instance == textInput)
+			if (eventBinder != null && instance == textInput)
 			{
 				eventBinder.removeListener(textInput, Event.CHANGE,textInput_changeHandler);
 			}

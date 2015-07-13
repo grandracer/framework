@@ -348,7 +348,7 @@ package org.flexlite.domUI.components
 			if (instance == textInput)
 			{
 				updateLabelDisplay();
-				eventBinder.addListener(textInput, Event.CHANGE,textInput_changeHandler);
+				_eventBinder.addListener(textInput, Event.CHANGE,textInput_changeHandler);
 				textInput.maxChars = maxChars;
 				textInput.restrict = restrict;
 			}
@@ -361,9 +361,9 @@ package org.flexlite.domUI.components
 		{
 			super.partRemoved(partName, instance);
 			
-			if (eventBinder != null && instance == textInput)
+			if (_eventBinder != null && instance == textInput)
 			{
-				eventBinder.removeListener(textInput, Event.CHANGE,textInput_changeHandler);
+				_eventBinder.removeListener(textInput, Event.CHANGE,textInput_changeHandler);
 			}
 		}
 		/**
@@ -446,7 +446,7 @@ package org.flexlite.domUI.components
 					if (!isDropDownOpen)
 					{
 						openDropDown();
-						eventBinder.addListener(this, UIEvent.OPEN, editingOpenHandler);
+						_eventBinder.addListener(this, UIEvent.OPEN, editingOpenHandler);
 						return;
 					}   
 				}
@@ -459,7 +459,7 @@ package org.flexlite.domUI.components
 		 */		
 		private function editingOpenHandler(event:UIEvent):void
 		{
-			eventBinder.removeListener(this, UIEvent.OPEN, editingOpenHandler);
+			_eventBinder.removeListener(this, UIEvent.OPEN, editingOpenHandler);
 			processInputField();
 		}
 		

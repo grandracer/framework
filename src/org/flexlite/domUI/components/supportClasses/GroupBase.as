@@ -467,5 +467,15 @@ package org.flexlite.domUI.components.supportClasses
 			if(hasEventListener("scrollRectChange"))
 				dispatchEvent(new Event("scrollRectChange"));
 		}
+
+		override public function dispose():void
+		{
+			if (_layout != null)
+			{
+				_layout.dispose();
+				_layout = null;
+			}
+			super.dispose();
+		}
 	}
 }

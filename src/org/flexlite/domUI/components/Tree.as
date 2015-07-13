@@ -118,7 +118,7 @@ package org.flexlite.domUI.components
 		{
 			super.dataGroup_rendererAddHandler(event);
 			if(event.renderer is ITreeItemRenderer)
-				eventBinder.addListener(event.renderer, TreeEvent.ITEM_OPENING,onItemOpening);
+				_eventBinder.addListener(event.renderer, TreeEvent.ITEM_OPENING,onItemOpening);
 		}
 		/**
 		 * 节点即将打开
@@ -146,7 +146,7 @@ package org.flexlite.domUI.components
 		{
 			super.dataGroup_rendererRemoveHandler(event);
 			if(event.renderer is ITreeItemRenderer)
-				eventBinder.removeListener(event.renderer, TreeEvent.ITEM_OPENING,onItemOpening);
+				_eventBinder.removeListener(event.renderer, TreeEvent.ITEM_OPENING,onItemOpening);
 		}
 		/**
 		 * 图标字段或函数改变标志

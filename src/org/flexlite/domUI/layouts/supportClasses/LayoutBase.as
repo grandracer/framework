@@ -250,7 +250,7 @@ package org.flexlite.domUI.layouts.supportClasses
 		 */
 		public function getVerticalScrollPositionDelta(navigationUnit:uint):Number
 		{
-            if (_mouseWheelSpeed == 0 || navigationUnit == NavigationUnit.PAGE_DOWN || navigationUnit == NavigationUnit.PAGE_UP) {
+            if (_mouseWheelSpeed == 0 || navigationUnit == NavigationUnit.PAGE_DOWN || navigationUnit == NavigationUnit.PAGE_UP || navigationUnit == NavigationUnit.HOME || navigationUnit == NavigationUnit.END) {
                 var g:GroupBase = target;
                 if (!g)
                     return 0;

@@ -1,5 +1,7 @@
 package org.flexlite.domUI.core
 {
+	import corelib.event.EventBinder;
+
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.InteractiveObject;
@@ -85,6 +87,9 @@ package org.flexlite.domUI.core
 		implements IUIComponent,IDisposable,ILayoutManagerClient,ILayoutElement,
 		IInvalidating,IVisualElement,IToolTipManagerClient
 	{
+
+		protected var _eventBinder:EventBinder;
+
 		/**
 		 * 构造函数
 		 */		
@@ -92,6 +97,7 @@ package org.flexlite.domUI.core
 		{
 			super();
 			focusRect = false;
+			_eventBinder = new EventBinder();
 			addEventListener(Event.ADDED_TO_STAGE,onAddedToStage);
 			addEventListener(Event.ADDED_TO_STAGE,checkInvalidateFlag);
 		}
@@ -1401,6 +1407,11 @@ package org.flexlite.domUI.core
         public function dispose():void
         {
             // TODO: may contain some generic UIComponent destruction
+			if (_eventBinder != null)
+			{
+				_eventBinder.dispose();
+				_eventBinder = null;
+			}
         }
     }
 }

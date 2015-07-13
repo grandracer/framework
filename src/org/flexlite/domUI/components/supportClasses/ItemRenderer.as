@@ -32,21 +32,21 @@ package org.flexlite.domUI.components.supportClasses
 		}
 		
 		private var dataChangedFlag:Boolean = false;
-		private var _data:Object;
+		private var _untypedData:Object;
 		/**
 		 * @inheritDoc
 		 */
 		public function get data():Object
 		{
-			return _data;
+			return _untypedData;
 		}
 		/**
 		 * @inheritDoc
 		 */
 		public function set data(value:Object):void
 		{
-			//这里不能加if(_data==value)return;的判断，会导致数据源无法刷新的问题
-			_data = value;
+			_untypedData = value;
+
 			if(initialized||parent)
 			{
 				dataChangedFlag = false;
@@ -64,7 +64,7 @@ package org.flexlite.domUI.components.supportClasses
 		 */		
 		protected function dataChanged():void
 		{
-			dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_DATA_CHANGE, false, false, this, _itemIndex, _data));
+			dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_DATA_CHANGE, false, false, this, _itemIndex, _untypedData));
 		}
 		
 		private var _selected:Boolean = false;
@@ -120,6 +120,5 @@ package org.flexlite.domUI.components.supportClasses
 				return "down";
 			return super.getCurrentSkinState();
 		}
-		
 	}
 }

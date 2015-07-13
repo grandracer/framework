@@ -42,14 +42,14 @@ package org.flexlite.domUI.skins.vector
 			labelDisplay.bottom = 3;
 			addElement(labelDisplay);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
 			super.updateDisplayList(w, h);
-			
+
 			graphics.clear();
 			var textColor:uint;
 			switch (currentState)

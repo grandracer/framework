@@ -993,17 +993,17 @@ package org.flexlite.domUI.components
 			dataProvider = null;
 			if (recyclerDic != null)
 			{
-            removeAllRenderers();
+            	removeAllRenderers();
 				for each (var renderers:Dictionary in recyclerDic)
 				{
 					for (var renderer:IItemRenderer in renderers)
 					{
-                    renderer.dispose();
-                    delete renderers[renderer];
-                }
-                delete recyclerDic[renderers];
-            }
-            recyclerDic = null;
+						renderer.dispose();
+						delete renderers[renderer];
+                	}
+                	delete recyclerDic[renderers];
+            	}
+            	recyclerDic = null;
             }
 			super.dispose();
         }

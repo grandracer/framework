@@ -8,10 +8,10 @@ package org.flexlite.domUI.core
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.geom.Point;
-	
+
 	import org.flexlite.domCore.dx_internal;
-    import org.flexlite.domUI.components.IDisposable;
-    import org.flexlite.domUI.events.MoveEvent;
+	import org.flexlite.domUI.components.IDisposable;
+	import org.flexlite.domUI.events.MoveEvent;
 	import org.flexlite.domUI.events.PropertyChangeEvent;
 	import org.flexlite.domUI.events.ResizeEvent;
 	import org.flexlite.domUI.events.UIEvent;
@@ -19,39 +19,39 @@ package org.flexlite.domUI.core
 	import org.flexlite.domUI.managers.ISystemManager;
 	import org.flexlite.domUI.managers.IToolTipManagerClient;
 	import org.flexlite.domUI.managers.ToolTipManager;
-	
+
 	use namespace dx_internal;
-	
+
 	/**
-	 * 组件尺寸发生改变 
-	 */	
+	 * 组件尺寸发生改变
+	 */
 	[Event(name="resize", type="org.flexlite.domUI.events.ResizeEvent")]
 	/**
-	 * 组件位置发生改变 
-	 */	
+	 * 组件位置发生改变
+	 */
 	[Event(name="move", type="org.flexlite.domUI.events.MoveEvent")]
 	/**
 	 * 组件开始初始化
-	 */	
+	 */
 	[Event(name="initialize", type="org.flexlite.domUI.events.UIEvent")]
-	
+
 	/**
-	 * 组件创建完成 
-	 */	
+	 * 组件创建完成
+	 */
 	[Event(name="creationComplete", type="org.flexlite.domUI.events.UIEvent")]
 	/**
-	 * 组件的一次三个延迟验证渲染阶段全部完成 
-	 */	
+	 * 组件的一次三个延迟验证渲染阶段全部完成
+	 */
 	[Event(name="updateComplete", type="org.flexlite.domUI.events.UIEvent")]
 	/**
 	 * 即将显示ToolTip显示对象
-	 */	
+	 */
 	[Event(name="toolTipShow", type="org.flexlite.domUI.events.ToolTipEvent")]
 	/**
 	 * 即将隐藏ToolTip显示对象
-	 */	
+	 */
 	[Event(name="toolTipHide", type="org.flexlite.domUI.events.ToolTipEvent")]
-	
+
 	/**
 	 * 拖拽开始,此事件由启动拖拽的组件自身抛出。
 	 */
@@ -62,28 +62,28 @@ package org.flexlite.domUI.core
 	[Event(name="dragComplete", type="org.flexlite.domUI.events.DragEvent")]
 	/**
 	 * 在目标区域放下拖拽的数据,此事件由拖拽管理器在经过的目标组件上抛出。
-	 */	
+	 */
 	[Event(name="dragDrop", type="org.flexlite.domUI.events.DragEvent")]
 	/**
 	 * 拖拽进入目标区域，此事件由拖拽管理器在经过的目标组件上抛出。
-	 */	
+	 */
 	[Event(name="dragEnter", type="org.flexlite.domUI.events.DragEvent")]
 	/**
 	 * 拖拽移出目标区域，此事件由拖拽管理器在经过的目标组件上抛出。
-	 */	
+	 */
 	[Event(name="dragExit", type="org.flexlite.domUI.events.DragEvent")]
 	/**
 	 * 拖拽经过目标区域，相当于MouseOver事件，此事件由拖拽管理器在经过的目标组件上抛出。
 	 */
 	[Event(name="dragOver", type="org.flexlite.domUI.events.DragEvent")]
-	
+
 	[DXML(show="false")]
-	
+
 	/**
 	 * 显示对象基类
 	 * @author DOM
 	 */
-	public class UIComponent extends Sprite 
+	public class UIComponent extends Sprite
 		implements IUIComponent,IDisposable,ILayoutManagerClient,ILayoutElement,
 		IInvalidating,IVisualElement,IToolTipManagerClient
 	{
@@ -92,7 +92,7 @@ package org.flexlite.domUI.core
 
 		/**
 		 * 构造函数
-		 */		
+		 */
 		public function UIComponent()
 		{
 			super();
@@ -101,10 +101,10 @@ package org.flexlite.domUI.core
 			addEventListener(Event.ADDED_TO_STAGE,onAddedToStage);
 			addEventListener(Event.ADDED_TO_STAGE,checkInvalidateFlag);
 		}
-		
+
 		/**
 		 * 添加到舞台
-		 */		
+		 */
 		private function onAddedToStage(e:Event):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE,onAddedToStage);
@@ -113,21 +113,21 @@ package org.flexlite.domUI.core
 			if(_nestLevel>0)
 				checkInvalidateFlag();
 		}
-		
+
 		private var _id:String;
 		/**
-		 * 组件 ID。此值将作为对象的实例名称，因此不应包含任何空格或特殊字符。应用程序中的每个组件都应具有唯一的 ID。 
-		 */		
+		 * 组件 ID。此值将作为对象的实例名称，因此不应包含任何空格或特殊字符。应用程序中的每个组件都应具有唯一的 ID。
+		 */
 		public function get id():String
 		{
 			return _id;
 		}
-		
+
 		public function set id(value:String):void
 		{
 			_id = value;
 		}
-		
+
 		private var _toolTip:Object;
 		/**
 		 * @inheritDoc
@@ -142,12 +142,12 @@ package org.flexlite.domUI.core
 				return;
 			var oldValue:Object = _toolTip;
 			_toolTip = value;
-			
+
 			ToolTipManager.registerToolTip(this, oldValue, value);
-			
+
 			dispatchEvent(new Event("toolTipChanged"));
 		}
-		
+
 		private var _toolTipClass:Class;
 		/**
 		 * @inheritDoc
@@ -162,7 +162,7 @@ package org.flexlite.domUI.core
 				return;
 			_toolTipClass = value;
 		}
-		
+
 		private var _toolTipOffset:Point;
 		/**
 		 * @inheritDoc
@@ -171,12 +171,12 @@ package org.flexlite.domUI.core
 		{
 			return _toolTipOffset;
 		}
-		
+
 		public function set toolTipOffset(value:Point):void
 		{
 			_toolTipOffset = value;
 		}
-		
+
 		private var _toolTipPosition:String = "mouse";
 		/**
 		 * @inheritDoc
@@ -203,7 +203,7 @@ package org.flexlite.domUI.core
 		{
 			_isPopUp = value;
 		}
-		
+
 		private var _owner:Object;
 		/**
 		 * @inheritDoc
@@ -219,7 +219,7 @@ package org.flexlite.domUI.core
 		{
 			_owner = value;
 		}
-		
+
 		private var _systemManager:ISystemManager;
 		/**
 		 * @inheritDoc
@@ -265,22 +265,22 @@ package org.flexlite.domUI.core
 					ui.systemManager = value;
 			}
 		}
-		
+
 		private var _updateCompletePendingFlag:Boolean = false;
 		/**
 		 * @inheritDoc
-		 */		
+		 */
 		public function get updateCompletePendingFlag():Boolean
 		{
 			return _updateCompletePendingFlag;
-		}		
+		}
 		public function set updateCompletePendingFlag(value:Boolean):void
 		{
 			_updateCompletePendingFlag = value;
 		}
-		
+
 		private var _initialized:Boolean = false;
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -300,7 +300,7 @@ package org.flexlite.domUI.core
 		}
 		/**
 		 * initialize()方法被调用过的标志。
-		 */		
+		 */
 		private var initializeCalled:Boolean = false;
 		/**
 		 * 初始化组件
@@ -321,42 +321,42 @@ package org.flexlite.domUI.core
 		/**
 		 * 创建子项,子类覆盖此方法以完成组件子项的初始化操作，
 		 * 请务必调用super.createChildren()以完成父类组件的初始化
-		 */		
+		 */
 		protected function createChildren():void
 		{
-			
-		}		
+
+		}
 		/**
 		 * 子项创建完成
-		 */		
+		 */
 		protected function childrenCreated():void
 		{
 			invalidateProperties();
 			invalidateSize();
 			invalidateDisplayList();
 		}
-		
-		
+
+
 		private var _nestLevel:int = 0;
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function get nestLevel():int
 		{
 			return _nestLevel;
 		}
-		
+
 		public function set nestLevel(value:int):void
 		{
 			if(_nestLevel==value)
 				return;
 			_nestLevel = value;
-			
+
 			if(_nestLevel==0)
 				addEventListener(Event.ADDED_TO_STAGE,checkInvalidateFlag);
 			else
 				removeEventListener(Event.ADDED_TO_STAGE,checkInvalidateFlag);
-			
+
 			for(var i:int=numChildren-1;i>=0;i--)
 			{
 				var child:ILayoutManagerClient = getChildAt(i) as ILayoutManagerClient;
@@ -366,7 +366,7 @@ package org.flexlite.domUI.core
 				}
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -377,7 +377,7 @@ package org.flexlite.domUI.core
 			childAdded(child);
 			return child;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -388,10 +388,10 @@ package org.flexlite.domUI.core
 			childAdded(child);
 			return child;
 		}
-		
+
 		/**
 		 * 即将添加一个子项
-		 */		
+		 */
 		dx_internal function addingChild(child:DisplayObject):void
 		{
 			if(child is ILayoutManagerClient)
@@ -404,10 +404,10 @@ package org.flexlite.domUI.core
 					InteractiveObject(child).doubleClickEnabled = true;
 			}
 		}
-		
+
 		/**
 		 * 已经添加一个子项
-		 */		
+		 */
 		dx_internal function childAdded(child:DisplayObject):void
 		{
 			if(child is UIComponent)
@@ -416,7 +416,7 @@ package org.flexlite.domUI.core
 				UIComponent(child).checkInvalidateFlag();
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -426,7 +426,7 @@ package org.flexlite.domUI.core
 			childRemoved(child);
 			return child;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -436,10 +436,10 @@ package org.flexlite.domUI.core
 			childRemoved(child);
 			return child;
 		}
-		
+
 		/**
 		 * 已经移除一个子项
-		 */		
+		 */
 		dx_internal function childRemoved(child:DisplayObject):void
 		{
 			if(child is ILayoutManagerClient)
@@ -451,10 +451,10 @@ package org.flexlite.domUI.core
 				IUIComponent(child).systemManager = null;
 			}
 		}
-		
+
 		/**
 		 * 检查属性失效标记并应用
-		 */		
+		 */
 		private function checkInvalidateFlag(event:Event=null):void
 		{
 			if(!DomGlobals.layoutManager)
@@ -477,7 +477,7 @@ package org.flexlite.domUI.core
 				validateNowFlag = false;
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -485,14 +485,14 @@ package org.flexlite.domUI.core
 		{
 			return super.doubleClickEnabled;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override public function set doubleClickEnabled(value:Boolean):void
 		{
 			super.doubleClickEnabled = value;
-			
+
 			for (var i:int = 0; i < numChildren; i++)
 			{
 				var child:InteractiveObject = getChildAt(i) as InteractiveObject;
@@ -500,7 +500,7 @@ package org.flexlite.domUI.core
 					child.doubleClickEnabled = value;
 			}
 		}
-		
+
 		private var _enabled:Boolean = true;
 		/**
 		 * @inheritDoc
@@ -509,7 +509,7 @@ package org.flexlite.domUI.core
 		{
 			return _enabled;
 		}
-		
+
 		public function set enabled(value:Boolean):void
 		{
 			if(_enabled==value)
@@ -517,12 +517,12 @@ package org.flexlite.domUI.core
 			_enabled = value;
 			dispatchEvent(new Event("enabledChanged"));
 		}
-		
+
 		/**
 		 * 属性提交前组件旧的宽度
-		 */	
+		 */
 		dx_internal var oldWidth:Number;
-			
+
 		private var _explicitWidth:Number = NaN;
 		/**
 		 * @inheritDoc
@@ -531,12 +531,12 @@ package org.flexlite.domUI.core
 		{
 			return _explicitWidth;
 		}
-		
-		
+
+
 		dx_internal var _width:Number;
 		/**
 		 * 组件宽度,默认值为NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
-		 */		
+		 */
 		override public function set width(value:Number):void
 		{
 			if(_width==value&&_explicitWidth==value)
@@ -549,7 +549,7 @@ package org.flexlite.domUI.core
 			if(isNaN(value))
 				invalidateSize();
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -559,27 +559,27 @@ package org.flexlite.domUI.core
                 return super.width;
             return escapeNaN(_width);
         }
-		
-		
+
+
 		/**
 		 * 属性提交前组件旧的高度
 		 */
 		dx_internal var oldHeight:Number;
-		
+
 		private var _explicitHeight:Number = NaN;
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function get explicitHeight():Number
 		{
 			return _explicitHeight;
 		}
-		
-		
+
+
 		dx_internal var _height:Number;
 		/**
 		 * 组件高度,默认值为NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
-		 */		
+		 */
 		override public function set height(value:Number):void
 		{
 			if(_height==value&&_explicitHeight==value)
@@ -592,7 +592,7 @@ package org.flexlite.domUI.core
 			if(isNaN(value))
 				invalidateSize();
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -604,7 +604,7 @@ package org.flexlite.domUI.core
         }
 		/**
 		 * 过滤NaN数字
-		 */		
+		 */
 		private function escapeNaN(number:Number):Number
 		{
 			if(isNaN(number))
@@ -631,7 +631,7 @@ package org.flexlite.domUI.core
 			super.scaleY = value;
 			invalidateParentSizeAndDisplayList();
 		}
-		
+
 		private var _minWidth:Number = 0;
 		/**
 		 * @inheritDoc
@@ -647,7 +647,7 @@ package org.flexlite.domUI.core
 			_minWidth = value;
 			invalidateSize();
 		}
-		
+
 		private var _maxWidth:Number = 10000;
 		/**
 		 * @inheritDoc
@@ -663,7 +663,7 @@ package org.flexlite.domUI.core
 			_maxWidth = value;
 			invalidateSize();
 		}
-		
+
 		private var _minHeight:Number = 0;
 		/**
 		 * @inheritDoc
@@ -679,7 +679,7 @@ package org.flexlite.domUI.core
 			_minHeight = value;
 			invalidateSize();
 		}
-		
+
 		private var _maxHeight:Number = 10000;
 		/**
 		 * @inheritDoc
@@ -695,13 +695,13 @@ package org.flexlite.domUI.core
 			_maxHeight = value;
 			invalidateSize();
 		}
-		
-		
-		
+
+
+
 		private var _measuredWidth:Number = 0;
 		/**
 		 * 组件的默认宽度（以像素为单位）。此值由 measure() 方法设置。
-		 */		
+		 */
 		public function get measuredWidth():Number
 		{
 			return _measuredWidth;
@@ -710,7 +710,7 @@ package org.flexlite.domUI.core
 		{
 			_measuredWidth = value;
 		}
-		
+
 		private var _measuredHeight:Number = 0;
 		/**
 		 * 组件的默认高度（以像素为单位）。此值由 measure() 方法设置。
@@ -745,12 +745,12 @@ package org.flexlite.domUI.core
 				dispatchResizeEvent();
 			}
 		}
-		
+
 		/**
 		 * 属性提交前组件旧的X
 		 */
 		dx_internal var oldX:Number;
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -763,12 +763,12 @@ package org.flexlite.domUI.core
 			if (_includeInLayout&&parent && parent is UIComponent)
 				UIComponent(parent).childXYChanged();
 		}
-		
+
 		/**
 		 * 属性提交前组件旧的Y
 		 */
 		dx_internal var oldY:Number;
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -781,53 +781,53 @@ package org.flexlite.domUI.core
 			if (_includeInLayout&&parent && parent is UIComponent)
 				UIComponent(parent).childXYChanged();
 		}
-		
+
 		dx_internal var invalidatePropertiesFlag:Boolean = false;
 		/**
 		 * @inheritDoc
-		 */		
+		 */
 		public function invalidateProperties():void
 		{
 			if (!invalidatePropertiesFlag)
 			{
 				invalidatePropertiesFlag = true;
-				
+
 				if (parent&&DomGlobals.layoutManager)
 					DomGlobals.layoutManager.invalidateProperties(this);
 			}
 		}
 		/**
 		 * @inheritDoc
-		 */		
+		 */
 		public function validateProperties():void
 		{
 			if (invalidatePropertiesFlag)
 			{
 				commitProperties();
-				
+
 				invalidatePropertiesFlag = false;
 			}
 		}
-		
+
 		dx_internal var invalidateSizeFlag:Boolean = false;
-		
+
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function invalidateSize():void
 		{
 			if (!invalidateSizeFlag)
 			{
 				invalidateSizeFlag = true;
-				
+
 				if (parent&&DomGlobals.layoutManager)
 					DomGlobals.layoutManager.invalidateSize(this);
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function validateSize(recursive:Boolean = false):void
 		{
 			if (recursive)
@@ -852,22 +852,22 @@ package org.flexlite.domUI.core
 		}
 		/**
 		 * 上一次测量的首选宽度
-		 */		
+		 */
 		dx_internal var oldPreferWidth:Number;
 		/**
 		 * 上一次测量的首选高度
-		 */		
+		 */
 		dx_internal var oldPreferHeight:Number;
 		/**
 		 * 测量组件尺寸，返回尺寸是否发生变化
-		 */		
+		 */
 		private function measureSizes():Boolean
 		{
 			var changed:Boolean = false;
-			
+
 			if (!invalidateSizeFlag)
 				return changed;
-			
+
 			if (!canSkipMeasurement())
 			{
 				measure();
@@ -903,26 +903,26 @@ package org.flexlite.domUI.core
 			}
 			return changed;
 		}
-		
+
 		dx_internal var invalidateDisplayListFlag:Boolean = false;
-		
+
 		/**
 		 * @inheritDoc
-		 */		
+		 */
 		public function invalidateDisplayList():void
 		{
 			if (!invalidateDisplayListFlag)
 			{
 				invalidateDisplayListFlag = true;
-				
+
 				if (parent&&DomGlobals.layoutManager)
 					DomGlobals.layoutManager.invalidateDisplayList(this);
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
-		 */		
+		 */
 		public function validateDisplayList():void
 		{
 			if (invalidateDisplayListFlag)
@@ -962,12 +962,12 @@ package org.flexlite.domUI.core
 				invalidateDisplayListFlag = false;
 			}
 		}
-		
+
 		dx_internal var validateNowFlag:Boolean = false;
-		
+
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function validateNow(skipDisplayList:Boolean = false):void
 		{
 			if(!validateNowFlag&&DomGlobals.layoutManager!=null)
@@ -977,7 +977,7 @@ package org.flexlite.domUI.core
 		}
 		/**
 		 * 标记父级容器的尺寸和显示列表为失效
-		 */		
+		 */
 		protected function invalidateParentSizeAndDisplayList():void
 		{
 			if (!parent||!_includeInLayout)
@@ -988,25 +988,25 @@ package org.flexlite.domUI.core
 			p.invalidateSize();
 			p.invalidateDisplayList();
 		}
-		
+
 		/**
 		 * 更新显示列表
-		 */		
+		 */
 		protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 		}
-		
+
 		/**
 		 * 是否可以跳过测量尺寸阶段,返回true则不执行measure()方法
-		 */		
+		 */
 		protected function canSkipMeasurement():Boolean
 		{
 			return !isNaN(_explicitWidth) && !isNaN(_explicitHeight);
 		}
-		
+
 		/**
 		 * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
-		 */		
+		 */
 		protected function commitProperties():void
 		{
 			if(oldWidth != _width||oldHeight != _height)
@@ -1020,7 +1020,7 @@ package org.flexlite.domUI.core
 		}
 		/**
 		 * 测量组件尺寸
-		 */		
+		 */
 		protected function measure():void
 		{
 			_measuredHeight = 0;
@@ -1039,15 +1039,15 @@ package org.flexlite.domUI.core
 			oldX = x;
 			oldY = y;
 		}
-		
+
 		/**
 		 * 子项的xy位置发生改变
-		 */		
+		 */
 		dx_internal function childXYChanged():void
 		{
-			
+
 		}
-		
+
 		/**
 		 *  抛出尺寸改变事件
 		 */
@@ -1061,13 +1061,13 @@ package org.flexlite.domUI.core
 			oldWidth = _width;
 			oldHeight = _height;
 		}
-		
+
 		/**
 		 * 抛出属性值改变事件
 		 * @param prop 改变的属性名
 		 * @param oldValue 属性的原始值
 		 * @param value 属性的新值
-		 */		
+		 */
 		protected function dispatchPropertyChangeEvent(prop:String, oldValue:*,
 													   value:*):void
 		{
@@ -1075,7 +1075,7 @@ package org.flexlite.domUI.core
 				dispatchEvent(PropertyChangeEvent.createUpdateEvent(
 					this, prop, oldValue, value));
 		}
-		
+
 		dx_internal var _includeInLayout:Boolean = true;
 		/**
 		 * @inheritDoc
@@ -1093,9 +1093,9 @@ package org.flexlite.domUI.core
 			_includeInLayout = value;
 		}
 
-		
+
 		private var _left:Number;
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -1110,7 +1110,7 @@ package org.flexlite.domUI.core
 			_left = value;
 			invalidateParentSizeAndDisplayList();
 		}
-		
+
 		private var _right:Number;
 		/**
 		 * @inheritDoc
@@ -1126,7 +1126,7 @@ package org.flexlite.domUI.core
 			_right = value;
 			invalidateParentSizeAndDisplayList();
 		}
-		
+
 		private var _top:Number;
 		/**
 		 * @inheritDoc
@@ -1142,11 +1142,11 @@ package org.flexlite.domUI.core
 			_top = value;
 			invalidateParentSizeAndDisplayList();
 		}
-		
+
 		private var _bottom:Number;
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function get bottom():Number
 		{
 			return _bottom;
@@ -1158,8 +1158,8 @@ package org.flexlite.domUI.core
 			_bottom = value;
 			invalidateParentSizeAndDisplayList();
 		}
-		
-		
+
+
 		private var _horizontalCenter:Number;
 		/**
 		 * @inheritDoc
@@ -1175,7 +1175,7 @@ package org.flexlite.domUI.core
 			_horizontalCenter = value;
 			invalidateParentSizeAndDisplayList();
 		}
-		
+
 		private var _verticalCenter:Number;
 		/**
 		 * @inheritDoc
@@ -1191,8 +1191,8 @@ package org.flexlite.domUI.core
 			_verticalCenter = value;
 			invalidateParentSizeAndDisplayList();
 		}
-		
-		
+
+
 		private var _percentWidth:Number;
 		/**
 		 * @inheritDoc
@@ -1208,10 +1208,10 @@ package org.flexlite.domUI.core
 			_percentWidth = value;
 			invalidateParentSizeAndDisplayList();
 		}
-		
-		
+
+
 		private var _percentHeight:Number;
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -1226,20 +1226,20 @@ package org.flexlite.domUI.core
 			_percentHeight = value;
 			invalidateParentSizeAndDisplayList();
 		}
-		
+
 		/**
 		 * 父级布局管理器设置了组件的宽度标志，尺寸设置优先级：自动布局>显式设置>自动测量
 		 */
 		dx_internal var layoutWidthExplicitlySet:Boolean = false;
-		
+
 		/**
 		 * 父级布局管理器设置了组件的高度标志，尺寸设置优先级：自动布局>显式设置>自动测量
 		 */
 		dx_internal var layoutHeightExplicitlySet:Boolean = false;
-		
+
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function setLayoutBoundsSize(layoutWidth:Number,layoutHeight:Number):void
 		{
 			layoutWidth /= scaleX;
@@ -1262,12 +1262,12 @@ package org.flexlite.domUI.core
 			{
 				layoutHeightExplicitlySet = true;
 			}
-			
+
 			setActualSize(layoutWidth,layoutHeight);
 		}
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function setLayoutBoundsPosition(x:Number,y:Number):void
 		{
 			var changed:Boolean = false;
@@ -1286,10 +1286,10 @@ package org.flexlite.domUI.core
 				dispatchMoveEvent();
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
-		 */		
+		 */
 		public function get preferredWidth():Number
 		{
 			var w:Number = isNaN(_explicitWidth) ? measuredWidth:_explicitWidth;
@@ -1297,7 +1297,7 @@ package org.flexlite.domUI.core
 				return 0;
 			return w*scaleX;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -1308,15 +1308,15 @@ package org.flexlite.domUI.core
 				return 0;
 			return h*scaleY;
 		}
-		
+
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function get preferredX():Number
 		{
 			return super.x;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -1338,10 +1338,10 @@ package org.flexlite.domUI.core
 		{
 			return super.y;
 		}
-		
+
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function get layoutBoundsWidth():Number
 		{
 			var w:Number =  0;
@@ -1362,7 +1362,7 @@ package org.flexlite.domUI.core
 		/**
 		 * 组件的布局高度,常用于父级的updateDisplayList()方法中
 		 * 按照：布局高度>外部显式设置高度>测量高度 的优先级顺序返回高度
-		 */		
+		 */
 		public function get layoutBoundsHeight():Number
 		{
 			var h:Number =  0
@@ -1380,11 +1380,11 @@ package org.flexlite.domUI.core
 			}
 			return escapeNaN(h*scaleY);
 		}
-		
+
 		private var _focusEnabled:Boolean = false;
 		/**
 		 * @inheritDoc
-		 */		
+		 */
 		public function get focusEnabled():Boolean
 		{
 			return _focusEnabled;
@@ -1395,7 +1395,7 @@ package org.flexlite.domUI.core
 		}
 		/**
 		 * @inheritDoc
-		 */		
+		 */
 		public function setFocus():void
 		{
 			if(DomGlobals.stage)
@@ -1406,7 +1406,6 @@ package org.flexlite.domUI.core
 
         public function dispose():void
         {
-            // TODO: may contain some generic UIComponent destruction
 			if (_eventBinder != null)
 			{
 				_eventBinder.dispose();

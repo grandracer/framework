@@ -1,24 +1,24 @@
 package org.flexlite.domUI.collections
 {
+	import corelib.utils.IDisposable;
+
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
 
-    import org.flexlite.domUI.components.IDisposable;
-
-    import org.flexlite.domUI.events.CollectionEvent;
+	import org.flexlite.domUI.events.CollectionEvent;
 	import org.flexlite.domUI.events.CollectionEventKind;
-	
+
 	/**
-	 * 集合数据发生改变 
-	 */	
+	 * 集合数据发生改变
+	 */
 	[Event(name="collectionChange", type="org.flexlite.domUI.events.CollectionEvent")]
-	
+
 	[DXML(show="false")]
-	
+
 	[DefaultProperty(name="source",array="true")]
-	
+
 	/**
 	 * 数组的集合类数据结构包装器
 	 * 通常作为列表组件的数据源，使用这种数据结构包装普通数组，
@@ -31,7 +31,7 @@ package org.flexlite.domUI.collections
 		/**
 		 * 构造函数
 		 * @param source 数据源
-		 */		
+		 */
 		public function ArrayCollection(source:Array = null)
 		{
 			super();
@@ -45,7 +45,7 @@ package org.flexlite.domUI.collections
 				_source = [];
 			}
 		}
-		
+
 		private var _source:Array;
 		/**
 		 * 数据源
@@ -66,22 +66,22 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * 在对数据源进行排序或过滤操作后可以手动调用此方法刷新所有数据,以更新视图。
-		 */		
+		 */
 		public function refresh():void
 		{
 			dispatchCoEvent(CollectionEventKind.REFRESH);
 		}
 		/**
 		 * 是否包含某项数据
-		 */		
+		 */
 		public function contains(item:Object):Boolean
 		{
 			return getItemIndex(item)!=-1;
 		}
-		
+
 		/**
 		 * 检测索引是否超出范围
-		 */		
+		 */
 		private function checkIndex(index:int):void
 		{
 			if(index<0||index>=_source.length)
@@ -89,7 +89,7 @@ package org.flexlite.domUI.collections
 				throw new RangeError("索引:\""+index+"\"超出集合元素索引范围");
 			}
 		}
-		
+
 		//--------------------------------------------------------------------------
 		//
 		// ICollection接口实现方法
@@ -104,7 +104,7 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * 向列表末尾添加指定项目。等效于 addItemAt(item, length)。
-		 */	
+		 */
 		public function addItem(item:Object):void
 		{
 			_source.push(item);
@@ -114,7 +114,7 @@ package org.flexlite.domUI.collections
 		 * 在指定的索引处添加项目。
 		 * 任何大于已添加项目的索引的项目索引都会增加 1。
 		 * @throws RangeError 如果索引小于 0 或大于长度。
-		 */	
+		 */
 		public function addItemAt(item:Object, index:int):void
 		{
 			if(index<0||index>_source.length)
@@ -191,7 +191,7 @@ package org.flexlite.domUI.collections
 		/**
 		 * 用新数据源替换原始数据源，此方法与直接设置source不同，它不会导致目标视图重置滚动位置。
 		 * @param newSource 新的数据源
-		 */		
+		 */
 		public function replaceAll(newSource:Array):void
 		{
 			if(!newSource)
@@ -218,7 +218,7 @@ package org.flexlite.domUI.collections
 		 * 若oldIndex大于newIndex,索引会加1
 		 * @return 被移动的项目
 		 * @throws RangeError 如果索引小于 0 或大于长度。
-		 */	
+		 */
 		public function moveItemAt(oldIndex:int,newIndex:int):Object
 		{
 			checkIndex(oldIndex);
@@ -228,10 +228,10 @@ package org.flexlite.domUI.collections
 			dispatchCoEvent(CollectionEventKind.MOVE,newIndex,oldIndex,[item]);
 			return item;
 		}
-		
+
 		/**
 		 * 抛出事件
-		 */		
+		 */
 		private function dispatchCoEvent(kind:String = null, location:int = -1,
 										 oldLocation:int = -1, items:Array = null,oldItems:Array=null):void
 		{
@@ -239,16 +239,16 @@ package org.flexlite.domUI.collections
 				kind,location,oldLocation,items,oldItems);
 			dispatchEvent(event);
 		}
-		
-		
+
+
 		//--------------------------------------------------------------------------
 		//
 		// 事件接口实现方法
 		//
 		//--------------------------------------------------------------------------
-		
+
 		private var eventDispatcher:EventDispatcher;
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -291,13 +291,13 @@ package org.flexlite.domUI.collections
 		{
 			return eventDispatcher.willTrigger(type);
 		}
-		
+
 		//--------------------------------------------------------------------------
 		//
 		// 覆盖Proxy的方法，以实现对for each 和for in的支持
 		//
 		//--------------------------------------------------------------------------
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -308,12 +308,12 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * 转换属性名为索引
-		 */		
+		 */
 		private function convertToIndex(name:*):int
 		{
 			if (name is QName)
 				name = name.localName;
-			
+
 			var index:int = -1;
 			try
 			{
@@ -326,7 +326,7 @@ package org.flexlite.domUI.collections
 			}
 			return index;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -335,7 +335,7 @@ package org.flexlite.domUI.collections
 			var index:int = convertToIndex(name);
 			replaceItemAt(value, index);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -346,7 +346,7 @@ package org.flexlite.domUI.collections
 				return false;
 			return index >= 0 && index < length;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -354,7 +354,7 @@ package org.flexlite.domUI.collections
 		{
 			return index < length ? index + 1 : 0;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -362,15 +362,15 @@ package org.flexlite.domUI.collections
 		{
 			return (index - 1).toString();
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override flash_proxy function nextValue(index:int):*
 		{
 			return getItemAt(index - 1);
-		}    
-		
+		}
+
 		/**
 		 * @inheritDoc
 		 */

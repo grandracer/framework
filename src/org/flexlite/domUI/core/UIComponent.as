@@ -1,6 +1,7 @@
 package org.flexlite.domUI.core
 {
 	import corelib.event.EventBinder;
+	import corelib.utils.IDisposable;
 
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -10,7 +11,6 @@ package org.flexlite.domUI.core
 	import flash.geom.Point;
 
 	import org.flexlite.domCore.dx_internal;
-	import org.flexlite.domUI.components.IDisposable;
 	import org.flexlite.domUI.events.MoveEvent;
 	import org.flexlite.domUI.events.PropertyChangeEvent;
 	import org.flexlite.domUI.events.ResizeEvent;

@@ -1,9 +1,11 @@
 package org.flexlite.domUI.components
 {
+	import corelib.utils.Dispose;
+
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.filters.ColorMatrixFilter;
-	
+
 	import org.flexlite.domCore.Injector;
 	import org.flexlite.domCore.dx_internal;
 	import org.flexlite.domUI.components.supportClasses.SkinBasicLayout;
@@ -12,23 +14,23 @@ package org.flexlite.domUI.components
 	import org.flexlite.domUI.core.Theme;
 	import org.flexlite.domUI.events.SkinPartEvent;
 	import org.flexlite.domUI.utils.SkinPartUtil;
-	
+
 	use namespace dx_internal;
-	
+
 	/**
-	 * 皮肤部件附加事件 
-	 */	
+	 * 皮肤部件附加事件
+	 */
 	[Event(name="partAdded", type="org.flexlite.domUI.events.SkinPartEvent")]
 	/**
-	 * 皮肤部件卸载事件 
-	 */	
+	 * 皮肤部件卸载事件
+	 */
 	[Event(name="partRemoved", type="org.flexlite.domUI.events.SkinPartEvent")]
-	
+
 	[DXML(show="false")]
-	
+
 	[SkinState("normal")]
 	[SkinState("disabled")]
-	
+
 	/**
 	 * 复杂可设置外观组件的基类，接受ISkin类或任何显示对象作为皮肤。
 	 * 当皮肤为ISkin时，将自动匹配两个实例内同名的公开属性(显示对象)，
@@ -41,13 +43,13 @@ package org.flexlite.domUI.components
 	{
 		/**
 		 * 构造函数
-		 */		
+		 */
 		public function SkinnableComponent()
 		{
 			super();
 			mouseChildren = true;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -74,19 +76,19 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 默认的皮肤解析适配器
-		 */		
+		 */
 		private static var defaultTheme:Theme;
-		
+
 		/**
 		 * 在皮肤注入管理器里标识自身的默认键，可以是类定义，实例，或者是完全限定类名。
 		 * 子类覆盖此方法，用于获取注入的缺省skinName。
-		 */		
+		 */
 		protected function get hostComponentKey():Object
 		{
 			return SkinnableComponent;
 		}
-		
-		private var _skinObject:Object 
+
+		private var _skinObject:Object
 		/**
 		 * 存储皮肤适配器解析skinName得到的原始皮肤对象，包括非显示对象皮肤的实例。
 		 */
@@ -94,7 +96,7 @@ package org.flexlite.domUI.components
 		{
 			return _skinObject;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -106,10 +108,10 @@ package org.flexlite.domUI.components
 			{
 				if(_skin.parent==this)
 				{
-					removeFromDisplayList(_skin); 
+					removeFromDisplayList(_skin);
 				}
 			}
-			
+
 			if(skin is DisplayObject)
 			{
 				_skin = skin as DisplayObject;
@@ -126,10 +128,10 @@ package org.flexlite.domUI.components
 			invalidateSize();
 			invalidateDisplayList();
 		}
-		
+
 		/**
 		 * 附加皮肤
-		 */		
+		 */
 		protected function attachSkin(skin:Object):void
 		{
 			if(skin is ISkin)
@@ -154,7 +156,7 @@ package org.flexlite.domUI.components
 		/**
 		 * 匹配皮肤和主机组件的公共变量，并完成实例的注入。此方法在附加皮肤时会自动执行一次。
 		 * 若皮肤中含有延迟实例化的子部件，在子部件实例化完成时需要从外部再次调用此方法,完成注入。
-		 */	
+		 */
 		public function findSkinParts():void
 		{
 			var curSkin:Object = _skinObject;
@@ -177,29 +179,29 @@ package org.flexlite.domUI.components
 				}
 			}
 		}
-		
+
 		/**
 		 * 由组件自身创建了SkinPart的标志
-		 */		
+		 */
 		private var hasCreatedSkinParts:Boolean = false;
 		/**
 		 * 由组件自身来创建必要的SkinPart，通常是皮肤为空或皮肤不是ISkinPart时调用。
-		 */		
+		 */
 		dx_internal function createSkinParts():void
 		{
 		}
 		/**
 		 * 删除组件自身创建的SkinPart
-		 */		
+		 */
 		dx_internal function removeSkinParts():void
 		{
 		}
-		
+
 		/**
 		 * 卸载皮肤
-		 */		
+		 */
 		protected function detachSkin(skin:Object):void
-		{       
+		{
 			if(hasCreatedSkinParts)
 			{
 				removeSkinParts();
@@ -221,10 +223,10 @@ package org.flexlite.domUI.components
 				(skin as ISkin).hostComponent = null;
 			}
 		}
-		
+
 		/**
 		 * 若皮肤是ISkinPartHost,则调用此方法附加皮肤中的公共部件
-		 */		
+		 */
 		protected function partAdded(partName:String,instance:Object):void
 		{
 			var event:SkinPartEvent = new SkinPartEvent(SkinPartEvent.PART_ADDED);
@@ -234,49 +236,49 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 若皮肤是ISkinPartHost，则调用此方法卸载皮肤之前注入的公共部件
-		 */		
+		 */
 		protected function partRemoved(partName:String,instance:Object):void
-		{       
+		{
 			var event:SkinPartEvent = new SkinPartEvent(SkinPartEvent.PART_REMOVED);
 			event.partName = partName;
 			event.instance = instance;
 			dispatchEvent(event);
 		}
-		
-		
-		
+
+
+
 		//========================皮肤视图状态=====================start=======================
-		
+
 		private var stateIsDirty:Boolean = false;
-		
+
 		/**
 		 * 标记当前需要重新验证皮肤状态
-		 */		
+		 */
 		public function invalidateSkinState():void
 		{
 			if (stateIsDirty)
 				return;
-			
+
 			stateIsDirty = true;
 			invalidateProperties();
 		}
-		
+
 		/**
 		 * 灰度滤镜
-		 */		
+		 */
 		private static var grayFilters:Array = [new ColorMatrixFilter([0.3086, 0.6094, 0.082, 0, 0, 0.3086, 0.6094, 0.082, 0, 0, 0.3086, 0.6094, 0.082, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1])];
 		/**
 		 * 旧的滤镜列表
-		 */		
+		 */
 		private var oldFilters:Array;
 		/**
 		 * 被替换过灰色滤镜的标志
-		 */		
+		 */
 		private var grayFilterIsSet:Boolean = false;
-		
+
 		/**
 		 * 子类覆盖此方法,应用当前的皮肤状态
-		 */		
+		 */
 		protected function validateSkinState():void
 		{
 			var curState:String = getCurrentSkinState();
@@ -308,7 +310,7 @@ package org.flexlite.domUI.components
 				}
 			}
 		}
-		
+
 		private var _autoMouseEnabled:Boolean = true;
 		/**
 		 * 在enabled属性发生改变时是否自动开启或禁用鼠标事件的响应。默认值为true。
@@ -317,7 +319,7 @@ package org.flexlite.domUI.components
 		{
 			return _autoMouseEnabled;
 		}
-		
+
 		public function set autoMouseEnabled(value:Boolean):void
 		{
 			if(_autoMouseEnabled==value)
@@ -334,14 +336,14 @@ package org.flexlite.domUI.components
 				super.mouseEnabled  = explicitMouseEnabled;
 			}
 		}
-		
+
 		/**
-		 * 外部显式设置的mouseChildren属性值 
-		 */		
+		 * 外部显式设置的mouseChildren属性值
+		 */
 		private var explicitMouseChildren:Boolean = true;
 		/**
 		 * @inheritDoc
-		 */		
+		 */
 		override public function set mouseChildren(value:Boolean):void
 		{
 			if(enabled)
@@ -350,18 +352,18 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 外部显式设置的mouseEnabled属性值
-		 */		
+		 */
 		private var explicitMouseEnabled:Boolean = true;
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		override public function set mouseEnabled(value:Boolean):void
 		{
 			if(enabled)
 				super.mouseEnabled = value;
 			explicitMouseEnabled = value;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -377,17 +379,17 @@ package org.flexlite.domUI.components
 			}
 			invalidateSkinState();
 		}
-		
+
 		/**
 		 * 返回组件当前的皮肤状态名称,子类覆盖此方法定义各种状态名
-		 */		
-		protected function getCurrentSkinState():String 
+		 */
+		protected function getCurrentSkinState():String
 		{
 			return enabled?"normal":"disabled"
 		}
-		
+
 		//========================皮肤视图状态===================end========================
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -400,11 +402,11 @@ package org.flexlite.domUI.components
 				validateSkinState();
 			}
 		}
-		
+
 		private var layout:SkinBasicLayout;
 		/**
 		 * 启用或禁用组件自身的布局。通常用在当组件的皮肤不是ISkinPartHost，又需要自己创建子项并布局时。
-		 */		
+		 */
 		dx_internal function set skinLayoutEnabled(value:Boolean):void
 		{
 			var hasLayout:Boolean = (layout != null);
@@ -423,7 +425,7 @@ package org.flexlite.domUI.components
 			invalidateSize();
 			invalidateDisplayList();
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -435,7 +437,7 @@ package org.flexlite.domUI.components
 				invalidateDisplayList();
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -483,7 +485,7 @@ package org.flexlite.domUI.components
 				catch(e:Error){}
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -499,20 +501,18 @@ package org.flexlite.domUI.components
 
         override public function dispose():void
         {
-            super.dispose();
-
-            var disposableSkin:IDisposable = _skin as IDisposable;
-            if (disposableSkin != null) {
-                disposableSkin.dispose();
-            }
-
-            detachSkin(_skinObject);
-            if (_skin && _skin.parent == this) {
-                removeFromDisplayList(_skin);
-            } else {
+			if (_skinObject != null)
+			{
+				detachSkin(_skinObject);
+				_skinObject = null;
+			}
+            if (_skin != null && _skin.parent == this)
+			{
+				Dispose.dispose(_skin);
+				removeFromDisplayList(_skin);
                 _skin = null;
             }
-            _skinObject = null;
+			super.dispose();
         }
     }
 }

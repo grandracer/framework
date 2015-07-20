@@ -1,22 +1,22 @@
 package org.flexlite.domUI.utils
 {
+	import corelib.utils.IDisposable;
+
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 
-    import org.flexlite.domUI.components.IDisposable;
-
-    /**
+	/**
 	 * 对于分派事件但期望侦听器不常用的类，OnDemandEventDispatcher 用作其基类。
 	 * 只有在附加了监听器时才会初始化一个EventDispatcher实例，而不是每次都实例化一个。
 	 * @author DOM
-	 */	
+	 */
 	public class OnDemandEventDispatcher implements IEventDispatcher, IDisposable
 	{
 		private var _dispatcher:EventDispatcher;
 		/**
 		 * 构造函数
-		 */		
+		 */
 		public function OnDemandEventDispatcher()
 		{
 		}
@@ -29,7 +29,7 @@ package org.flexlite.domUI.utils
 			{
 				_dispatcher = new EventDispatcher(this);
 			}
-			_dispatcher.addEventListener(type,listener,useCapture,priority,useWeakReference); 
+			_dispatcher.addEventListener(type,listener,useCapture,priority,useWeakReference);
 		}
 		/**
 		 * @inheritDoc
@@ -38,7 +38,7 @@ package org.flexlite.domUI.utils
 		{
 			if (_dispatcher != null)
 				return _dispatcher.dispatchEvent(event);
-			return true; 
+			return true;
 		}
 		/**
 		 * @inheritDoc
@@ -47,7 +47,7 @@ package org.flexlite.domUI.utils
 		{
 			if (_dispatcher != null)
 				return _dispatcher.hasEventListener(type);
-			return false; 
+			return false;
 		}
 		/**
 		 * @inheritDoc
@@ -55,7 +55,7 @@ package org.flexlite.domUI.utils
 		public function removeEventListener(type:String, listener:Function, useCapture:Boolean = false):void
 		{
 			if (_dispatcher != null)
-				_dispatcher.removeEventListener(type,listener,useCapture);         
+				_dispatcher.removeEventListener(type,listener,useCapture);
 		}
 		/**
 		 * @inheritDoc
@@ -64,7 +64,7 @@ package org.flexlite.domUI.utils
 		{
 			if (_dispatcher != null)
 				return _dispatcher.willTrigger(type);
-			return false; 
+			return false;
 		}
 
         public function dispose():void

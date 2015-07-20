@@ -5,24 +5,24 @@ package org.flexlite.domUI.components
 	import org.flexlite.domUI.core.IVisualElementContainer;
 	import org.flexlite.domUI.events.ElementExistenceEvent;
 	import org.flexlite.domUI.layouts.supportClasses.LayoutBase;
-	
+
 	use namespace dx_internal;
-	
+
 	/**
 	 * 元素添加事件
-	 */	
+	 */
 	[Event(name="elementAdd", type="org.flexlite.domUI.events.ElementExistenceEvent")]
-	
+
 	/**
-	 * 元素移除事件 
-	 */	
+	 * 元素移除事件
+	 */
 	[Event(name="elementRemove", type="org.flexlite.domUI.events.ElementExistenceEvent")]
-	
+
 
 	[DXML(show="true")]
-	
+
 	[DefaultProperty(name="elementsContent",array="true")]
-	
+
 	/**
 	 * 可设置外观的容器的基类
 	 * @author DOM
@@ -33,7 +33,7 @@ package org.flexlite.domUI.components
 		{
 			super();
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -41,22 +41,22 @@ package org.flexlite.domUI.components
 		{
 			return SkinnableContainer;
 		}
-		
+
 		/**
 		 * [SkinPart]实体容器
 		 */
 		public var contentGroup:Group;
-		
+
 		/**
-		 * 实体容器实例化之前缓存子对象的容器 
-		 */		
+		 * 实体容器实例化之前缓存子对象的容器
+		 */
 		dx_internal var _placeHolderGroup:Group;
-		
+
 		/**
 		 * 获取当前的实体容器
-		 */		
+		 */
 		dx_internal function get currentContentGroup():Group
-		{          
+		{
 			if (contentGroup==null)
 			{
 				if (_placeHolderGroup==null)
@@ -73,14 +73,14 @@ package org.flexlite.domUI.components
 			}
 			else
 			{
-				return contentGroup;    
+				return contentGroup;
 			}
 		}
-		
+
 		/**
-		 * 设置容器子对象数组 。数组包含要添加到容器的子项列表，之前的已存在于容器中的子项列表被全部移除后添加列表里的每一项到容器。 
+		 * 设置容器子对象数组 。数组包含要添加到容器的子项列表，之前的已存在于容器中的子项列表被全部移除后添加列表里的每一项到容器。
 		 * 设置该属性时会对您输入的数组进行一次浅复制操作，所以您之后对该数组的操作不会影响到添加到容器的子项列表数量。
-		 */		
+		 */
 		public function set elementsContent(value:Array):void
 		{
 			currentContentGroup.elementsContent = value;
@@ -169,22 +169,22 @@ package org.flexlite.domUI.components
 		{
 			return currentContentGroup.containsElement(element);
 		}
-		
-		
+
+
 		/**
 		 * contentGroup发生改变时传递的参数
-		 */		
+		 */
 		private var contentGroupProperties:Object = {};
-		
+
 		/**
 		 * 此容器的布局对象
 		 */
 		public function get layout():LayoutBase
 		{
 			return contentGroup!=null?
-				contentGroup.layout:contentGroupProperties.layout;	
+				contentGroup.layout:contentGroupProperties.layout;
 		}
-		
+
 		public function set layout(value:LayoutBase):void
 		{
 			if (contentGroup!=null)
@@ -196,7 +196,7 @@ package org.flexlite.domUI.components
 				contentGroupProperties.layout = value;
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -219,14 +219,14 @@ package org.flexlite.domUI.components
 					var sourceContent:Array = _placeHolderGroup.getElementsContent().concat();
 					for (var i:int = _placeHolderGroup.numElements; i > 0; i--)
 					{
-						var element:IVisualElement = _placeHolderGroup.removeElementAt(0);  
+						var element:IVisualElement = _placeHolderGroup.removeElementAt(0);
 						element.ownerChanged(null);
 					}
 					removeFromDisplayList(_placeHolderGroup);
 					contentGroup.elementsContent = sourceContent;
 					for (i = sourceContent.numElements; i > 0; i--)
 					{
-						element = sourceContent[i];  
+						element = sourceContent[i];
 						element.ownerChanged(this);
 					}
 					_placeHolderGroup = null;
@@ -237,7 +237,7 @@ package org.flexlite.domUI.components
 					ElementExistenceEvent.ELEMENT_REMOVE, contentGroup_elementRemovedHandler);
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -255,7 +255,7 @@ package org.flexlite.domUI.components
 				if(contentGroup.numElements>0)
 				{
 					_placeHolderGroup = new Group;
-					
+
 					while(contentGroup.numElements>0)
 					{
 						_placeHolderGroup.addElement(contentGroup.getElementAt(0));
@@ -267,10 +267,10 @@ package org.flexlite.domUI.components
 				}
 			}
 		}
-		
+
 		/**
 		 * 容器添加元素事件
-		 */		
+		 */
 		dx_internal function contentGroup_elementAddedHandler(event:ElementExistenceEvent):void
 		{
 			event.element.ownerChanged(this);
@@ -278,7 +278,7 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 容器移除元素事件
-		 */		
+		 */
 		dx_internal function contentGroup_elementRemovedHandler(event:ElementExistenceEvent):void
 		{
 			event.element.ownerChanged(null);
@@ -296,7 +296,7 @@ package org.flexlite.domUI.components
 			addToDisplayList(contentGroup);
 			partAdded("contentGroup",contentGroup);
 		}
-				
+
 		/**
 		 * @inheritDoc
 		 */
@@ -305,6 +305,21 @@ package org.flexlite.domUI.components
 			partRemoved("contentGroup",contentGroup);
 			removeFromDisplayList(contentGroup);
 			contentGroup = null;
+		}
+
+		override public function dispose():void
+		{
+			if (_placeHolderGroup != null)
+			{
+				_placeHolderGroup.dispose();
+				_placeHolderGroup = null;
+			}
+			if (contentGroup != null)
+			{
+				contentGroup.dispose();
+				contentGroup = null;
+			}
+			super.dispose();
 		}
 	}
 }

@@ -3,43 +3,43 @@ package org.flexlite.domUI.managers
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.UncaughtErrorEvent;
-	
+
 	import org.flexlite.domCore.dx_internal;
 	import org.flexlite.domUI.core.DomGlobals;
 	import org.flexlite.domUI.events.UIEvent;
 	import org.flexlite.domUI.managers.layoutClass.DepthQueue;
-	
+
 	use namespace dx_internal;
-	
+
 	/**
-	 * 所有组件的一次三个延迟验证渲染阶段全部完成 
-	 */	
+	 * 所有组件的一次三个延迟验证渲染阶段全部完成
+	 */
 	[Event(name="updateComplete", type="org.flexlite.domUI.events.UIEvent")]
 	/**
 	 * 布局管理器
 	 * @author DOM
 	 */
-	public class LayoutManager extends EventDispatcher
+	public class LayoutManager extends EventDispatcher implements ILayoutManager
 	{
 		public function LayoutManager()
 		{
 			super();
 		}
-		
+
 		private var targetLevel:int = int.MAX_VALUE;
 		/**
-		 * 需要抛出组件初始化完成事件的对象 
-		 */		
+		 * 需要抛出组件初始化完成事件的对象
+		 */
 		private var updateCompleteQueue:DepthQueue = new DepthQueue();
-		
+
 		private var invalidatePropertiesFlag:Boolean = false;
-		
+
 		private var invalidateClientPropertiesFlag:Boolean = false;
-		
+
 		private var invalidatePropertiesQueue:DepthQueue = new DepthQueue();
 		/**
 		 * 标记组件提交过属性
-		 */		
+		 */
 		public function invalidateProperties(client:ILayoutManagerClient):void
 		{
 			if(!invalidatePropertiesFlag)
@@ -52,10 +52,10 @@ package org.flexlite.domUI.managers
 				invalidateClientPropertiesFlag = true;
 			invalidatePropertiesQueue.insert(client);
 		}
-		
+
 		/**
 		 * 使提交的属性生效
-		 */		
+		 */
 		private function validateProperties():void
 		{
 			var client:ILayoutManagerClient = invalidatePropertiesQueue.shift();
@@ -69,21 +69,21 @@ package org.flexlite.domUI.managers
 						updateCompleteQueue.insert(client);
 						client.updateCompletePendingFlag = true;
 					}
-				}        
+				}
 				client = invalidatePropertiesQueue.shift();
 			}
 			if(invalidatePropertiesQueue.isEmpty())
 				invalidatePropertiesFlag = false;
 		}
-		
+
 		private var invalidateSizeFlag:Boolean = false;
-		
+
 		private var invalidateClientSizeFlag:Boolean = false;
-		
+
 		private var invalidateSizeQueue:DepthQueue = new DepthQueue();
 		/**
 		 * 标记需要重新测量尺寸
-		 */		
+		 */
 		public function invalidateSize(client:ILayoutManagerClient ):void
 		{
 			if(!invalidateSizeFlag)
@@ -98,7 +98,7 @@ package org.flexlite.domUI.managers
 		}
 		/**
 		 * 测量属性
-		 */		
+		 */
 		private function validateSize():void
 		{
 			var client:ILayoutManagerClient = invalidateSizeQueue.pop();
@@ -112,20 +112,20 @@ package org.flexlite.domUI.managers
 						updateCompleteQueue.insert(client);
 						client.updateCompletePendingFlag = true;
 					}
-				}      
+				}
 				client = invalidateSizeQueue.pop();
 			}
 			if(invalidateSizeQueue.isEmpty())
 				invalidateSizeFlag = false;
 		}
-		
-		
+
+
 		private var invalidateDisplayListFlag:Boolean = false;
-		
+
 		private var invalidateDisplayListQueue:DepthQueue = new DepthQueue();
 		/**
 		 * 标记需要重新测量尺寸
-		 */		
+		 */
 		public function invalidateDisplayList(client:ILayoutManagerClient ):void
 		{
 			if(!invalidateDisplayListFlag)
@@ -138,7 +138,7 @@ package org.flexlite.domUI.managers
 		}
 		/**
 		 * 测量属性
-		 */		
+		 */
 		private function validateDisplayList():void
 		{
 			var client:ILayoutManagerClient = invalidateDisplayListQueue.shift();
@@ -152,19 +152,19 @@ package org.flexlite.domUI.managers
 						updateCompleteQueue.insert(client);
 						client.updateCompletePendingFlag = true;
 					}
-				}      
+				}
 				client = invalidateDisplayListQueue.shift();
 			}
 			if(invalidateDisplayListQueue.isEmpty())
 				invalidateDisplayListFlag = false;
 		}
-		/** 
+		/**
 		 * 是否已经添加了事件监听
-		 */		
+		 */
 		private var listenersAttached:Boolean = false;
 		/**
 		 * 添加事件监听
-		 */		
+		 */
 		private function attachListeners():void
 		{
 			DomGlobals.stage.addEventListener(Event.ENTER_FRAME,doPhasedInstantiationCallBack);
@@ -172,10 +172,10 @@ package org.flexlite.domUI.managers
 			DomGlobals.stage.invalidate();
 			listenersAttached = true;
 		}
-		
+
 		/**
 		 * 执行属性应用
-		 */		
+		 */
 		private function doPhasedInstantiationCallBack(event:Event=null):void
 		{
 			DomGlobals.stage.removeEventListener(Event.ENTER_FRAME,doPhasedInstantiationCallBack);
@@ -197,7 +197,7 @@ package org.flexlite.domUI.managers
 				doPhasedInstantiation();
 			}
 		}
-		
+
 		private function doPhasedInstantiation():void
 		{
 			if (invalidatePropertiesFlag)
@@ -208,12 +208,12 @@ package org.flexlite.domUI.managers
 			{
 				validateSize();
 			}
-			
+
 			if (invalidateDisplayListFlag)
 			{
 				validateDisplayList();
 			}
-			
+
 			if (invalidatePropertiesFlag ||
 				invalidateSizeFlag ||
 				invalidateDisplayListFlag)
@@ -233,13 +233,13 @@ package org.flexlite.domUI.managers
 					client.updateCompletePendingFlag = false;
 					client = updateCompleteQueue.pop();
 				}
-				
+
 				dispatchEvent(new UIEvent(UIEvent.UPDATE_COMPLETE));
 			}
 		}
 		/**
 		 * 立即应用所有延迟的属性
-		 */		
+		 */
 		public function validateNow():void
 		{
 			var infiniteLoopGuard:int = 0;
@@ -247,18 +247,18 @@ package org.flexlite.domUI.managers
 				doPhasedInstantiationCallBack();
 		}
 		/**
-		 * 使大于等于指定组件层级的元素立即应用属性 
+		 * 使大于等于指定组件层级的元素立即应用属性
 		 * @param target 要立即应用属性的组件
 		 * @param skipDisplayList 是否跳过更新显示列表阶段
-		 */			
-		public function validateClient(target:ILayoutManagerClient, skipDisplayList:Boolean = false):void
+		 */
+		public function validateClient(target:ILayoutManagerClient, skipDisplayList:Boolean):void
 		{
-			
+
 			var obj:ILayoutManagerClient;
 			var i:int = 0;
 			var done:Boolean = false;
 			var oldTargetLevel:int = targetLevel;
-			
+
 			if (targetLevel == int.MAX_VALUE)
 				targetLevel = target.nestLevel;
 
@@ -266,7 +266,7 @@ package org.flexlite.domUI.managers
             while (!done && iterations <= 200) {
                 iterations++;
 				done = true;
-				
+
 				obj = ILayoutManagerClient(invalidatePropertiesQueue.removeSmallestChild(target));
 				while (obj)
 				{
@@ -281,13 +281,13 @@ package org.flexlite.domUI.managers
 					}
 					obj = ILayoutManagerClient(invalidatePropertiesQueue.removeSmallestChild(target));
 				}
-				
+
 				if (invalidatePropertiesQueue.isEmpty())
 				{
 					invalidatePropertiesFlag = false;
 				}
 				invalidateClientPropertiesFlag = false;
-				
+
 				obj = ILayoutManagerClient(invalidateSizeQueue.removeLargestChild(target));
 				while (obj)
 				{
@@ -310,17 +310,17 @@ package org.flexlite.domUI.managers
 							break;
 						}
 					}
-					
+
 					obj = ILayoutManagerClient(invalidateSizeQueue.removeLargestChild(target));
 				}
-				
+
 				if (invalidateSizeQueue.isEmpty())
 				{
 					invalidateSizeFlag = false;
 				}
 				invalidateClientPropertiesFlag = false;
 				invalidateClientSizeFlag = false;
-				
+
 				if (!skipDisplayList)
 				{
 					obj = ILayoutManagerClient(invalidateDisplayListQueue.removeSmallestChild(target));
@@ -345,7 +345,7 @@ package org.flexlite.domUI.managers
 								break;
 							}
 						}
-						
+
 						if (invalidateClientSizeFlag)
 						{
 							obj = ILayoutManagerClient(invalidateSizeQueue.removeLargestChild(target));
@@ -356,18 +356,18 @@ package org.flexlite.domUI.managers
 								break;
 							}
 						}
-						
+
 						obj = ILayoutManagerClient(invalidateDisplayListQueue.removeSmallestChild(target));
 					}
-					
-					
+
+
 					if (invalidateDisplayListQueue.isEmpty())
 					{
 						invalidateDisplayListFlag = false;
 					}
 				}
 			}
-			
+
 			if (oldTargetLevel == int.MAX_VALUE)
 			{
 				targetLevel = int.MAX_VALUE;
@@ -378,7 +378,7 @@ package org.flexlite.domUI.managers
 					{
 						if (!obj.initialized)
 							obj.initialized = true;
-						
+
 						if (obj.hasEventListener(UIEvent.UPDATE_COMPLETE))
 							obj.dispatchEvent(new UIEvent(UIEvent.UPDATE_COMPLETE));
 						obj.updateCompletePendingFlag = false;

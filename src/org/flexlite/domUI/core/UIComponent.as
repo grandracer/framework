@@ -473,7 +473,7 @@ package org.flexlite.domUI.core
 			}
 			if(validateNowFlag)
 			{
-				DomGlobals.layoutManager.validateClient(this);
+				DomGlobals.layoutManager.validateClient(this, false);
 				validateNowFlag = false;
 			}
 		}
@@ -695,8 +695,6 @@ package org.flexlite.domUI.core
 			_maxHeight = value;
 			invalidateSize();
 		}
-
-
 
 		private var _measuredWidth:Number = 0;
 		/**
@@ -1412,5 +1410,44 @@ package org.flexlite.domUI.core
 				_eventBinder = null;
 			}
         }
+
+		private static function invalidateChildren(container:DisplayObjectContainer):void
+		{
+			for (var i:int = 0, len:int = container.numChildren; i < len; ++i)
+			{
+				var child:DisplayObject = container.getChildAt(i);
+				var childAsComponent:UIComponent = child as UIComponent;
+				var childAsContainer:DisplayObjectContainer = child as DisplayObjectContainer;
+				if (childAsContainer != null) invalidateChildren(childAsContainer);
+				if (childAsComponent != null)
+				{
+					childAsComponent.invalidateProperties();
+					childAsComponent.invalidateSize();
+					childAsComponent.invalidateDisplayList();
+				}
+			}
+ 		}
+
+		private static function validateChildren(container:DisplayObjectContainer):void
+		{
+			for (var i:int = 0, len:int = container.numChildren; i < len; ++i)
+			{
+				var child:DisplayObject = container.getChildAt(i);
+				var childAsComponent:UIComponent = child as UIComponent;
+				var childAsContainer:DisplayObjectContainer = child as DisplayObjectContainer;
+				if (childAsComponent != null) childAsComponent.validateNow();
+				if (childAsContainer != null) validateChildren(childAsContainer);
+			}
+		}
+
+		public function revalidateTree():void
+		{
+			invalidateChildren(this);
+			invalidateProperties();
+			invalidateSize();
+			invalidateDisplayList();
+			validateNow();
+			validateChildren(this);
+		}
     }
 }

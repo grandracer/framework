@@ -100,7 +100,7 @@ package org.flexlite.domUI.collections
 		 */
 		public function get length():int
 		{
-			return _source.length;
+			return _source != null ? _source.length : 0;
 		}
 		/**
 		 * 向列表末尾添加指定项目。等效于 addItemAt(item, length)。

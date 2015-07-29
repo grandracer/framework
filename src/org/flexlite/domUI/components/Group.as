@@ -495,7 +495,6 @@ package org.flexlite.domUI.components
 			if (_elementsContent != null)
 			{
 				for each (var element:IVisualElement in _elementsContent) element.dispose();
-				Dispose.disposeDisplayObjectContainer(this);
 				removeAllElements();
 				_elementsContent = null;
 			}

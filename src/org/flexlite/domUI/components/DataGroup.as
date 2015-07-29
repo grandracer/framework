@@ -1,12 +1,14 @@
 package org.flexlite.domUI.components
 {
+	import corelib.utils.Dispose;
+
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
-	
+
 	import org.flexlite.domCore.dx_internal;
 	import org.flexlite.domUI.collections.ICollection;
 	import org.flexlite.domUI.components.supportClasses.GroupBase;
@@ -22,21 +24,21 @@ package org.flexlite.domUI.components
 	import org.flexlite.domUI.layouts.supportClasses.LayoutBase;
 
 	use namespace dx_internal;
-	
-	
+
+
 	[DXML(show="true")]
-	
+
 	[DefaultProperty(name="dataProvider",array="false")]
-	
+
 	/**
-	 * 添加了项呈示器 
-	 */	
+	 * 添加了项呈示器
+	 */
 	[Event(name="rendererAdd", type="org.flexlite.domUI.events.RendererExistenceEvent")]
 	/**
-	 * 移除了项呈示器 
-	 */	
+	 * 移除了项呈示器
+	 */
 	[Event(name="rendererRemove", type="org.flexlite.domUI.events.RendererExistenceEvent")]
-	
+
 	/**
 	 * 数据项目的容器基类
 	 * 将数据项目转换为可视元素以进行显示。
@@ -46,12 +48,12 @@ package org.flexlite.domUI.components
 	{
 		/**
 		 * 构造函数
-		 */		
+		 */
 		public function DataGroup()
 		{
 			super();
 		}
-		
+
 		private var _rendererOwner:IItemRendererOwner;
 		/**
 		 * 项呈示器的主机组件
@@ -65,47 +67,47 @@ package org.flexlite.domUI.components
 		{
 			_rendererOwner = value;
 		}
-		
-		
+
+
 		private var useVirtualLayoutChanged:Boolean = false;
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override public function set layout(value:LayoutBase):void
 		{
 			if (value == layout)
-				return; 
-			
+				return;
+
 			if (layout)
 			{
 				layout.typicalLayoutRect = null;
 				layout.removeEventListener("useVirtualLayoutChanged", layout_useVirtualLayoutChangedHandler);
 			}
-			
+
 			if (layout && value && (layout.useVirtualLayout != value.useVirtualLayout))
 				changeUseVirtualLayout();
-			super.layout = value;    
+			super.layout = value;
 			if (value)
 			{
 				value.typicalLayoutRect = typicalLayoutRect;
 				value.addEventListener("useVirtualLayoutChanged", layout_useVirtualLayoutChangedHandler);
 			}
 		}
-		
+
 		/**
 		 * 是否使用虚拟布局标记改变
-		 */		
+		 */
 		private function layout_useVirtualLayoutChangedHandler(event:Event):void
 		{
 			changeUseVirtualLayout();
 		}
-		
+
 		/**
-		 * 存储当前可见的项呈示器索引列表 
-		 */		
+		 * 存储当前可见的项呈示器索引列表
+		 */
 		private var virtualRendererIndices:Vector.<int>;
-		
+
 		override public function setVirtualElementIndicesInView(startIndex:int, endIndex:int):void
 		{
 			if(!layout||!layout.useVirtualLayout)
@@ -123,7 +125,7 @@ package org.flexlite.domUI.components
 				}
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -143,20 +145,20 @@ package org.flexlite.domUI.components
 					if(renderer is IInvalidating)
 						(renderer as IInvalidating).validateNow();
 					createNewRendererFlag = false;
-					dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_ADD, 
+					dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_ADD,
 						false, false, renderer, index, item));
 				}
 				element = renderer as IVisualElement;
 			}
 			return element;
 		}
-		
+
 		private var rendererToClassMap:Dictionary = new Dictionary(true);
 		private var freeRenderers:Dictionary = new Dictionary;
-		
+
 		/**
 		 * 释放指定索引处的项呈示器
-		 */		
+		 */
 		private function freeRendererByIndex(index:int):void
 		{
 			if(!indexToRenderer[index])
@@ -170,7 +172,7 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 释放指定的项呈示器
-		 */		
+		 */
 		private function doFreeRenderer(renderer:IItemRenderer):void
 		{
 			var rendererClass:Class = rendererToClassMap[renderer];
@@ -181,12 +183,12 @@ package org.flexlite.domUI.components
 			freeRenderers[rendererClass].push(renderer);
 			(renderer as DisplayObject).visible = false;
 		}
-		
+
 		/**
-		 * 是否创建了新的项呈示器标志 
-		 */		
+		 * 是否创建了新的项呈示器标志
+		 */
 		private var createNewRendererFlag:Boolean = false;
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -195,10 +197,10 @@ package org.flexlite.domUI.components
 			if(!createNewRendererFlag)//虚拟布局时创建子项不需要重新验证
 				super.invalidateSize();
 		}
-		
+
 		/**
 		 * 为指定索引创建虚拟的项呈示器
-		 */		
+		 */
 		private function createVirtualRenderer(index:int):IItemRenderer
 		{
 			var item:Object = dataProvider.getItemAt(index);
@@ -216,7 +218,7 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 根据rendererClass创建一个Renderer,并添加到显示列表
-		 */		
+		 */
 		private function createOneRenderer(rendererClass:Class):IItemRenderer
 		{
 			var renderer:IItemRenderer;
@@ -255,7 +257,7 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 设置项呈示器的默认皮肤
-		 */		
+		 */
 		private function setItemRenderSkinName(renderer:IItemRenderer):void
 		{
 			if(!renderer)
@@ -273,11 +275,11 @@ package org.flexlite.domUI.components
 					client.skinName = _itemRendererSkinName;
 			}
 		}
-		
+
 		private var cleanTimer:Timer;
 		/**
 		 * 虚拟布局结束清理不可见的项呈示器
-		 */		
+		 */
 		private function finishVirtualLayout():void
 		{
 			if(!virtualLayoutUnderway)
@@ -305,7 +307,7 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 延迟清理多余的在显示列表中的ItemRenderer。
-		 */		
+		 */
 		private function cleanAllFreeRenderer(event:TimerEvent=null):void
 		{
 			var renderer:IItemRenderer;
@@ -320,7 +322,7 @@ package org.flexlite.domUI.components
 			freeRenderers = new Dictionary;
 			cleanFreeRenderer = false;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -331,10 +333,10 @@ package org.flexlite.domUI.components
 					virtualRendererIndices:new Vector.<int>(0);
 			return super.getElementIndicesInView();
 		}
-		
+
 		/**
 		 * 更改是否使用虚拟布局
-		 */		
+		 */
 		private function changeUseVirtualLayout():void
 		{
 			useVirtualLayoutChanged = true;
@@ -342,9 +344,9 @@ package org.flexlite.domUI.components
 			removeDataProviderListener();
 			invalidateProperties();
 		}
-		
+
 		private var dataProviderChanged:Boolean = false;
-		
+
 		private var _dataProvider:ICollection;
 		/**
 		 * 列表数据源，请使用实现了ICollection接口的数据类型，例如ArrayCollection
@@ -368,7 +370,7 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 移除数据源监听
-		 */		
+		 */
 		private function removeDataProviderListener():void
 		{
 			if(_dataProvider)
@@ -376,7 +378,7 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 数据源改变事件处理
-		 */		
+		 */
 		private function onCollectionChange(event:CollectionEvent):void
 		{
 			switch(event.kind)
@@ -413,10 +415,10 @@ package org.flexlite.domUI.components
 			invalidateSize();
 			invalidateDisplayList();
 		}
-		
+
 		/**
 		 * 数据源添加项目事件处理
-		 */		
+		 */
 		private function itemAddedHandler(items:Array,index:int):void
 		{
 			var length:int = items.length;
@@ -428,7 +430,7 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 数据源移动项目事件处理
-		 */		
+		 */
 		private function itemMovedHandler(item:Object,location:int,oldLocation:int):void
 		{
 			itemRemoved(item,oldLocation);
@@ -437,7 +439,7 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 数据源移除项目事件处理
-		 */		
+		 */
 		private function itemRemovedHandler(items:Array,location:int):void
 		{
 			var length:int = items.length;
@@ -445,17 +447,17 @@ package org.flexlite.domUI.components
 			{
 				itemRemoved(items[i], location + i);
 			}
-			
+
 			resetRenderersIndices();
 		}
 		/**
 		 * 添加一项
-		 */		
+		 */
 		private function itemAdded(item:Object,index:int):void
 		{
 			if (layout)
 				layout.elementAdded(index);
-			
+
 			if (layout && layout.useVirtualLayout)
 			{
 				if (virtualRendererIndices)
@@ -467,7 +469,7 @@ package org.flexlite.domUI.components
 						if (vrIndex >= index)
 							virtualRendererIndices[i] = vrIndex + 1;
 					}
-					indexToRenderer.splice(index, 0, null); 
+					indexToRenderer.splice(index, 0, null);
 				}
 				return;
 			}
@@ -477,20 +479,20 @@ package org.flexlite.domUI.components
 			if(!renderer)
 				return;
 			updateRenderer(renderer,index,item);
-			dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_ADD, 
+			dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_ADD,
 				false, false, renderer, index, item));
 		}
-		
+
 		/**
 		 * 移除一项
-		 */		
+		 */
 		private function itemRemoved(item:Object, index:int):void
 		{
 			if (layout)
 				layout.elementRemoved(index);
 			if (virtualRendererIndices && (virtualRendererIndices.length > 0))
 			{
-				var vrItemIndex:int = -1; 
+				var vrItemIndex:int = -1;
 				const virtualRendererIndicesLength:int = virtualRendererIndices.length;
 				for (var i:int = 0; i < virtualRendererIndicesLength; i++)
 				{
@@ -504,28 +506,28 @@ package org.flexlite.domUI.components
 					virtualRendererIndices.splice(vrItemIndex, 1);
 			}
 			const oldRenderer:IItemRenderer = indexToRenderer[index];
-			
+
 			if (indexToRenderer.length > index)
 				indexToRenderer.splice(index, 1);
-			
+
 			dispatchEvent(new RendererExistenceEvent(
 				RendererExistenceEvent.RENDERER_REMOVE, false, false, oldRenderer, index, item));
-			
+
 			if(oldRenderer&&oldRenderer is DisplayObject)
 			{
 				recycle(oldRenderer);
-				dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_REMOVE, 
+				dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_REMOVE,
 					false, false, oldRenderer, oldRenderer.itemIndex, oldRenderer.data));
 			}
 		}
-		
+
 		/**
 		 * 对象池字典
-		 */		
+		 */
 		private var recyclerDic:Dictionary = new Dictionary();
 		/**
 		 * 回收一个ItemRenderer实例
-		 */		
+		 */
 		private function recycle(renderer:IItemRenderer):void
 		{
 			super.removeChild(renderer as DisplayObject);
@@ -542,12 +544,12 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 更新当前所有项的索引
-		 */		
+		 */
 		private function resetRenderersIndices():void
 		{
 			if (indexToRenderer.length == 0)
 				return;
-			
+
 			if (layout && layout.useVirtualLayout)
 			{
 				for each (var index:int in virtualRendererIndices)
@@ -562,32 +564,32 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 数据源更新或替换项目事件处理
-		 */	
+		 */
 		private function itemUpdatedHandler(item:Object,location:int):void
 		{
 			if (renderersBeingUpdated)
 				return;//防止无限循环
-			
+
 			var renderer:IItemRenderer = indexToRenderer[location];
 			if(renderer)
 				updateRenderer(renderer,location,item);
 		}
 		/**
 		 * 调整指定项呈示器的索引值
-		 */		
+		 */
 		private function resetRendererItemIndex(index:int):void
 		{
 			var renderer:IItemRenderer = indexToRenderer[index] as IItemRenderer;
 			if (renderer)
-				renderer.itemIndex = index;    
+				renderer.itemIndex = index;
 		}
-		
-		
+
+
 		/**
 		 * 项呈示器改变
-		 */		
+		 */
 		private var itemRendererChanged:Boolean;
-		
+
 		private var _itemRenderer:Class;
 		/**
 		 * 用于数据项目的项呈示器。该类必须实现 IItemRenderer 接口。<br/>
@@ -609,9 +611,9 @@ package org.flexlite.domUI.components
 			removeDataProviderListener();
 			invalidateProperties();
 		}
-		
+
 		private var itemRendererSkinNameChange:Boolean = false;
-		
+
 		private var _itemRendererSkinName:Object;
 		/**
 		 * 条目渲染器的可选皮肤标识符。在实例化itemRenderer时，若其内部没有设置过skinName,则将此属性的值赋值给它的skinName。
@@ -640,18 +642,18 @@ package org.flexlite.domUI.components
 		 * rendererClass获取顺序：itemRendererFunction > itemRenderer > 默认ItemRenerer。<br/>
 		 * 应该定义一个与此示例函数类似的呈示器函数： <br/>
 		 * function myItemRendererFunction(item:Object):Class
-		 */		
+		 */
 		public function get itemRendererFunction():Function
 		{
 			return _itemRendererFunction;
 		}
-		
+
 		public function set itemRendererFunction(value:Function):void
 		{
 			if(_itemRendererFunction==value)
 				return;
 			_itemRendererFunction = value;
-			
+
 			itemRendererChanged = true;
 			typicalItemChanged = true;
 			removeDataProviderListener();
@@ -659,7 +661,7 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 为特定的数据项返回项呈示器类定义
-		 */		
+		 */
 		private function itemToRendererClass(item:Object):Class
 		{
 			var rendererClass:Class;
@@ -675,11 +677,11 @@ package org.flexlite.domUI.components
 			}
 			return rendererClass?rendererClass:ItemRenderer;
 		}
-		
+
 		/**
 		 * @private
 		 * 设置默认的ItemRenderer
-		 */		
+		 */
 		override protected function createChildren():void
 		{
 			if(!layout)
@@ -691,8 +693,8 @@ package org.flexlite.domUI.components
 			}
 			super.createChildren();
 		}
-		
-		
+
+
 		/**
 		 * @inheritDoc
 		 */
@@ -722,9 +724,9 @@ package org.flexlite.domUI.components
 //					verticalScrollPosition = horizontalScrollPosition = 0;
 				}
 			}
-			
+
 			super.commitProperties();
-			
+
 			if(typicalItemChanged)
 			{
 				typicalItemChanged = false;
@@ -758,7 +760,7 @@ package org.flexlite.domUI.components
 				}
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -766,16 +768,16 @@ package org.flexlite.domUI.components
 		{
 			if(layout&&layout.useVirtualLayout)
 			{
-				ensureTypicalLayoutElement();	
+				ensureTypicalLayoutElement();
 			}
 			super.measure();
 		}
-		
+
 		/**
-		 * 正在进行虚拟布局阶段 
-		 */		
+		 * 正在进行虚拟布局阶段
+		 */
 		private var virtualLayoutUnderway:Boolean = false;
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -790,7 +792,7 @@ package org.flexlite.domUI.components
 			if(virtualLayoutUnderway)
 				finishVirtualLayout();
 		}
-		
+
 		/**
 		 * 用于测试默认大小的数据
 		 */
@@ -804,17 +806,17 @@ package org.flexlite.domUI.components
 		{
 			if (layout.typicalLayoutRect)
 				return;
-			
+
 			if (_dataProvider&&_dataProvider.length > 0)
 			{
 				typicalItem = _dataProvider.getItemAt(0);
 				measureRendererSize();
 			}
 		}
-		
+
 		/**
 		 * 测量项呈示器默认尺寸
-		 */		
+		 */
 		private function measureRendererSize():void
 		{
 			if(!typicalItem)
@@ -841,34 +843,34 @@ package org.flexlite.domUI.components
 			recycle(typicalRenderer);
 			setTypicalLayoutRect(rect);
 			createNewRendererFlag = false;
-		} 
-		
+		}
+
 		/**
 		 * 项呈示器的默认尺寸
-		 */		
+		 */
 		private var typicalLayoutRect:Rectangle;
 		/**
 		 * 设置项目默认大小
-		 */		
+		 */
 		private function setTypicalLayoutRect(rect:Rectangle):void
 		{
 			typicalLayoutRect = rect;
 			if(layout)
 				layout.typicalLayoutRect = rect;
 		}
-		
-		
+
+
 		/**
-		 * 索引到项呈示器的转换数组 
-		 */		
+		 * 索引到项呈示器的转换数组
+		 */
 		private var indexToRenderer:Array = [];
 		/**
 		 * 清理freeRenderer标志
-		 */		
+		 */
 		private var cleanFreeRenderer:Boolean = false;
 		/**
 		 * 移除所有项呈示器
-		 */		
+		 */
 		private function removeAllRenderers():void
 		{
 			var length:int = indexToRenderer.length;
@@ -879,7 +881,7 @@ package org.flexlite.domUI.components
 				if(renderer)
 				{
 					recycle(renderer);
-					dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_REMOVE, 
+					dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_REMOVE,
 						false, false, renderer, renderer.itemIndex, renderer.data));
 				}
 			}
@@ -889,10 +891,10 @@ package org.flexlite.domUI.components
 				return;
 			cleanAllFreeRenderer();
 		}
-		
+
 		/**
 		 * 为数据项创建项呈示器
-		 */		
+		 */
 		private function createRenderers():void
 		{
 			if(!_dataProvider)
@@ -908,28 +910,28 @@ package org.flexlite.domUI.components
 					continue;
 				indexToRenderer[index] = renderer;
 				updateRenderer(renderer,index,item);
-				dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_ADD, 
+				dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_ADD,
 					false, false, renderer, index, item));
 				index ++;
 			}
 		}
 		/**
 		 * 正在更新数据项的标志
-		 */		
+		 */
 		private var renderersBeingUpdated:Boolean = false;
-		
+
 		/**
 		 * 更新项呈示器
-		 */		
+		 */
 		protected function updateRenderer(renderer:IItemRenderer, itemIndex:int, data:Object):IItemRenderer
 		{
 			renderersBeingUpdated = true;
-			
+
 			if(_rendererOwner)
 			{
 				renderer = _rendererOwner.updateRenderer(renderer,itemIndex,data);
 			}
-			else 
+			else
 			{
 				if(renderer is IVisualElement)
 				{
@@ -939,22 +941,22 @@ package org.flexlite.domUI.components
 				renderer.label = itemToLabel(data);
 				renderer.data = data;
 			}
-			
+
 			renderersBeingUpdated = false;
 			return renderer;
 		}
-		
+
 		/**
 		 * 返回可在项呈示器中显示的 String。
-		 * 若DataGroup被作为SkinnableDataContainer的皮肤组件,此方法将不会执行，被SkinnableDataContainer.itemToLabel()所替代。 
-		 */		
+		 * 若DataGroup被作为SkinnableDataContainer的皮肤组件,此方法将不会执行，被SkinnableDataContainer.itemToLabel()所替代。
+		 */
 		protected function itemToLabel(item:Object):String
 		{
 			if (item)
 				return item.toString();
 			else return " ";
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -962,7 +964,7 @@ package org.flexlite.domUI.components
 		{
 			return indexToRenderer[index];
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -972,7 +974,7 @@ package org.flexlite.domUI.components
 				return -1;
 			return indexToRenderer.indexOf(element);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -990,26 +992,18 @@ package org.flexlite.domUI.components
 				cleanTimer.removeEventListener(TimerEvent.TIMER,cleanAllFreeRenderer);
 				cleanTimer = null;
 			}
-			dataProvider = null;
 			if (recyclerDic != null)
 			{
             	removeAllRenderers();
-				for each (var renderers:Dictionary in recyclerDic)
-				{
-					for (var renderer:IItemRenderer in renderers)
-					{
-						renderer.dispose();
-						delete renderers[renderer];
-                	}
-                	delete recyclerDic[renderers];
-            	}
+				Dispose.disposeDictionary(recyclerDic);
             	recyclerDic = null;
             }
+			dataProvider = null;
 			super.dispose();
         }
 
         /*private static const errorStr:String = "在此组件中不可用，若此组件为容器类，请使用";
-		[Deprecated] 
+		[Deprecated]
 		*//**
 		 * addChild()在此组件中不可用，若此组件为容器类，请使用addElement()代替
 		 *//*
@@ -1017,7 +1011,7 @@ package org.flexlite.domUI.components
 		{
 			throw(new Error("addChild()"+errorStr+"addElement()代替"));
 		}
-		[Deprecated] 
+		[Deprecated]
 		*//**
 		 * addChildAt()在此组件中不可用，若此组件为容器类，请使用addElementAt()代替
 		 *//*
@@ -1025,7 +1019,7 @@ package org.flexlite.domUI.components
 		{
 			throw(new Error("addChildAt()"+errorStr+"addElementAt()代替"));
 		}
-		[Deprecated] 
+		[Deprecated]
 		*//**
 		 * removeChild()在此组件中不可用，若此组件为容器类，请使用removeElement()代替
 		 *//*
@@ -1033,7 +1027,7 @@ package org.flexlite.domUI.components
 		{
 			throw(new Error("removeChild()"+errorStr+"removeElement()代替"));
 		}
-		[Deprecated] 
+		[Deprecated]
 		*//**
 		 * removeChildAt()在此组件中不可用，若此组件为容器类，请使用removeElementAt()代替
 		 *//*
@@ -1041,7 +1035,7 @@ package org.flexlite.domUI.components
 		{
 			throw(new Error("removeChildAt()"+errorStr+"removeElementAt()代替"));
 		}
-		[Deprecated] 
+		[Deprecated]
 		*//**
 		 * setChildIndex()在此组件中不可用，若此组件为容器类，请使用setElementIndex()代替
 		 *//*
@@ -1049,7 +1043,7 @@ package org.flexlite.domUI.components
 		{
 			throw(new Error("setChildIndex()"+errorStr+"setElementIndex()代替"));
 		}
-		[Deprecated] 
+		[Deprecated]
 		*//**
 		 * swapChildren()在此组件中不可用，若此组件为容器类，请使用swapElements()代替
 		 *//*
@@ -1057,7 +1051,7 @@ package org.flexlite.domUI.components
 		{
 			throw(new Error("swapChildren()"+errorStr+"swapElements()代替"));
 		}
-		[Deprecated] 
+		[Deprecated]
 		*//**
 		 * swapChildrenAt()在此组件中不可用，若此组件为容器类，请使用swapElementsAt()代替
 		 *//*

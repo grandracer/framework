@@ -1,6 +1,7 @@
 package org.flexlite.domUI.core
 {
 	import corelib.event.EventBinder;
+	import corelib.utils.Dispose;
 	import corelib.utils.IDisposable;
 
 	import flash.display.DisplayObject;
@@ -1409,6 +1410,7 @@ package org.flexlite.domUI.core
 				_eventBinder.dispose();
 				_eventBinder = null;
 			}
+			Dispose.disposeDisplayObjectContainer(this);
         }
 
 		private static function invalidateChildren(container:DisplayObjectContainer):void

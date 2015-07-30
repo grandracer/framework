@@ -5,24 +5,25 @@ package org.flexlite.domUI.components
 	import flash.text.TextFormat;
 	import flash.text.TextLineMetrics;
 	import flash.utils.Dictionary;
-	
+
 	import org.flexlite.domCore.Injector;
 	import org.flexlite.domCore.dx_internal;
 	import org.flexlite.domUI.components.supportClasses.TextBase;
+	import org.flexlite.domUI.core.IPadded;
 	import org.flexlite.domUI.core.ITranslator;
 	import org.flexlite.domUI.events.UIEvent;
 	import org.flexlite.domUI.layouts.VerticalAlign;
-	
+
 	use namespace dx_internal;
-	
-	
+
+
 	[DXML(show="true")]
-	
+
 	/**
 	 * 一行或多行不可编辑的文本控件
 	 * @author DOM
 	 */
-	public class Label extends TextBase
+	public class Label extends TextBase implements IPadded
 	{
 		public function Label()
 		{
@@ -41,15 +42,15 @@ package org.flexlite.domUI.components
 		/**
 		 * 是否只显示嵌入的字体。此属性对只所有Label实例有效。true表示如果指定的fontFamily没有被嵌入，
 		 * 即使用户机上存在该设备字体也不显示。而将使用默认的字体。默认值为false。
-		 */		
+		 */
 		public static var showEmbedFontsOnly:Boolean = false;
 		/**
 		 * 是否是第一个创建的Label实例
-		 */		
+		 */
 		private static var isFirstLabel:Boolean = true;
 		/**
 		 * 注入的文本翻译对象
-		 */		
+		 */
 		private static var translator:ITranslator;
 		/**
 		 * @inheritDoc
@@ -72,9 +73,9 @@ package org.flexlite.domUI.components
 				return;
 			super.fontFamily = value;
 		}
-		
+
 		private var toolTipSet:Boolean = false;
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -83,15 +84,15 @@ package org.flexlite.domUI.components
 			super.toolTip = value;
 			toolTipSet = (value != null);
 		}
-		
+
 		/**
 		 * 一个验证阶段完成
-		 */		
+		 */
 		private function updateCompleteHandler(event:UIEvent):void
 		{
 			lastUnscaledWidth = NaN;
 		}
-		
+
 		private var _verticalAlign:String = VerticalAlign.TOP;
 		/**
 		 * 垂直对齐方式,支持VerticalAlign.TOP,VerticalAlign.BOTTOM,VerticalAlign.MIDDLE和VerticalAlign.JUSTIFY(两端对齐);
@@ -113,12 +114,12 @@ package org.flexlite.domUI.components
 			invalidateSize();
 			invalidateDisplayList();
 		}
-		
+
 		override dx_internal function get realLeading():int
 		{
 			return _verticalAlign==VerticalAlign.JUSTIFY?0:leading;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -134,13 +135,13 @@ package org.flexlite.domUI.components
 			}
 			return _textFormat;
 		}
-		
+
 		/**
 		 * 从另外一个文本组件复制默认文字格式信息到自身，不包括对setFormatOfRange()的调用。<br/>
 		 * 复制的值包含：<br/>
 		 * fontFamily，size，textColor，bold，italic，underline，textAlign，<br/>
 		 * leading，letterSpacing，disabledColor,verticalAlign属性。
-		 */	
+		 */
 		override public function copyDefaultFormatFrom(textBase:TextBase):void
 		{
 			super.copyDefaultFormatFrom(textBase);
@@ -149,8 +150,8 @@ package org.flexlite.domUI.components
 				verticalAlign = (textBase as Label).verticalAlign;
 			}
 		}
-		
-		
+
+
 		private var _maxDisplayedLines:int = 0;
 		/**
 		 * 最大显示行数,0或负值代表不限制。
@@ -159,7 +160,7 @@ package org.flexlite.domUI.components
 		{
 			return _maxDisplayedLines;
 		}
-		
+
 		public function set maxDisplayedLines(value:int):void
 		{
 			if(_maxDisplayedLines==value)
@@ -168,7 +169,7 @@ package org.flexlite.domUI.components
 			invalidateSize();
 			invalidateDisplayList();
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -184,7 +185,7 @@ package org.flexlite.domUI.components
 				super.text = value;
 			rangeFormatDic = null;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -192,19 +193,19 @@ package org.flexlite.domUI.components
 		{
 			if (!value)
 				value = "";
-			
+
 			if (isHTML && value == explicitHTMLText)
 				return;
-			
+
 			super.htmlText = value;
-			
+
 			rangeFormatDic = null;
 		}
 		/**
-		 * 上一次测量的宽度 
-		 */		
+		 * 上一次测量的宽度
+		 */
 		private var lastUnscaledWidth:Number = NaN;
-		
+
 		private var _padding:Number = 0;
 		/**
 		 * 四个边缘的共同内边距。若单独设置了任一边缘的内边距，则该边缘的内边距以单独设置的值为准。
@@ -222,7 +223,7 @@ package org.flexlite.domUI.components
 			invalidateSize();
 			invalidateDisplayList();
 		}
-		
+
 		private var _paddingLeft:Number = NaN;
 		/**
 		 * 文字距离左边缘的空白像素,若为NaN将使用padding的值，默认值：NaN。
@@ -231,17 +232,17 @@ package org.flexlite.domUI.components
 		{
 			return _paddingLeft;
 		}
-		
+
 		public function set paddingLeft(value:Number):void
 		{
 			if (_paddingLeft == value)
 				return;
-			
+
 			_paddingLeft = value;
 			invalidateSize();
 			invalidateDisplayList();
-		}    
-		
+		}
+
 		private var _paddingRight:Number = NaN;
 		/**
 		 * 文字距离右边缘的空白像素,若为NaN将使用padding的值，默认值：NaN。
@@ -250,17 +251,17 @@ package org.flexlite.domUI.components
 		{
 			return _paddingRight;
 		}
-		
+
 		public function set paddingRight(value:Number):void
 		{
 			if (_paddingRight == value)
 				return;
-			
+
 			_paddingRight = value;
 			invalidateSize();
 			invalidateDisplayList();
-		}    
-		
+		}
+
 		private var _paddingTop:Number = NaN;
 		/**
 		 * 文字距离顶部边缘的空白像素,若为NaN将使用padding的值，默认值：NaN。
@@ -269,17 +270,17 @@ package org.flexlite.domUI.components
 		{
 			return _paddingTop;
 		}
-		
+
 		public function set paddingTop(value:Number):void
 		{
 			if (_paddingTop == value)
 				return;
-			
+
 			_paddingTop = value;
 			invalidateSize();
 			invalidateDisplayList();
-		}    
-		
+		}
+
 		private var _paddingBottom:Number = NaN;
 		/**
 		 * 文字距离底部边缘的空白像素,若为NaN将使用padding的值，默认值：NaN。
@@ -288,17 +289,17 @@ package org.flexlite.domUI.components
 		{
 			return _paddingBottom;
 		}
-		
+
 		public function set paddingBottom(value:Number):void
 		{
 			if (_paddingBottom == value)
 				return;
-			
+
 			_paddingBottom = value;
 			invalidateSize();
 			invalidateDisplayList();
-		}    
-		
+		}
+
 		/**
 		 * @inheritDoc
 		 */
@@ -306,9 +307,9 @@ package org.flexlite.domUI.components
 		{
 			var needSetDefaultFormat:Boolean = defaultStyleChanged||textChanged || htmlTextChanged;
 			rangeFormatChanged = needSetDefaultFormat||rangeFormatChanged;
-			
+
 			super.commitProperties();
-			
+
 			if(rangeFormatChanged)
 			{
 				if(!needSetDefaultFormat)//如果样式发生改变，父级会执行样式刷新的过程。这里就不用重复了。
@@ -318,7 +319,7 @@ package org.flexlite.domUI.components
 			}
 		}
 
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -340,20 +341,20 @@ package org.flexlite.domUI.components
 					return;
 				}
 			}
-			
+
 			var availableWidth:Number;
-			
+
 			if (!isNaN(explicitWidth))
 				availableWidth = explicitWidth;
 			else if (maxWidth!=10000)
 				availableWidth = maxWidth;
-			
+
 			measureUsingWidth(availableWidth);
 		}
-		
+
 		/**
 		 * 特殊情况，组件尺寸由父级决定，要等到父级UpdateDisplayList的阶段才能测量
-		 */		
+		 */
 		private function isSpecialCase():Boolean
 		{
 			return _maxDisplayedLines!=1&&
@@ -361,10 +362,10 @@ package org.flexlite.domUI.components
 				isNaN(explicitHeight) &&
 				isNaN(percentHeight);
 		}
-		
+
 		/**
 		 * 使用指定的宽度进行测量
-		 */	
+		 */
 		private function measureUsingWidth(w:Number):void
 		{
 			var originalText:String = textField.text;
@@ -376,7 +377,7 @@ package org.flexlite.domUI.components
 					textField.$text = _text;
 				applyRangeFormat();
 			}
-			
+
 			var padding:Number = isNaN(_padding)?0:_padding;
 			var paddingL:Number = isNaN(_paddingLeft)?padding:_paddingLeft;
 			var paddingR:Number = isNaN(_paddingRight)?padding:_paddingRight;
@@ -384,7 +385,7 @@ package org.flexlite.domUI.components
 			var paddingB:Number = isNaN(_paddingBottom)?padding:_paddingBottom;
 
 			textField.autoSize = "left";
-			
+
 			if (!isNaN(w))
 			{
 				textField.$width = w - paddingL - paddingR;
@@ -395,41 +396,41 @@ package org.flexlite.domUI.components
 			{
 				var oldWordWrap:Boolean = textField.wordWrap;
 				textField.wordWrap = false;
-				
+
 				measuredWidth = Math.ceil(textField.textWidth);
 				measuredHeight = Math.ceil(textField.textHeight);
-				
+
 				textField.wordWrap = oldWordWrap;
 			}
-			
+
 			textField.autoSize = "none";
-			
+
 			if(_maxDisplayedLines>0&&textField.numLines>_maxDisplayedLines)
 			{
 				var lineM:TextLineMetrics = textField.getLineMetrics(0);
 				measuredHeight = lineM.height*_maxDisplayedLines-lineM.leading+4;
 			}
-			
+
 			measuredWidth += paddingL + paddingR;
 			measuredHeight += paddingT + paddingB;
-			
+
 			if(_isTruncated)
 			{
 				textField.$text = originalText;
 				applyRangeFormat();
 			}
 		}
-		
+
 		/**
-		 * 记录不同范围的格式信息 
-		 */		
+		 * 记录不同范围的格式信息
+		 */
 		private var rangeFormatDic:Dictionary;
-		
+
 		/**
 		 * 范围格式信息发送改变标志
-		 */		
+		 */
 		private var rangeFormatChanged:Boolean = false;
-		
+
 		/**
 		 * 将指定的格式应用于指定范围中的每个字符。
 		 * 注意：使用此方法应用的格式只能影响到当前的文字内容，若改变文字内容，所有文字将会被重置为默认格式。
@@ -437,7 +438,7 @@ package org.flexlite.domUI.components
 		 * @param beginIndex 可选；一个整数，指定所需文本范围内第一个字符的从零开始的索引位置。
 		 * @param endIndex 可选；一个整数，指定所需文本范围后面的第一个字符。
 		 * 如果指定 beginIndex 和 endIndex 值，则更新索引从 beginIndex 到 endIndex-1 的文本。
-		 */		
+		 */
 		public function setFormatOfRange(format:TextFormat, beginIndex:int=-1, endIndex:int=-1):void
 		{
 			if(!rangeFormatDic)
@@ -445,24 +446,24 @@ package org.flexlite.domUI.components
 			if(!rangeFormatDic[beginIndex])
 				rangeFormatDic[beginIndex] = new Dictionary;
 			rangeFormatDic[beginIndex][endIndex] = cloneTextFormat(format);
-			
+
 			rangeFormatChanged = true;
 			invalidateProperties();
 			invalidateSize();
 			invalidateDisplayList();
 		}
-		
+
 		/**
 		 * 克隆一个文本格式对象
-		 */		
+		 */
 		private static function cloneTextFormat(tf:TextFormat):TextFormat
 		{
 			return new TextFormat(tf.font, tf.size, tf.color, tf.bold, tf.italic,
 				tf.underline, tf.url, tf.target, tf.align,
 				tf.leftMargin, tf.rightMargin, tf.indent, tf.leading);
 		}
-		
-		
+
+
 		/**
 		 * 应用范围格式信息
 		 */
@@ -503,22 +504,22 @@ package org.flexlite.domUI.components
 				}
 			}
 		}
-		
-		
-		
+
+
+
 		/**
 		 * @inheritDoc
 		 */
 		override protected function updateDisplayList(unscaledWidth:Number,unscaledHeight:Number):void
 		{
 			$updateDisplayList(unscaledWidth,unscaledHeight);
-			
+
 			var padding:Number = isNaN(_padding)?0:_padding;
 			var paddingL:Number = isNaN(_paddingLeft)?padding:_paddingLeft;
 			var paddingR:Number = isNaN(_paddingRight)?padding:_paddingRight;
 			var paddingT:Number = isNaN(_paddingTop)?padding:_paddingTop;
 			var paddingB:Number = isNaN(_paddingBottom)?padding:_paddingBottom;
-			
+
 			textField.x = paddingL;
 			textField.y = paddingT;
 			if (isSpecialCase())
@@ -538,7 +539,7 @@ package org.flexlite.domUI.components
 			//接下来直接调用自身的updateDisplayList()而没有经过measu(),使用的测量尺寸是上一次的错误值。
 			if(invalidateSizeFlag)
 				validateSize();
-			
+
 			if(!textField.visible)//解决初始化时文本闪烁问题
 				textField.visible = true;
 			if(_isTruncated)
@@ -546,22 +547,22 @@ package org.flexlite.domUI.components
 				textField.$text = _text;
 				applyRangeFormat();
 			}
-			
+
 			textField.scrollH = 0;
 			textField.scrollV = 1;
-			
+
 			textField.$width = unscaledWidth - paddingL - paddingR;
 			var unscaledTextHeight:Number = unscaledHeight - paddingT - paddingB;
 			textField.$height = unscaledTextHeight;
-			
+
 			if(_maxDisplayedLines==1)
 				textField.wordWrap = false;
 			else if (Math.floor(width) < Math.floor(measuredWidth))
 				textField.wordWrap = true;
-			
+
 			_textWidth = textField.textWidth;
 			_textHeight = textField.textHeight;
-			
+
 			if(_maxDisplayedLines>0&&textField.numLines>_maxDisplayedLines)
 			{
 				var lineM:TextLineMetrics = textField.getLineMetrics(0);
@@ -573,7 +574,7 @@ package org.flexlite.domUI.components
 				textField.$setTextFormat(defaultTextFormat);
 				applyRangeFormat(0);
 			}
-			
+
 			if(_truncateToFit)
 			{
 				_isTruncated = truncateTextToFit();
@@ -605,18 +606,18 @@ package org.flexlite.domUI.components
 				textField.$height = unscaledTextHeight-textField.y;
 			}
 		}
-		
-		
+
+
 		private var _isTruncated:Boolean = false;
-		
+
 		/**
 		 * 文本是否已经截断并以...结尾的标志。注意：当使用htmlText显示文本时，始终直接截断文本,不显示...。
-		 */		
+		 */
 		public function get isTruncated():Boolean
 		{
 			return _isTruncated;
 		}
-		
+
 		private var _truncateToFit:Boolean = true;
 		/**
 		 * 如果此属性为true，并且Label控件大小小于其文本大小，则使用"..."截断 Label控件的文本。
@@ -626,7 +627,7 @@ package org.flexlite.domUI.components
 		{
 			return _truncateToFit;
 		}
-		
+
 		public function set truncateToFit(value:Boolean):void
 		{
 			if(_truncateToFit==value)
@@ -634,20 +635,20 @@ package org.flexlite.domUI.components
 			_truncateToFit = value;
 			invalidateDisplayList();
 		}
-		
-		
+
+
 		/**
 		 * 截断超过边界的字符串，使用"..."结尾
-		 */		
+		 */
 		private function truncateTextToFit():Boolean
 		{
 			if(isHTML)
 				return false;
 			var truncationIndicator:String = "...";
 			var originalText:String = text;
-			
+
 			var expLeading:Object = verticalAlign==VerticalAlign.JUSTIFY?0:null;
-			
+
 			try
 			{
 				var lineM:TextLineMetrics = textField.getLineMetrics(0);
@@ -676,7 +677,7 @@ package org.flexlite.domUI.components
 			}
 			return false;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -688,10 +689,10 @@ package org.flexlite.domUI.components
 			textField.visible = false;
 			textField.mouseWheelEnabled = false;
 		}
-		
+
 		/**
 		 * 文字内容发生改变
-		 */		
+		 */
 		override dx_internal function textField_textModifiedHandler(event:Event):void
 		{
 			super.textField_textModifiedHandler(event);

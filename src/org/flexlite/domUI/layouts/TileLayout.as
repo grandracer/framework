@@ -2,88 +2,89 @@ package org.flexlite.domUI.layouts
 {
 	import flash.events.Event;
 	import flash.geom.Rectangle;
-	
+
 	import org.flexlite.domUI.core.ILayoutElement;
+	import org.flexlite.domUI.core.IPadded;
 	import org.flexlite.domUI.layouts.supportClasses.LayoutBase;
-	
+
 	[DXML(show="false")]
-	
+
 	/**
 	 * 格子布局
 	 * @author DOM
 	 */
-	public class TileLayout extends LayoutBase
+	public class TileLayout extends LayoutBase implements IPadded
 	{
 		/**
 		 * 构造函数
-		 */		
+		 */
 		public function TileLayout()
 		{
 			super();
 		}
 		/**
-		 * 标记horizontalGap被显式指定过 
+		 * 标记horizontalGap被显式指定过
 		 */
 		private var explicitHorizontalGap:Number = NaN;
-		
+
 		private var _horizontalGap:Number = 6;
 		/**
 		 * 列之间的水平空间（以像素为单位）。
-		 */		
+		 */
 		public function get horizontalGap():Number
 		{
 			return _horizontalGap;
 		}
-		
+
 		public function set horizontalGap(value:Number):void
 		{
 			if (value == _horizontalGap)
 				return;
 			explicitHorizontalGap = value;
-				
+
 			_horizontalGap = value;
 			invalidateTargetSizeAndDisplayList();
 			if(hasEventListener("gapChanged"))
 				dispatchEvent(new Event("gapChanged"));
 		}
-		
+
 		/**
-		 * 标记verticalGap被显式指定过 
-		 */		
+		 * 标记verticalGap被显式指定过
+		 */
 		private var explicitVerticalGap:Number = NaN;
-		
+
 		private var _verticalGap:Number = 6;
-		
+
 		/**
 		 * 行之间的垂直空间（以像素为单位）。
-		 */		
+		 */
 		public function get verticalGap():Number
 		{
 			return _verticalGap;
 		}
-		
+
 		public function set verticalGap(value:Number):void
 		{
 			if (value == _verticalGap)
 				return;
 			explicitVerticalGap = value;
-			
+
 			_verticalGap = value;
 			invalidateTargetSizeAndDisplayList();
 			if(hasEventListener("gapChanged"))
 				dispatchEvent(new Event("gapChanged"));
 		}
-		
-		
+
+
 		private var _columnCount:int = -1;
 		/**
 		 * 实际列计数。
-		 */		
+		 */
 		public function get columnCount():int
 		{
 			return _columnCount;
 		}
-		
+
 		private var _requestedColumnCount:int = 0;
 		/**
 		 * 要显示的列数。设置为0表示自动确定列计数,默认值0。<br/>
@@ -103,16 +104,16 @@ package org.flexlite.domUI.layouts
 			invalidateTargetSizeAndDisplayList();
 		}
 
-		
+
 		private var _rowCount:int = -1;
 		/**
 		 * 实际行计数。
-		 */		
+		 */
 		public function get rowCount():int
 		{
 			return _rowCount;
 		}
-		
+
 		private var _requestedRowCount:int = 0;
 		/**
 		 * 要显示的行数。设置为0表示自动确定行计数,默认值0。<br/>
@@ -132,21 +133,21 @@ package org.flexlite.domUI.layouts
 			invalidateTargetSizeAndDisplayList();
 		}
 
-		
+
 		/**
 		 * 外部显式指定的列宽
 		 */
 		private var explicitColumnWidth:Number = NaN;
-	
+
 		private var _columnWidth:Number = NaN;
 		/**
 		 * 实际列宽（以像素为单位）。 若未显式设置，则从根据最宽的元素的宽度确定列宽度。
-		 */		
+		 */
 		public function get columnWidth():Number
 		{
 			return _columnWidth;
 		}
-		
+
 		/**
 		 *  @private
 		 */
@@ -158,21 +159,21 @@ package org.flexlite.domUI.layouts
 			_columnWidth = value;
 			invalidateTargetSizeAndDisplayList();
 		}
-		
+
 		/**
-		 * 外部显式指定的行高 
-		 */		
+		 * 外部显式指定的行高
+		 */
 		private var explicitRowHeight:Number = NaN;
 
 		private var _rowHeight:Number = NaN;
 		/**
 		 * 行高（以像素为单位）。 如果未显式设置，则从元素的高度的最大值确定行高度。
-		 */		
+		 */
 		public function get rowHeight():Number
 		{
 			return _rowHeight;
 		}
-		
+
 		/**
 		 *  @private
 		 */
@@ -184,7 +185,7 @@ package org.flexlite.domUI.layouts
 			_rowHeight = value;
 			invalidateTargetSizeAndDisplayList();
 		}
-		
+
 		private var _padding:Number = 0;
 		/**
 		 * 四个边缘的共同内边距。若单独设置了任一边缘的内边距，则该边缘的内边距以单独设置的值为准。
@@ -201,8 +202,8 @@ package org.flexlite.domUI.layouts
 			_padding = value;
 			invalidateTargetSizeAndDisplayList();
 		}
-		
-		
+
+
 		private var _paddingLeft:Number = NaN;
 		/**
 		 * 容器的左边缘与布局元素的左边缘之间的最少像素数,若为NaN将使用padding的值，默认值：NaN。
@@ -211,16 +212,16 @@ package org.flexlite.domUI.layouts
 		{
 			return _paddingLeft;
 		}
-		
+
 		public function set paddingLeft(value:Number):void
 		{
 			if (_paddingLeft == value)
 				return;
-			
+
 			_paddingLeft = value;
 			invalidateTargetSizeAndDisplayList();
-		}    
-		
+		}
+
 		private var _paddingRight:Number = NaN;
 		/**
 		 * 容器的右边缘与布局元素的右边缘之间的最少像素数,若为NaN将使用padding的值，默认值：NaN。
@@ -229,16 +230,16 @@ package org.flexlite.domUI.layouts
 		{
 			return _paddingRight;
 		}
-		
+
 		public function set paddingRight(value:Number):void
 		{
 			if (_paddingRight == value)
 				return;
-			
+
 			_paddingRight = value;
 			invalidateTargetSizeAndDisplayList();
-		}    
-		
+		}
+
 		private var _paddingTop:Number = NaN;
 		/**
 		 * 容器的顶边缘与第一个布局元素的顶边缘之间的像素数,若为NaN将使用padding的值，默认值：NaN。
@@ -247,16 +248,16 @@ package org.flexlite.domUI.layouts
 		{
 			return _paddingTop;
 		}
-		
+
 		public function set paddingTop(value:Number):void
 		{
 			if (_paddingTop == value)
 				return;
-			
+
 			_paddingTop = value;
 			invalidateTargetSizeAndDisplayList();
-		}    
-		
+		}
+
 		private var _paddingBottom:Number = NaN;
 		/**
 		 * 容器的底边缘与最后一个布局元素的底边缘之间的像素数,若为NaN将使用padding的值，默认值：NaN。
@@ -265,91 +266,91 @@ package org.flexlite.domUI.layouts
 		{
 			return _paddingBottom;
 		}
-		
+
 		public function set paddingBottom(value:Number):void
 		{
 			if (_paddingBottom == value)
 				return;
-			
+
 			_paddingBottom = value;
 			invalidateTargetSizeAndDisplayList();
-		}    
-		
-		
+		}
+
+
 		private var _horizontalAlign:String = HorizontalAlign.JUSTIFY;
 		/**
 		 * 指定如何在水平方向上对齐单元格内的元素。
 		 * 支持的值有 HorizontalAlign.LEFT、HorizontalAlign.CENTER、
 		 * HorizontalAlign.RIGHT、HorizontalAlign.JUSTIFY。
 		 * 默认值：HorizontalAlign.JUSTIFY
-		 */		
+		 */
 		public function get horizontalAlign():String
 		{
 			return _horizontalAlign;
 		}
-		
+
 		public function set horizontalAlign(value:String):void
 		{
 			if (_horizontalAlign == value)
 				return;
-			
+
 			_horizontalAlign = value;
 			invalidateTargetSizeAndDisplayList();
 		}
-		
+
 		private var _verticalAlign:String = VerticalAlign.JUSTIFY;
-		
+
 		/**
 		 * 指定如何在垂直方向上对齐单元格内的元素。
 		 * 支持的值有 VerticalAlign.TOP、VerticalAlign.MIDDLE、
-		 * VerticalAlign.BOTTOM、VerticalAlign.JUSTIFY。 
+		 * VerticalAlign.BOTTOM、VerticalAlign.JUSTIFY。
 		 * 默认值：VerticalAlign.JUSTIFY。
-		 */		
+		 */
 		public function get verticalAlign():String
 		{
 			return _verticalAlign;
 		}
-		
+
 		public function set verticalAlign(value:String):void
 		{
 			if (_verticalAlign == value)
 				return;
-			
+
 			_verticalAlign = value;
 			invalidateTargetSizeAndDisplayList();
 		}
-		
+
 		private var _columnAlign:String = ColumnAlign.LEFT;
-		
+
 		/**
 		 * 指定如何将完全可见列与容器宽度对齐。
 		 * 设置为 ColumnAlign.LEFT 时，它会关闭列两端对齐。在容器的最后一列和右边缘之间可能存在部分可见的列或空白。这是默认值。
-		 * 
+		 *
 		 * 设置为 ColumnAlign.JUSTIFY_USING_GAP 时，horizontalGap 的实际值将增大，
 		 * 这样最后一个完全可见列右边缘会与容器的右边缘对齐。仅存在一个完全可见列时，
 		 * horizontalGap 的实际值将增大，这样它会将任何部分可见列推到容器的右边缘之外。
 		 * 请注意显式设置 horizontalGap 属性不会关闭两端对齐。它仅确定初始间隙值。两端对齐可能会增大它。
-		 * 
+		 *
 		 * 设置为 ColumnAlign.JUSTIFY_USING_WIDTH 时，columnWidth 的实际值将增大，
 		 * 这样最后一个完全可见列右边缘会与容器的右边缘对齐。请注意显式设置 columnWidth 属性不会关闭两端对齐。
 		 * 它仅确定初始列宽度值。两端对齐可能会增大它。
-		 */		
+		 */
 		public function get columnAlign():String
 		{
 			return _columnAlign;
 		}
-		
+
 		public function set columnAlign(value:String):void
 		{
 			if (_columnAlign == value)
 				return;
-			
+
 			_columnAlign = value;
 			invalidateTargetSizeAndDisplayList();
 		}
-		
+
 		private var _rowAlign:String = RowAlign.TOP;
-		
+
 		public function get rowAlign():String
 		{
 			return _rowAlign;
@@ -357,48 +358,48 @@ package org.flexlite.domUI.layouts
 		/**
 		 * 指定如何将完全可见行与容器高度对齐。
 		 * 设置为 RowAlign.TOP 时，它会关闭列两端对齐。在容器的最后一行和底边缘之间可能存在部分可见的行或空白。这是默认值。
-		 * 
+		 *
 		 * 设置为 RowAlign.JUSTIFY_USING_GAP 时，verticalGap 的实际值会增大，
 		 * 这样最后一个完全可见行底边缘会与容器的底边缘对齐。仅存在一个完全可见行时，verticalGap 的值会增大，
 		 * 这样它会将任何部分可见行推到容器的底边缘之外。请注意，显式设置 verticalGap
 		 * 不会关闭两端对齐，而只是确定初始间隙值。两端对齐接着可以增大它。
-		 * 
+		 *
 		 * 设置为 RowAlign.JUSTIFY_USING_HEIGHT 时，rowHeight 的实际值会增大，
-		 * 这样最后一个完全可见行底边缘会与容器的底边缘对齐。请注意，显式设置 rowHeight 
+		 * 这样最后一个完全可见行底边缘会与容器的底边缘对齐。请注意，显式设置 rowHeight
 		 * 不会关闭两端对齐，而只是确定初始行高度值。两端对齐接着可以增大它。
-		 */		
+		 */
 		public function set rowAlign(value:String):void
 		{
 			if (_rowAlign == value)
 				return;
-			
+
 			_rowAlign = value;
 			invalidateTargetSizeAndDisplayList();
 		}
-		
+
 		private var _orientation:String = TileOrientation.ROWS;
 		/**
 		 * 指定是逐行还是逐列排列元素。
-		 */		
+		 */
 		public function get orientation():String
 		{
 			return _orientation;
 		}
-		
+
 		public function set orientation(value:String):void
 		{
 			if (_orientation == value)
 				return;
-			
+
 			_orientation = value;
 			invalidateTargetSizeAndDisplayList();
 			if(hasEventListener("orientationChanged"))
 				dispatchEvent(new Event("orientationChanged"));
 		}
-		
+
 		/**
 		 * 标记目标容器的尺寸和显示列表失效
-		 */		
+		 */
 		private function invalidateTargetSizeAndDisplayList():void
 		{
 			if(target)
@@ -407,7 +408,7 @@ package org.flexlite.domUI.layouts
 				target.invalidateDisplayList();
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -415,15 +416,15 @@ package org.flexlite.domUI.layouts
 		{
 			if (!target)
 				return;
-			
+
 			var savedColumnCount:int = _columnCount;
 			var savedRowCount:int = _rowCount;
 			var savedColumnWidth:int = _columnWidth;
-			var savedRowHeight:int = _rowHeight; 
-			
+			var savedRowHeight:int = _rowHeight;
+
 			var measuredWidth:Number = 0;
 			var measuredHeight:Number = 0;
-			
+
 			calculateRowAndColumn(target.explicitWidth,target.explicitHeight);
 			var columnCount:int = _requestedColumnCount>0 ? _requestedColumnCount: _columnCount;
 			var rowCount:int = _requestedRowCount>0 ? _requestedRowCount : _rowCount;
@@ -433,33 +434,33 @@ package org.flexlite.domUI.layouts
 			{
 				measuredWidth = columnCount * (_columnWidth + horizontalGap) - horizontalGap;
 			}
-			
+
 			if (rowCount > 0)
 			{
 				measuredHeight = rowCount * (_rowHeight + verticalGap) - verticalGap;
 			}
-			
+
 			var padding:Number = isNaN(_padding)?0:_padding;
 			var paddingL:Number = isNaN(_paddingLeft)?padding:_paddingLeft;
 			var paddingR:Number = isNaN(_paddingRight)?padding:_paddingRight;
 			var paddingT:Number = isNaN(_paddingTop)?padding:_paddingTop;
 			var paddingB:Number = isNaN(_paddingBottom)?padding:_paddingBottom;
-			
+
 			var hPadding:Number = paddingL + paddingR;
 			var vPadding:Number = paddingT + paddingB;
-			
+
 			target.measuredWidth = Math.ceil(measuredWidth + hPadding);
 			target.measuredHeight = Math.ceil(measuredHeight + vPadding);
-			
+
 			_columnCount = savedColumnCount;
 			_rowCount = savedRowCount;
 			_columnWidth = savedColumnWidth;
-			_rowHeight = savedRowHeight; 
+			_rowHeight = savedRowHeight;
 		}
-		
+
 		/**
 		 * 计算行和列的尺寸及数量
-		 */		
+		 */
 		private function calculateRowAndColumn(explicitWidth:Number, explicitHeight:Number):void
 		{
 			var horizontalGap:Number = isNaN(_horizontalGap)?0:_horizontalGap;
@@ -480,10 +481,10 @@ package org.flexlite.domUI.layouts
 				_rowCount = _columnCount = 0;
 				return;
 			}
-			
+
 			if(isNaN(explicitColumnWidth)||isNaN(explicitRowHeight))
 				updateMaxElementSize();
-			
+
 			if(isNaN(explicitColumnWidth))
 			{
 				_columnWidth = maxElementWidth;
@@ -500,7 +501,7 @@ package org.flexlite.domUI.layouts
 			{
 				_rowHeight = explicitRowHeight;
 			}
-			
+
 			var itemWidth:Number = _columnWidth + horizontalGap;
 			//防止出现除数为零的情况
 			if(itemWidth <= 0)
@@ -508,22 +509,22 @@ package org.flexlite.domUI.layouts
 			var itemHeight:Number = _rowHeight + verticalGap;
 			if(itemHeight <= 0)
 				itemHeight = 1;
-			
+
 			var orientedByColumns:Boolean = (orientation == TileOrientation.COLUMNS);
 			var widthHasSet:Boolean = !isNaN(explicitWidth);
 			var heightHasSet:Boolean = !isNaN(explicitHeight);
-			
+
 			var padding:Number = isNaN(_padding)?0:_padding;
 			var paddingL:Number = isNaN(_paddingLeft)?padding:_paddingLeft;
 			var paddingR:Number = isNaN(_paddingRight)?padding:_paddingRight;
 			var paddingT:Number = isNaN(_paddingTop)?padding:_paddingTop;
 			var paddingB:Number = isNaN(_paddingBottom)?padding:_paddingBottom;
-			
+
 			if (_requestedColumnCount>0 || _requestedRowCount>0)
 			{
 				if (_requestedRowCount>0)
 					_rowCount = Math.min(_requestedRowCount,numElements);
-				
+
 				if (_requestedColumnCount>0)
 					_columnCount = Math.min(_requestedColumnCount,numElements);
 			}
@@ -541,14 +542,14 @@ package org.flexlite.domUI.layouts
 			}
 			else if(widthHasSet&&(!heightHasSet||!orientedByColumns))
 			{
-				var targetWidth:Number = Math.max(0, 
+				var targetWidth:Number = Math.max(0,
 					explicitWidth - paddingL - paddingR);
 				_columnCount = Math.floor((targetWidth + horizontalGap)/itemWidth);
 				_columnCount = Math.max(1,Math.min(_columnCount,numElements));
 			}
 			else
 			{
-				var targetHeight:Number = Math.max(0, 
+				var targetHeight:Number = Math.max(0,
 					explicitHeight - paddingT - paddingB);
 				_rowCount = Math.floor((targetHeight + verticalGap)/itemHeight);
 				_rowCount = Math.max(1,Math.min(_rowCount,numElements));
@@ -567,27 +568,27 @@ package org.flexlite.domUI.layouts
 		}
 		/**
 		 * 缓存的最大子对象宽度
-		 */		
+		 */
 		private var maxElementWidth:Number = 0;
 		/**
-		 * 缓存的最大子对象高度 
-		 */		
+		 * 缓存的最大子对象高度
+		 */
 		private var maxElementHeight:Number = 0;
 		/**
 		 * 更新最大子对象尺寸
-		 */		
+		 */
 		private function updateMaxElementSize():void
 		{
 			if(!target)
 				return;
 			if(useVirtualLayout)
 				updateMaxElementSizeVirtual();
-			else 
+			else
 				updateMaxElementSizeReal();
 		}
 		/**
 		 * 更新虚拟布局的最大子对象尺寸
-		 */		
+		 */
 		private function updateMaxElementSizeVirtual():void
 		{
 			var typicalHeight:Number = typicalLayoutRect?typicalLayoutRect.height:22;
@@ -606,11 +607,11 @@ package org.flexlite.domUI.layouts
 					maxElementHeight = Math.max(maxElementHeight,elt.preferredHeight);
 				}
 			}
-				
+
 		}
 		/**
 		 * 更新真实布局的最大子对象尺寸
-		 */		
+		 */
 		private function updateMaxElementSizeReal():void
 		{
 			var numElements:int = target.numElements;
@@ -623,7 +624,7 @@ package org.flexlite.domUI.layouts
 				maxElementHeight = Math.max(maxElementHeight,elt.preferredHeight);
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -633,20 +634,20 @@ package org.flexlite.domUI.layouts
 			maxElementWidth = 0;
 			maxElementHeight = 0;
 		}
-		
+
 		/**
 		 * 当前视图中的第一个元素索引
-		 */		
+		 */
 		private var startIndex:int = -1;
 		/**
 		 * 当前视图中的最后一个元素的索引
-		 */		
+		 */
 		private var endIndex:int = -1;
 		/**
-		 * 视图的第一个和最后一个元素的索引值已经计算好的标志 
-		 */		
+		 * 视图的第一个和最后一个元素的索引值已经计算好的标志
+		 */
 		private var indexInViewCalculated:Boolean = false;
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -662,12 +663,12 @@ package org.flexlite.domUI.layouts
 					target.invalidateDisplayList();
 				}
 			}
-			
+
 		}
-		
+
 		/**
 		 * 获取视图中第一个和最后一个元素的索引,返回是否发生改变
-		 */		
+		 */
 		private function getIndexInView():Boolean
 		{
 			if(!target||target.numElements==0)
@@ -675,7 +676,7 @@ package org.flexlite.domUI.layouts
 				startIndex = endIndex = -1;
 				return false;
 			}
-			
+
 			var numElements:int = target.numElements;
 			if(!useVirtualLayout)
 			{
@@ -683,7 +684,7 @@ package org.flexlite.domUI.layouts
 				endIndex = numElements-1;
 				return false;
 			}
-			
+
 			if(isNaN(target.width)||target.width==0||isNaN(target.height)||target.height==0)
 			{
 				startIndex = endIndex = -1;
@@ -736,10 +737,10 @@ package org.flexlite.domUI.layouts
 				startIndex = Math.min(numElements-1,Math.max(0,startRow*_columnCount));
 				endIndex = Math.min(numElements-1,Math.max(0,endRow*_columnCount-1));
 			}
-			
+
 			return startIndex != oldStartIndex||endIndex != oldEndIndex;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -774,7 +775,7 @@ package org.flexlite.domUI.layouts
 			{
 				calculateRowAndColumn(width,height);
 			}
-			
+
 			if(startIndex == -1||endIndex==-1)
 			{
 				target.setContentSize(0,0);
@@ -796,7 +797,7 @@ package org.flexlite.domUI.layouts
 					elt = target.getElementAt(i) as ILayoutElement;
 				if(elt == null||!elt.includeInLayout)
 					continue;
-				
+
 				if(orientedByColumns)
 				{
 					columnIndex = Math.ceil((index+1)/_rowCount)-1;
@@ -816,7 +817,7 @@ package org.flexlite.domUI.layouts
 				sizeAndPositionElement(elt,x,y,_columnWidth,rowHeight);
 				index++;
 			}
-			
+
 			var hPadding:Number = paddingL + paddingR;
 			var vPadding:Number = paddingT + paddingB;
 			var contentWidth:Number = (_columnWidth+horizontalGap)*_columnCount-horizontalGap;
@@ -826,26 +827,26 @@ package org.flexlite.domUI.layouts
 
 		/**
 		 * 为单个元素布局
-		 */		
+		 */
 		private function sizeAndPositionElement(element:ILayoutElement,cellX:int,cellY:int,
 												cellWidth:int,cellHeight:int):void
 		{
 			var elementWidth:Number = NaN;
 			var elementHeight:Number = NaN;
-			
+
 			if (horizontalAlign == HorizontalAlign.JUSTIFY)
 				elementWidth = cellWidth;
 			else if (!isNaN(element.percentWidth))
 				elementWidth = cellWidth * element.percentWidth * 0.01;
-			
+
 			if (verticalAlign == VerticalAlign.JUSTIFY)
 				elementHeight = cellHeight;
 			else if (!isNaN(element.percentHeight))
 				elementHeight = cellHeight * element.percentHeight * 0.01;
-			
-			
+
+
 			element.setLayoutBoundsSize(Math.round(elementWidth), Math.round(elementHeight));
-			
+
 			var x:Number = cellX;
 			switch (horizontalAlign)
 			{
@@ -856,7 +857,7 @@ package org.flexlite.domUI.layouts
 					x = cellX + (cellWidth - element.layoutBoundsWidth) / 2;
 					break;
 			}
-			
+
 			var y:Number = cellY;
 			switch (verticalAlign)
 			{
@@ -868,12 +869,12 @@ package org.flexlite.domUI.layouts
 					break;
 			}
 			element.setLayoutBoundsPosition(Math.round(x), Math.round(y));
-		}			
-		
-		
+		}
+
+
 		/**
 		 * 为两端对齐调整间隔或格子尺寸
-		 */		
+		 */
 		private function adjustForJustify(width:Number,height:Number):void
 		{
 			var padding:Number = isNaN(_padding)?0:_padding;
@@ -881,10 +882,10 @@ package org.flexlite.domUI.layouts
 			var paddingR:Number = isNaN(_paddingRight)?padding:_paddingRight;
 			var paddingT:Number = isNaN(_paddingTop)?padding:_paddingTop;
 			var paddingB:Number = isNaN(_paddingBottom)?padding:_paddingBottom;
-			
-			var targetWidth:Number = Math.max(0, 
+
+			var targetWidth:Number = Math.max(0,
 				width - paddingL - paddingR);
-			var targetHeight:Number = Math.max(0, 
+			var targetHeight:Number = Math.max(0,
 				height - paddingT - paddingB);
 			if(!isNaN(explicitVerticalGap))
 				_verticalGap = explicitVerticalGap;
@@ -892,14 +893,14 @@ package org.flexlite.domUI.layouts
 				_horizontalGap = explicitHorizontalGap;
 			_verticalGap = isNaN(_verticalGap)?0:_verticalGap;
 			_horizontalGap = isNaN(_horizontalGap)?0:_horizontalGap;
-			
+
 			var itemWidth:Number = _columnWidth + _horizontalGap;
 			if(itemWidth <= 0)
 				itemWidth = 1;
 			var itemHeight:Number = _rowHeight + _verticalGap;
 			if(itemHeight <= 0)
 				itemHeight = 1;
-			
+
 			var offsetY:Number = targetHeight-_rowHeight*_rowCount;
 			var offsetX:Number = targetWidth-_columnWidth*_columnCount;
 			var gapCount:int;
@@ -932,10 +933,10 @@ package org.flexlite.domUI.layouts
 						_columnWidth += (offsetX-(_columnCount-1)*_horizontalGap)/_columnCount;
 					}
 				}
-			}			
+			}
 		}
-		
-		
+
+
 		/**
 		 * @inheritDoc
 		 */
@@ -964,7 +965,7 @@ package org.flexlite.domUI.layouts
 			}
 			return bounds;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -993,7 +994,7 @@ package org.flexlite.domUI.layouts
 			}
 			return bounds;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -1022,7 +1023,7 @@ package org.flexlite.domUI.layouts
 			}
 			return bounds;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -1049,10 +1050,10 @@ package org.flexlite.domUI.layouts
 				bounds.top = target.contentHeight - paddingB;
 				bounds.bottom = target.contentHeight;
 			}
-			
+
 			return bounds;
 		}
-		
+
 		private function leftEdge(columnIndex:int):Number
 		{
 			if (columnIndex < 0)
@@ -1062,7 +1063,7 @@ package org.flexlite.domUI.layouts
 			var horizontalGap:Number = isNaN(_horizontalGap)?0:_horizontalGap;
 			return Math.max(0, columnIndex * (_columnWidth + horizontalGap)) + paddingL;
 		}
-		
+
 		private function rightEdge(columnIndex:int):Number
 		{
 			if (columnIndex < 0)
@@ -1070,10 +1071,10 @@ package org.flexlite.domUI.layouts
 			var padding:Number = isNaN(_padding)?0:_padding;
 			var paddingL:Number = isNaN(_paddingLeft)?padding:_paddingLeft;
 			var horizontalGap:Number = isNaN(_horizontalGap)?0:_horizontalGap;
-			return Math.min(target.contentWidth, columnIndex * (_columnWidth + horizontalGap) + 
+			return Math.min(target.contentWidth, columnIndex * (_columnWidth + horizontalGap) +
 				_columnWidth) + paddingL;
 		}
-		
+
 		final private function topEdge(rowIndex:int):Number
 		{
 			if (rowIndex < 0)
@@ -1083,7 +1084,7 @@ package org.flexlite.domUI.layouts
 			var verticalGap:Number = isNaN(_verticalGap)?0:_verticalGap;
 			return Math.max(0, rowIndex * (_rowHeight + verticalGap)) + paddingT;
 		}
-		
+
 		final private function bottomEdge(rowIndex:int):Number
 		{
 			if (rowIndex < 0)

@@ -1,30 +1,30 @@
 package org.flexlite.domUI.collections
 {
 	import flash.events.EventDispatcher;
-	
+
 	import org.flexlite.domUI.events.CollectionEvent;
 	import org.flexlite.domUI.events.CollectionEventKind;
-	
+
 	/**
-	 * 集合数据发生改变 
-	 */	
+	 * 集合数据发生改变
+	 */
 	[Event(name="collectionChange", type="org.flexlite.domUI.events.CollectionEvent")]
-	
+
 	[DXML(show="false")]
-	
+
 	[DefaultProperty(name="source")]
 	/**
 	 * Object的集合类数据结构包装器,通常作为Tree组件的数据源。
 	 * @author DOM
 	 */
-	public class ObjectCollection extends EventDispatcher 
+	public class ObjectCollection extends EventDispatcher
 		implements ICollection,ITreeCollection
 	{
 		/**
 		 * 构造函数
 		 * @param childrenKey 要从item中获取子项列表的属性名,属性值为一个数组或Vector。
 		 * @param parentKey 要从item中获取父级项的属性名
-		 */		
+		 */
 		public function ObjectCollection(childrenKey:String="children",parentKey:String="parent")
 		{
 			super();
@@ -33,13 +33,13 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * 要从item中获取子项列表的属性名
-		 */		
+		 */
 		private var childrenKey:String;
 		/**
 		 * 要从item中获取父级项的属性名
-		 */		
+		 */
 		private var parentKey:String;
-		
+
 		private var _source:Object;
 		/**
 		 * 数据源。注意：设置source会同时清空openNodes。
@@ -68,12 +68,12 @@ package org.flexlite.domUI.collections
 			}
 			dispatchCoEvent(CollectionEventKind.RESET);
 		}
-		
+
 		/**
 		 * 要显示的节点列表
-		 */		
+		 */
 		private var nodeList:Array = [];
-		
+
 		private var _openNodes:Array = [];
 		/**
 		 * 处于展开状态的节点列表
@@ -87,7 +87,7 @@ package org.flexlite.domUI.collections
 			_openNodes = value?value.concat():[];
 			refresh();
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -117,7 +117,7 @@ package org.flexlite.domUI.collections
 			}
 			return -1;
 		}
-		
+
 		/**
 		 * 通知视图，某个项目的属性已更新。
 		 */
@@ -129,7 +129,7 @@ package org.flexlite.domUI.collections
 				dispatchCoEvent(CollectionEventKind.UPDATE,index,-1,[item]);
 			}
 		}
-		
+
 		/**
 		 * 删除指定节点
 		 */
@@ -155,9 +155,9 @@ package org.flexlite.domUI.collections
 				nodeList.splice(index,1);
 				dispatchCoEvent(CollectionEventKind.REMOVE,index,-1,[item]);
 			}
-			
+
 		}
-		
+
 		private var _showRoot:Boolean = false;
 		/**
 		 * 是否显示根节点,默认false。
@@ -186,10 +186,10 @@ package org.flexlite.domUI.collections
 				refresh();
 			}
 		}
-		
+
 		/**
 		 * 添加打开的节点到列表
-		 */		
+		 */
 		private function addChildren(parent:Object,list:Array):void
 		{
 			if(!parent.hasOwnProperty(childrenKey)||_openNodes.indexOf(parent)==-1)
@@ -202,7 +202,7 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * @inheritDoc
-		 */		
+		 */
 		public function hasChildren(item:Object):Boolean
 		{
 			if(item.hasOwnProperty(childrenKey))
@@ -211,14 +211,14 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function isItemOpen(item:Object):Boolean
 		{
 			return _openNodes.indexOf(item)!=-1;
-		}	
+		}
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function expandItem(item:Object,open:Boolean=true):void
 		{
 			if(open)
@@ -228,7 +228,7 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * 打开一个节点
-		 */		
+		 */
 		private function openNode(item:Object):void
 		{
 			if(_openNodes.indexOf(item)==-1)
@@ -253,7 +253,7 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * 关闭一个节点
-		 */		
+		 */
 		private function closeNode(item:Object):void
 		{
 			var index:int = _openNodes.indexOf(item);
@@ -278,7 +278,7 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function getDepth(item:Object):int
 		{
 			var depth:int = 0;
@@ -294,7 +294,7 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * 刷新数据源。
-		 */		
+		 */
 		public function refresh():void
 		{
 			nodeList = [];
@@ -308,10 +308,10 @@ package org.flexlite.domUI.collections
 			}
 			dispatchCoEvent(CollectionEventKind.REFRESH);
 		}
-		
+
 		/**
 		 * 抛出事件
-		 */		
+		 */
 		private function dispatchCoEvent(kind:String = null, location:int = -1,
 										 oldLocation:int = -1, items:Array = null,oldItems:Array=null):void
 		{
@@ -338,6 +338,11 @@ package org.flexlite.domUI.collections
 				catch(e:Error){}
 				assignParent(child);
 			}
+		}
+
+		public function dispose():void
+		{
+			throw new Error('Not implemented');
 		}
 	}
 }

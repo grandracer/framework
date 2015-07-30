@@ -1,5 +1,6 @@
 package org.flexlite.domUI.collections
 {
+	import corelib.event.EventBinder;
 	import corelib.utils.IDisposable;
 
 	import flash.events.Event;
@@ -28,6 +29,8 @@ package org.flexlite.domUI.collections
 	 */
 	public class ArrayCollection extends Proxy implements ICollection, IDisposable
 	{
+		private var _eventBinder:EventBinder;
+
 		/**
 		 * 构造函数
 		 * @param source 数据源
@@ -35,15 +38,9 @@ package org.flexlite.domUI.collections
 		public function ArrayCollection(source:Array = null)
 		{
 			super();
-			eventDispatcher = new EventDispatcher(this);
-			if(source)
-			{
-				_source = source;
-			}
-			else
-			{
-				_source = [];
-			}
+			_eventBinder = new EventBinder();
+			_eventDispatcher = new EventDispatcher(this);
+			_source = source != null ? source : [];
 		}
 
 		private var _source:Array;
@@ -247,49 +244,31 @@ package org.flexlite.domUI.collections
 		//
 		//--------------------------------------------------------------------------
 
-		private var eventDispatcher:EventDispatcher;
+		private var _eventDispatcher:EventDispatcher;
 
-		/**
-		 * @inheritDoc
-		 */
-		public function addEventListener(type:String,
-										 listener:Function,
-										 useCapture:Boolean = false,
-										 priority:int = 0,
-										 useWeakReference:Boolean = false):void
+		public function addEventListener(eventType:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void
 		{
-			eventDispatcher.addEventListener(type, listener, useCapture,
-				priority, useWeakReference);
+			_eventBinder.addListener(_eventDispatcher, eventType, listener, useCapture, priority, useWeakReference);
 		}
-		/**
-		 * @inheritDoc
-		 */
-		public function removeEventListener(type:String,
-											listener:Function,
-											useCapture:Boolean = false):void
+
+		public function removeEventListener(eventType:String, listener:Function, useCapture:Boolean = false):void
 		{
-			eventDispatcher.removeEventListener(type, listener, useCapture);
+			if (_eventBinder != null) _eventBinder.removeListener(_eventDispatcher, eventType, listener, useCapture);
 		}
-		/**
-		 * @inheritDoc
-		 */
+
 		public function dispatchEvent(event:Event):Boolean
 		{
-			return eventDispatcher.dispatchEvent(event);
+			return _eventDispatcher.dispatchEvent(event);
 		}
-		/**
-		 * @inheritDoc
-		 */
-		public function hasEventListener(type:String):Boolean
+
+		public function hasEventListener(eventType:String):Boolean
 		{
-			return eventDispatcher.hasEventListener(type);
+			return _eventDispatcher.hasEventListener(eventType);
 		}
-		/**
-		 * @inheritDoc
-		 */
-		public function willTrigger(type:String):Boolean
+
+		public function willTrigger(eventType:String):Boolean
 		{
-			return eventDispatcher.willTrigger(type);
+			return _eventDispatcher.willTrigger(eventType);
 		}
 
 		//--------------------------------------------------------------------------
@@ -379,13 +358,19 @@ package org.flexlite.domUI.collections
 			return null;
 		}
 
-
         public function dispose():void
         {
-            if (_source) {
+			if (_eventBinder != null)
+			{
+				_eventBinder.dispose();
+				_eventBinder = null;
+			}
+            if (_source != null)
+			{
                 _source.splice(0, _source.length);
                 _source = null;
             }
+			_eventDispatcher = null;
         }
     }
 }

@@ -82,7 +82,7 @@ package org.flexlite.domUI.components
 			if (layout)
 			{
 				layout.typicalLayoutRect = null;
-				layout.removeEventListener("useVirtualLayoutChanged", layout_useVirtualLayoutChangedHandler);
+				_eventBinder.removeListener(layout, 'useVirtualLayoutChanged', layout_useVirtualLayoutChangedHandler);
 			}
 
 			if (layout && value && (layout.useVirtualLayout != value.useVirtualLayout))
@@ -91,7 +91,7 @@ package org.flexlite.domUI.components
 			if (value)
 			{
 				value.typicalLayoutRect = typicalLayoutRect;
-				value.addEventListener("useVirtualLayoutChanged", layout_useVirtualLayoutChangedHandler);
+				_eventBinder.addListener(value, 'useVirtualLayoutChanged', layout_useVirtualLayoutChangedHandler);
 			}
 		}
 
@@ -299,7 +299,7 @@ package org.flexlite.domUI.components
 			if(!cleanTimer)
 			{
 				cleanTimer = new Timer(3000,1);
-				cleanTimer.addEventListener(TimerEvent.TIMER,cleanAllFreeRenderer);
+				_eventBinder.addListener(cleanTimer, TimerEvent.TIMER, cleanAllFreeRenderer);
 			}
 			//为了提高持续滚动过程中的性能，防止反复地添加移除子项，这里不直接清理而是延迟后在滚动停止时清理一次。
 			cleanTimer.reset();
@@ -368,14 +368,15 @@ package org.flexlite.domUI.components
 			invalidateSize();
 			invalidateDisplayList();
 		}
+
 		/**
 		 * 移除数据源监听
 		 */
 		private function removeDataProviderListener():void
 		{
-			if(_dataProvider)
-				_dataProvider.removeEventListener(CollectionEvent.COLLECTION_CHANGE,onCollectionChange);
+			if (_dataProvider != null) _eventBinder.removeListener(_dataProvider, CollectionEvent.COLLECTION_CHANGE, onCollectionChange);
 		}
+
 		/**
 		 * 数据源改变事件处理
 		 */
@@ -530,18 +531,15 @@ package org.flexlite.domUI.components
 		 */
 		private function recycle(renderer:IItemRenderer):void
 		{
-			super.removeChild(renderer as DisplayObject);
-			if(renderer is IVisualElement)
-			{
-				(renderer as IVisualElement).ownerChanged(null);
-			}
+			var rendererAsDisplayObject:DisplayObject = renderer as DisplayObject;
+			var rendererAsVisualElement:IVisualElement = renderer as IVisualElement;
+			if (rendererAsDisplayObject != null && rendererAsDisplayObject.parent == this) removeChild(rendererAsDisplayObject);
+			if (rendererAsVisualElement != null) rendererAsVisualElement.ownerChanged(null);
 			var rendererClass:Class = rendererToClassMap[renderer];
-			if(!recyclerDic[rendererClass])
-			{
-				recyclerDic[rendererClass] = new Dictionary(true);
-			}
+			if (recyclerDic[rendererClass] == null) recyclerDic[rendererClass] = new Dictionary(true);
 			recyclerDic[rendererClass][renderer] = null;
 		}
+
 		/**
 		 * 更新当前所有项的索引
 		 */
@@ -707,8 +705,7 @@ package org.flexlite.domUI.components
 					layout.clearVirtualLayoutCache();
 				useVirtualLayoutChanged = false;
 				itemRendererChanged = false;
-				if(_dataProvider)
-					_dataProvider.addEventListener(CollectionEvent.COLLECTION_CHANGE,onCollectionChange);
+				if (_dataProvider != null) _eventBinder.addListener(_dataProvider, CollectionEvent.COLLECTION_CHANGE, onCollectionChange);
 				if(layout&&layout.useVirtualLayout)
 				{
 					invalidateSize();
@@ -796,7 +793,7 @@ package org.flexlite.domUI.components
 		/**
 		 * 用于测试默认大小的数据
 		 */
-		private var typicalItem:Object
+		private var typicalItem:Object;
 
 		private var typicalItemChanged:Boolean = false;
 		/**
@@ -989,16 +986,41 @@ package org.flexlite.domUI.components
         {
 			if (cleanTimer != null) {
 				cleanTimer.stop();
-				cleanTimer.removeEventListener(TimerEvent.TIMER,cleanAllFreeRenderer);
 				cleanTimer = null;
 			}
 			if (recyclerDic != null)
 			{
             	removeAllRenderers();
-				Dispose.disposeDictionary(recyclerDic);
+				Dispose.dispose(recyclerDic);
             	recyclerDic = null;
             }
-			dataProvider = null;
+			if (rendererToClassMap != null)
+			{
+				Dispose.dispose(rendererToClassMap);
+				rendererToClassMap = null;
+			}
+			if (freeRenderers != null)
+			{
+				Dispose.dispose(freeRenderers);
+				freeRenderers = null;
+			}
+			if (_dataProvider != null)
+			{
+				_dataProvider.dispose();
+				_dataProvider = null;
+			}
+			if (indexToRenderer != null)
+			{
+				Dispose.dispose(indexToRenderer);
+				indexToRenderer = null;
+			}
+			_rendererOwner = null;
+			virtualRendererIndices = null;
+			_itemRenderer = null;
+			_itemRendererSkinName = null;
+			_itemRendererFunction = null;
+			typicalItem = null;
+			typicalLayoutRect = null;
 			super.dispose();
         }
 

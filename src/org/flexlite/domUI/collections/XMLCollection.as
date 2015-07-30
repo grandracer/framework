@@ -1,33 +1,33 @@
 package org.flexlite.domUI.collections
 {
 	import flash.events.EventDispatcher;
-	
+
 	import org.flexlite.domUI.events.CollectionEvent;
 	import org.flexlite.domUI.events.CollectionEventKind;
-	
+
 	/**
-	 * 集合数据发生改变 
-	 */	
+	 * 集合数据发生改变
+	 */
 	[Event(name="collectionChange", type="org.flexlite.domUI.events.CollectionEvent")]
-	
+
 	[DXML(show="false")]
-	
+
 	[DefaultProperty(name="source")]
 	/**
 	 * XML的集合类数据结构包装器,通常作为Tree组件的数据源。
 	 * @author DOM
 	 */
-	public class XMLCollection extends EventDispatcher 
+	public class XMLCollection extends EventDispatcher
 		implements ICollection,ITreeCollection
 	{
 		/**
 		 * 构造函数
 		 * @param source 数据源
 		 * @param openNodes 打开的节点列表
-		 */		
+		 */
 		public function XMLCollection(source:XML=null,openNodes:Array=null)
 		{
-			super();	
+			super();
 			if(openNodes)
 			{
 				_openNodes = openNodes.concat();
@@ -42,7 +42,12 @@ package org.flexlite.domUI.collections
 				addChildren(_source,nodeList);
 			}
 		}
-		
+
+		public function dispose():void
+		{
+			// TODO
+		}
+
 		private var _source:XML;
 		/**
 		 * 数据源。注意：设置source会同时清空openNodes。
@@ -67,12 +72,12 @@ package org.flexlite.domUI.collections
 			}
 			dispatchCoEvent(CollectionEventKind.RESET);
 		}
-		
+
 		/**
 		 * 要显示的节点列表
-		 */		
+		 */
 		private var nodeList:Array = [];
-		
+
 		private var _openNodes:Array = [];
 		/**
 		 * 处于展开状态的节点列表
@@ -86,7 +91,7 @@ package org.flexlite.domUI.collections
 			_openNodes = value?value.concat():[];
 			refresh();
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -116,7 +121,7 @@ package org.flexlite.domUI.collections
 			}
 			return 0;
 		}
-		
+
 		private var _showRoot:Boolean = false;
 		/**
 		 * 是否显示根节点,默认false。
@@ -144,7 +149,7 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * 添加打开的节点到列表
-		 */		
+		 */
 		private function addChildren(parent:XML,list:Array):void
 		{
 			var children:XMLList = parent.children();
@@ -157,7 +162,7 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * @inheritDoc
-		 */		
+		 */
 		public function hasChildren(item:Object):Boolean
 		{
 			if(!(item is XML))
@@ -166,14 +171,14 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function isItemOpen(item:Object):Boolean
 		{
 			return _openNodes.indexOf(item)!=-1;
-		}	
+		}
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function expandItem(item:Object,open:Boolean=true):void
 		{
 			if(!(item is XML))
@@ -185,7 +190,7 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * 打开一个节点
-		 */		
+		 */
 		private function openNode(item:XML):void
 		{
 			var index:int = nodeList.indexOf(item);
@@ -207,7 +212,7 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * 关闭一个节点
-		 */		
+		 */
 		private function closeNode(item:XML):void
 		{
 			var index:int = _openNodes.indexOf(item);
@@ -217,7 +222,7 @@ package org.flexlite.domUI.collections
 			index = nodeList.indexOf(item);
 			if(index!=-1)
 			{
-				
+
 				var list:Array = [];
 				addChildren(item,list);
 				index++;
@@ -233,7 +238,7 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function getDepth(item:Object):int
 		{
 			var depth:int = 0;
@@ -251,7 +256,7 @@ package org.flexlite.domUI.collections
 		}
 		/**
 		 * 刷新数据源。
-		 */		
+		 */
 		public function refresh():void
 		{
 			nodeList = [];
@@ -265,10 +270,10 @@ package org.flexlite.domUI.collections
 			}
 			dispatchCoEvent(CollectionEventKind.REFRESH);
 		}
-		
+
 		/**
 		 * 抛出事件
-		 */		
+		 */
 		private function dispatchCoEvent(kind:String = null, location:int = -1,
 										 oldLocation:int = -1, items:Array = null,oldItems:Array=null):void
 		{

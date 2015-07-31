@@ -8,20 +8,20 @@ package org.flexlite.domUI.components
 	import org.flexlite.domUI.layouts.supportClasses.LayoutBase;
 
 	use namespace dx_internal;
-	
+
 	/**
-	 * 添加了项呈示器 
-	 */	
+	 * 添加了项呈示器
+	 */
 	[Event(name="rendererAdd", type="org.flexlite.domUI.events.RendererExistenceEvent")]
 	/**
-	 * 移除了项呈示器 
-	 */	
+	 * 移除了项呈示器
+	 */
 	[Event(name="rendererRemove", type="org.flexlite.domUI.events.RendererExistenceEvent")]
-	
+
 	[DXML(show="true")]
-	
+
 	[DefaultProperty(name="dataProvider",array="false")]
-	
+
 	/**
 	 * 可设置外观的数据项目容器基类
 	 * @author DOM
@@ -30,12 +30,12 @@ package org.flexlite.domUI.components
 	{
 		/**
 		 * 构造函数
-		 */		
+		 */
 		public function SkinnableDataContainer()
 		{
 			super();
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -57,33 +57,33 @@ package org.flexlite.domUI.components
 			renderer.data = data;
 			return renderer;
 		}
-		
+
 		/**
-		 * 返回可在项呈示器中显示的 String 
-		 */		
+		 * 返回可在项呈示器中显示的 String
+		 */
 		public function itemToLabel(item:Object):String
 		{
 			if (item !== null)
 				return item.toString();
 			else return " ";
 		}
-		
+
 		/**
 		 * [SkinPart]数据项目容器实体
-		 */		
+		 */
 		public var dataGroup:DataGroup;
 		/**
-		 * dataGroup发生改变时传递的参数 
-		 */		
+		 * dataGroup发生改变时传递的参数
+		 */
 		private var dataGroupProperties:Object = {};
-		
+
 		/**
 		 * 列表数据源，请使用实现了ICollection接口的数据类型，例如ArrayCollection
-		 */		
+		 */
 		public function get dataProvider():ICollection
-		{       
+		{
 			return dataGroup!=null
-			? dataGroup.dataProvider 
+			? dataGroup.dataProvider
 				: dataGroupProperties.dataProvider;
 		}
 
@@ -99,18 +99,18 @@ package org.flexlite.domUI.components
 				dataGroupProperties.dataProvider = true;
 			}
 		}
-		
+
 		/**
 		 * 用于数据项目的项呈示器。该类必须实现 IItemRenderer 接口。 <br/>
 		 * rendererClass获取顺序：itemRendererFunction > itemRenderer > 默认ItemRenerer。
-		 */		
+		 */
 		public function get itemRenderer():Class
 		{
-			return (dataGroup) 
-			? dataGroup.itemRenderer 
+			return (dataGroup)
+			? dataGroup.itemRenderer
 				: dataGroupProperties.itemRenderer;
 		}
-		
+
 		public function set itemRenderer(value:Class):void
 		{
 			if (dataGroup==null)
@@ -123,18 +123,18 @@ package org.flexlite.domUI.components
 				dataGroupProperties.itemRenderer = true;
 			}
 		}
-		
+
 		/**
 		 * 条目渲染器的可选皮肤标识符。在实例化itemRenderer时，若其内部没有设置过skinName,则将此属性的值赋值给它的skinName。
 		 * 注意:若itemRenderer不是ISkinnableClient，则此属性无效。
-		 */	
+		 */
 		public function get itemRendererSkinName():Object
 		{
-			return (dataGroup) 
-			? dataGroup.itemRendererSkinName 
+			return (dataGroup)
+			? dataGroup.itemRendererSkinName
 				: dataGroupProperties.itemRendererSkinName;
 		}
-		
+
 		public function set itemRendererSkinName(value:Object):void
 		{
 			if (dataGroup==null)
@@ -147,20 +147,20 @@ package org.flexlite.domUI.components
 				dataGroupProperties.itemRendererSkinName = true;
 			}
 		}
-		
+
 		/**
 		 * 为某个特定项目返回一个项呈示器Class的函数。 <br/>
 		 * rendererClass获取顺序：itemRendererFunction > itemRenderer > 默认ItemRenerer。 <br/>
 		 * 应该定义一个与此示例函数类似的呈示器函数： <br/>
 		 * function myItemRendererFunction(item:Object):Class
-		 */		
+		 */
 		public function get itemRendererFunction():Function
 		{
-			return (dataGroup) 
-			? dataGroup.itemRendererFunction 
+			return (dataGroup)
+			? dataGroup.itemRendererFunction
 				: dataGroupProperties.itemRendererFunction;
 		}
-		
+
 		public function set itemRendererFunction(value:Function):void
 		{
 			if (dataGroup==null)
@@ -173,17 +173,17 @@ package org.flexlite.domUI.components
 				dataGroupProperties.itemRendererFunction = true;
 			}
 		}
-		
+
 		/**
 		 * 布局对象
-		 */	
+		 */
 		public function get layout():LayoutBase
 		{
-			return (dataGroup) 
-			? dataGroup.layout 
+			return (dataGroup)
+			? dataGroup.layout
 				: dataGroupProperties.layout;
 		}
-		
+
 		public function set layout(value:LayoutBase):void
 		{
 			if (dataGroup==null)
@@ -196,42 +196,42 @@ package org.flexlite.domUI.components
 				dataGroupProperties.layout = true;
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override protected function partAdded(partName:String, instance:Object):void
 		{
 			super.partAdded(partName, instance);
-			
+
 			if (instance == dataGroup)
 			{
 				var newDataGroupProperties:Object = {};
-				
+
 				if (dataGroupProperties.layout !== undefined)
 				{
 					dataGroup.layout = dataGroupProperties.layout;
 					newDataGroupProperties.layout = true;
 				}
-				
+
 				if (dataGroupProperties.dataProvider !== undefined)
 				{
 					dataGroup.dataProvider = dataGroupProperties.dataProvider;
 					newDataGroupProperties.dataProvider = true;
 				}
-				
+
 				if (dataGroupProperties.itemRenderer !== undefined)
 				{
 					dataGroup.itemRenderer = dataGroupProperties.itemRenderer;
 					newDataGroupProperties.itemRenderer = true;
 				}
-				
+
 				if (dataGroupProperties.itemRendererSkinName !== undefined)
 				{
 					dataGroup.itemRendererSkinName = dataGroupProperties.itemRendererSkinName;
 					newDataGroupProperties.itemRendererSkinName = true;
 				}
-				
+
 				if (dataGroupProperties.itemRendererFunction !== undefined)
 				{
 					dataGroup.itemRendererFunction = dataGroupProperties.itemRendererFunction;
@@ -239,13 +239,13 @@ package org.flexlite.domUI.components
 				}
 				dataGroup.rendererOwner = this;
 				dataGroupProperties = newDataGroupProperties;
-				
+
 				if (hasEventListener(RendererExistenceEvent.RENDERER_ADD))
 				{
 					dataGroup.addEventListener(
 						RendererExistenceEvent.RENDERER_ADD, dispatchEvent);
 				}
-				
+
 				if (hasEventListener(RendererExistenceEvent.RENDERER_REMOVE))
 				{
 					dataGroup.addEventListener(
@@ -253,14 +253,14 @@ package org.flexlite.domUI.components
 				}
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override protected function partRemoved(partName:String, instance:Object):void
 		{
 			super.partRemoved(partName, instance);
-			
+
 			if (instance == dataGroup)
 			{
 				dataGroup.removeEventListener(
@@ -284,7 +284,7 @@ package org.flexlite.domUI.components
 				dataGroup.layout = null;
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -292,27 +292,27 @@ package org.flexlite.domUI.components
 			type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false) : void
 		{
 			super.addEventListener(type, listener, useCapture, priority, useWeakReference);
-			
+
 			if (type == RendererExistenceEvent.RENDERER_ADD && dataGroup)
 			{
 				dataGroup.addEventListener(
 					RendererExistenceEvent.RENDERER_ADD, dispatchEvent);
 			}
-			
+
 			if (type == RendererExistenceEvent.RENDERER_REMOVE && dataGroup)
 			{
 				dataGroup.addEventListener(
 					RendererExistenceEvent.RENDERER_REMOVE, dispatchEvent);
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override public function removeEventListener(type:String, listener:Function, useCapture:Boolean=false) : void
 		{
 			super.removeEventListener(type, listener, useCapture);
-			
+
 			if (type == RendererExistenceEvent.RENDERER_ADD && dataGroup)
 			{
 				if (!hasEventListener(RendererExistenceEvent.RENDERER_ADD))
@@ -321,7 +321,7 @@ package org.flexlite.domUI.components
 						RendererExistenceEvent.RENDERER_ADD, dispatchEvent);
 				}
 			}
-			
+
 			if (type == RendererExistenceEvent.RENDERER_REMOVE && dataGroup)
 			{
 				if (!hasEventListener(RendererExistenceEvent.RENDERER_REMOVE))
@@ -331,7 +331,7 @@ package org.flexlite.domUI.components
 				}
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -347,7 +347,7 @@ package org.flexlite.domUI.components
 			addToDisplayList(dataGroup);
 			partAdded("dataGroup",dataGroup);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -366,10 +366,8 @@ package org.flexlite.domUI.components
             if (dataGroup != null) {
                 dataGroup.dispose();
                 dataGroup = null;
-
                 dataGroupProperties.dataProvider = null;
             }
-
             super.dispose();
         }
     }

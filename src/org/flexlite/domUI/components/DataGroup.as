@@ -864,29 +864,29 @@ package org.flexlite.domUI.components
 		/**
 		 * 清理freeRenderer标志
 		 */
+
 		private var cleanFreeRenderer:Boolean = false;
+
 		/**
 		 * 移除所有项呈示器
 		 */
 		private function removeAllRenderers():void
 		{
-			var length:int = indexToRenderer.length;
-			var renderer:IItemRenderer;
-			for(var i:int=0;i<length;i++)
+			if (indexToRenderer != null)
 			{
-				renderer = indexToRenderer[i];
-				if(renderer)
+				for (var i:int = 0, length:int = indexToRenderer.length; i < length; i++)
 				{
-					recycle(renderer);
-					dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_REMOVE,
-						false, false, renderer, renderer.itemIndex, renderer.data));
+					var renderer:IItemRenderer = indexToRenderer[i];
+					if (renderer != null)
+					{
+						recycle(renderer);
+						dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_REMOVE, false, false, renderer, renderer.itemIndex, renderer.data));
+					}
 				}
+				indexToRenderer = [];
+				virtualRendererIndices = null;
 			}
-			indexToRenderer = [];
-			virtualRendererIndices = null;
-			if(!cleanFreeRenderer)
-				return;
-			cleanAllFreeRenderer();
+			if (cleanFreeRenderer) cleanAllFreeRenderer();
 		}
 
 		/**

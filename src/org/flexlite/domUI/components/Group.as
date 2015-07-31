@@ -1,7 +1,5 @@
 package org.flexlite.domUI.components
 {
-	import corelib.utils.Dispose;
-
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 
@@ -357,15 +355,13 @@ package org.flexlite.domUI.components
 
 			return element;
 		}
+
 		/**
 		 * @inheritDoc
 		 */
 		public function removeAllElements():void
 		{
-			for (var i:int = numElements - 1; i >= 0; i--)
-			{
-				removeElementAt(i);
-			}
+			if (_elementsContent != null) for (var i:int = numElements - 1; i >= 0; i--) removeElementAt(i);
 		}
 
 		/**

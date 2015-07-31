@@ -1,8 +1,10 @@
 package org.flexlite.domUI.components
 {
+	import corelib.utils.Dispose;
+
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
+
 	import org.flexlite.domCore.dx_internal;
 	import org.flexlite.domUI.components.supportClasses.ScrollerLayout;
 	import org.flexlite.domUI.core.IInvalidating;
@@ -12,28 +14,28 @@ package org.flexlite.domUI.components
 	import org.flexlite.domUI.core.NavigationUnit;
 	import org.flexlite.domUI.events.PropertyChangeEvent;
 	import org.flexlite.domUI.layouts.supportClasses.LayoutBase;
-	
+
 	use namespace dx_internal;
-	
+
 	[DXML(show="true")]
-	
+
 	[DefaultProperty(name="viewport",array="false")]
-	
+
 	/**
 	 * 滚动条组件
 	 * @author DOM
-	 */	
+	 */
 	public class Scroller extends SkinnableComponent implements IVisualElementContainer
 	{
 		/**
 		 * 构造函数
-		 */		
+		 */
 		public function Scroller()
 		{
 			super();
 			focusEnabled = true;
 		}
-		
+
 		private var _layout:LayoutBase;
 		/**
 		 * 此容器的布局对象,若不设置，默认使用ScrollerLayout。
@@ -42,7 +44,7 @@ package org.flexlite.domUI.components
 		{
 			return _layout;
 		}
-		
+
 		public function set layout(value:LayoutBase):void
 		{
 			if(_layout==value)
@@ -55,7 +57,7 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 实体容器
-		 */		
+		 */
 		private var contentGroup:Group
 		/**
 		 * @inheritDoc
@@ -92,12 +94,12 @@ package org.flexlite.domUI.components
 		{
 			return Scroller;
 		}
-		
+
 		private var _verticalScrollPolicy:String = "auto";
 
 		/**
 		 * 垂直滚动条显示策略，参见ScrollPolicy类定义的常量。
-		 */		
+		 */
 		public function get verticalScrollPolicy():String
 		{
 			return _verticalScrollPolicy;
@@ -115,7 +117,7 @@ package org.flexlite.domUI.components
 
 		/**
 		 * 水平滚动条显示策略，参见ScrollPolicy类定义的常量。
-		 */		
+		 */
 		public function get horizontalScrollPolicy():String
 		{
 			return _horizontalScrollPolicy;
@@ -130,7 +132,7 @@ package org.flexlite.domUI.components
 
 		/**
 		 * 标记皮肤需要更新尺寸和布局
-		 */		
+		 */
 		private function invalidateSkin():void
 		{
 			if(contentGroup)
@@ -138,38 +140,38 @@ package org.flexlite.domUI.components
 				contentGroup.invalidateSize();
 				contentGroup.invalidateDisplayList();
 			}
-		}    
-		
+		}
+
 		/**
 		 * [SkinPart]水平滚动条
-		 */		
+		 */
 		public var horizontalScrollBar:HScrollBar;
 
 		/**
 		 * [SkinPart]垂直滚动条
-		 */		
+		 */
 		public var verticalScrollBar:VScrollBar;
-		
+
 		private var _viewport:IViewport;
-		
+
 		/**
-		 * 要滚动的视域组件。 
-		 */		
+		 * 要滚动的视域组件。
+		 */
 		public function get viewport():IViewport
-		{       
+		{
 			return _viewport;
 		}
 		public function set viewport(value:IViewport):void
 		{
 			if (value == _viewport)
 				return;
-			
+
 			uninstallViewport();
 			_viewport = value;
 			installViewport();
 			dispatchEvent(new Event("viewportChanged"));
 		}
-		
+
 		private var _useMouseWheelDelta:Boolean = true;
 		/**
 		 * 用户在操作系统中可以设置将鼠标滚轮每滚动一个单位应滚动多少行。
@@ -190,14 +192,14 @@ package org.flexlite.domUI.components
 			if(verticalScrollBar)
 				verticalScrollBar.useMouseWheelDelta = _useMouseWheelDelta;
 		}
-		
+
 		/**
 		 * 安装并初始化视域组件
-		 */		
+		 */
 		private function installViewport():void
 		{
 			if (skinObject && viewport)
-			{ 
+			{
 				viewport.clipAndEnableScrolling = true;
 				contentGroup.addElementAt(viewport,0);
 				viewport.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, viewport_propertyChangeHandler);
@@ -207,16 +209,16 @@ package org.flexlite.domUI.components
 			if (horizontalScrollBar)
 				horizontalScrollBar.viewport = viewport;
 		}
-		
+
 		/**
 		 * 卸载视域组件
-		 */		
+		 */
 		private function uninstallViewport():void
 		{
 			if (horizontalScrollBar)
 				horizontalScrollBar.viewport = null;
 			if (verticalScrollBar)
-				verticalScrollBar.viewport = null;        
+				verticalScrollBar.viewport = null;
 			if (skin && viewport)
 			{
 				viewport.clipAndEnableScrolling = false;
@@ -224,15 +226,15 @@ package org.flexlite.domUI.components
 				viewport.removeEventListener(PropertyChangeEvent.PROPERTY_CHANGE, viewport_propertyChangeHandler);
 			}
 		}
-		
-		
+
+
 		private var _minViewportInset:Number = 0;
-		
+
 		/**
 		 * Scroller四个边与视域组件的最小间隔距离。
 		 * 如果滚动条都不可见，则四个边的间隔为此属性的值。
 		 * 如果滚动条可见，则取滚动条的宽度和此属性的值的较大值。
-		 */		
+		 */
 		public function get minViewportInset():Number
 		{
 			return _minViewportInset;
@@ -241,15 +243,15 @@ package org.flexlite.domUI.components
 		{
 			if (value == _minViewportInset)
 				return;
-			
+
 			_minViewportInset = value;
 			invalidateSkin();
 		}
-		
+
 		private var _measuredSizeIncludesScrollBars:Boolean = true;
 		/**
 		 * 如果为 true，Scroller的测量大小会加上滚动条所占的空间，否则 Scroller的测量大小仅取决于其视域组件的尺寸。
-		 */		
+		 */
 		public function get measuredSizeIncludesScrollBars():Boolean
 		{
 			return _measuredSizeIncludesScrollBars;
@@ -258,33 +260,33 @@ package org.flexlite.domUI.components
 		{
 			if (value == _measuredSizeIncludesScrollBars)
 				return;
-			
+
 			_measuredSizeIncludesScrollBars = value;
 			invalidateSkin();
-		}   
-		
+		}
+
 		/**
 		 * 视域组件的属性改变
-		 */		
+		 */
 		private function viewport_propertyChangeHandler(event:PropertyChangeEvent):void
 		{
-			switch(event.property) 
+			switch(event.property)
 			{
-				case "contentWidth": 
-				case "contentHeight": 
+				case "contentWidth":
+				case "contentHeight":
 					invalidateSkin();
 					break;
 			}
 		}
-		
+
 		public function get numElements():int
 		{
 			return viewport ? 1 : 0;
 		}
-		
+
 		/**
 		 * 抛出索引越界异常
-		 */		
+		 */
 		private function throwRangeError(index:int):void
 		{
 			throw new RangeError("索引:\""+index+"\"超出可视元素索引范围");
@@ -300,7 +302,7 @@ package org.flexlite.domUI.components
 				throwRangeError(index);
 			return null;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -320,7 +322,7 @@ package org.flexlite.domUI.components
 				return true;
 			return false;
 		}
-		
+
 		private function throwNotSupportedError():void
 		{
 			throw new Error("此方法在Scroller组件内不可用!");
@@ -394,23 +396,23 @@ package org.flexlite.domUI.components
 			super.attachSkin(skin);
 			installViewport();
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override protected function detachSkin(skin:Object):void
-		{    
+		{
 			uninstallViewport();
 			super.detachSkin(skin);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override protected function partAdded(partName:String, instance:Object):void
 		{
 			super.partAdded(partName, instance);
-			
+
 			if (instance == verticalScrollBar)
 			{
 				verticalScrollBar.viewport = viewport;
@@ -423,16 +425,16 @@ package org.flexlite.domUI.components
 				horizontalScrollBar.useMouseWheelDelta = _useMouseWheelDelta;
 				contentGroup.addElement(horizontalScrollBar);
 			}
-			
+
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override protected function partRemoved(partName:String, instance:Object):void
 		{
 			super.partRemoved(partName, instance);
-			
+
 			if (instance == verticalScrollBar)
 			{
 				verticalScrollBar.viewport = null;
@@ -446,17 +448,17 @@ package org.flexlite.domUI.components
 					contentGroup.removeElement(horizontalScrollBar);
 			}
 		}
-		
-		
+
+
 		/**
 		 * 皮肤上鼠标滚轮事件
-		 */		
+		 */
 		private function contentGroup_mouseWheelHandler(event:MouseEvent):void
 		{
 			const vp:IViewport = viewport;
 			if (event.isDefaultPrevented() || !vp || !vp.visible)
 				return;
-			
+
 			var nSteps:uint = Math.abs(event.delta);
 			var navigationUnit:uint;
 			if (verticalScrollBar && verticalScrollBar.visible)
@@ -488,9 +490,24 @@ package org.flexlite.domUI.components
 					}
 				}
 				event.preventDefault();
-			}            
+			}
 		}
-		
+
+		override public function dispose():void
+		{
+			if (_layout != null)
+			{
+				_layout.dispose();
+				_layout = null;
+			}
+			_horizontalScrollPolicy = null;
+			_verticalScrollPolicy = null;
+			_viewport = null;
+			contentGroup = null;
+			horizontalScrollBar = null;
+			verticalScrollBar = null;
+			super.dispose();
+		}
 	}
-	
+
 }

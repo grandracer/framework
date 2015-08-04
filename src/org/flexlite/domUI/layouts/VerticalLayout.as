@@ -4,6 +4,7 @@ package org.flexlite.domUI.layouts
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 
+	import org.flexlite.domUI.core.IAligned;
 	import org.flexlite.domUI.core.ILayoutElement;
 	import org.flexlite.domUI.core.IPadded;
 	import org.flexlite.domUI.core.IVisualElement;
@@ -15,7 +16,7 @@ package org.flexlite.domUI.layouts
 	 * 垂直布局
 	 * @author DOM
 	 */
-	public class VerticalLayout extends LayoutBase implements IPadded
+	public class VerticalLayout extends LayoutBase implements IAligned, IPadded
 	{
 		public function VerticalLayout()
 		{

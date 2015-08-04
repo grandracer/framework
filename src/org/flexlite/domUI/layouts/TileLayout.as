@@ -3,6 +3,7 @@ package org.flexlite.domUI.layouts
 	import flash.events.Event;
 	import flash.geom.Rectangle;
 
+	import org.flexlite.domUI.core.IAligned;
 	import org.flexlite.domUI.core.ILayoutElement;
 	import org.flexlite.domUI.core.IPadded;
 	import org.flexlite.domUI.layouts.supportClasses.LayoutBase;
@@ -13,7 +14,7 @@ package org.flexlite.domUI.layouts
 	 * 格子布局
 	 * @author DOM
 	 */
-	public class TileLayout extends LayoutBase implements IPadded
+	public class TileLayout extends LayoutBase implements IAligned, IPadded
 	{
 		/**
 		 * 构造函数

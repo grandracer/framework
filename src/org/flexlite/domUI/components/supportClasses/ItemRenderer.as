@@ -2,13 +2,13 @@ package org.flexlite.domUI.components.supportClasses
 {
 
 
-    import flash.events.Event;
+	import flash.events.IEventDispatcher;
 
-    import org.flexlite.domUI.components.IItemRenderer;
-    import org.flexlite.domUI.events.RendererExistenceEvent;
+	import org.flexlite.domUI.components.IItemRenderer;
+	import org.flexlite.domUI.events.RendererExistenceEvent;
 
-    [DXML(show="false")]
-	
+	[DXML(show="false")]
+
 	/**
 	 * 项呈示器基类
 	 * @author DOM
@@ -22,7 +22,7 @@ package org.flexlite.domUI.components.supportClasses
 			buttonMode = false;
 			useHandCursor = false;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -30,7 +30,7 @@ package org.flexlite.domUI.components.supportClasses
 		{
 			return ItemRenderer;
 		}
-		
+
 		private var dataChangedFlag:Boolean = false;
 		private var _untypedData:Object;
 		/**
@@ -61,12 +61,16 @@ package org.flexlite.domUI.components.supportClasses
 		/**
 		 * 子类复写此方法以在data数据源发生改变时跟新显示列表。
 		 * 与直接复写data的setter方法不同，它会确保在皮肤已经附加完成后再被调用。
-		 */		
+		 */
 		protected function dataChanged():void
 		{
-			dispatchEvent(new RendererExistenceEvent(RendererExistenceEvent.RENDERER_DATA_CHANGE, false, false, this, _itemIndex, _untypedData));
+			var event:RendererExistenceEvent = new RendererExistenceEvent(RendererExistenceEvent.RENDERER_DATA_CHANGE, false, false, this, _itemIndex, _untypedData);
+			var iowner:IEventDispatcher = IEventDispatcher(owner);
+			var iparent:IEventDispatcher = IEventDispatcher(parent);
+			iparent.dispatchEvent(event);
+			if (iowner != iparent) iowner.dispatchEvent(event);
 		}
-		
+
 		private var _selected:Boolean = false;
 		/**
 		 * @inheritDoc
@@ -75,7 +79,7 @@ package org.flexlite.domUI.components.supportClasses
 		{
 			return _selected;
 		}
-		
+
 		public function set selected(value:Boolean):void
 		{
 			if(_selected==value)
@@ -83,7 +87,7 @@ package org.flexlite.domUI.components.supportClasses
 			_selected = value;
 			invalidateSkinState();
 		}
-		
+
 		private var _itemIndex:int = -1;
 		/**
 		 * @inheritDoc
@@ -92,12 +96,12 @@ package org.flexlite.domUI.components.supportClasses
 		{
 			return _itemIndex;
 		}
-		
+
 		public function set itemIndex(value:int):void
 		{
 			_itemIndex = value;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -110,7 +114,7 @@ package org.flexlite.domUI.components.supportClasses
 				dataChanged();
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */

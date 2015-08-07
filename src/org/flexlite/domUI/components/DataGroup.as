@@ -811,6 +811,13 @@ package org.flexlite.domUI.components
 			}
 		}
 
+		private var _measureRendererSizeFlag:Boolean = false;
+
+		public function get measureRendererSizeFlag():Boolean
+		{
+			return _measureRendererSizeFlag;
+		}
+
 		/**
 		 * 测量项呈示器默认尺寸
 		 */
@@ -829,6 +836,7 @@ package org.flexlite.domUI.components
 				return;
 			}
 			createNewRendererFlag = true;
+			_measureRendererSizeFlag = true;
 			var displayObj:DisplayObject = typicalRenderer as DisplayObject;
 			updateRenderer(typicalRenderer,0,typicalItem);
 			if(typicalRenderer is IInvalidating)
@@ -839,6 +847,7 @@ package org.flexlite.domUI.components
 				Math.abs(w*displayObj.scaleX),Math.abs(h*displayObj.scaleY));
 			recycle(typicalRenderer);
 			setTypicalLayoutRect(rect);
+			_measureRendererSizeFlag = false;
 			createNewRendererFlag = false;
 		}
 

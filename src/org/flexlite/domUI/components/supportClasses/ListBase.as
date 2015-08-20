@@ -7,7 +7,6 @@ package org.flexlite.domUI.components.supportClasses
 	import org.flexlite.domUI.collections.ICollection;
 	import org.flexlite.domUI.components.IItemRenderer;
 	import org.flexlite.domUI.components.SkinnableDataContainer;
-	import org.flexlite.domUI.components.TabBar;
 	import org.flexlite.domUI.core.IVisualElement;
 	import org.flexlite.domUI.events.CollectionEvent;
 	import org.flexlite.domUI.events.CollectionEventKind;
@@ -654,29 +653,26 @@ package org.flexlite.domUI.components.supportClasses
 		protected function dataGroup_rendererAddHandler(event:RendererExistenceEvent):void
 		{
 			var renderer:DisplayObject = event.renderer as DisplayObject;
-
-			if (renderer == null)
-				return;
-
-			_eventBinder.addListener(renderer, MouseEvent.ROLL_OVER, item_mouseEventHandler);
-			_eventBinder.addListener(renderer, MouseEvent.ROLL_OUT, item_mouseEventHandler);
-            _eventBinder.addListener(renderer, MouseEvent.CLICK, item_mouseEventHandler);
-            _eventBinder.addListener(renderer, MouseEvent.DOUBLE_CLICK, item_mouseEventHandler);
+			if (renderer != null)
+			{
+				_eventBinder.addListener(renderer, MouseEvent.ROLL_OVER, item_mouseEventHandler);
+				_eventBinder.addListener(renderer, MouseEvent.ROLL_OUT, item_mouseEventHandler);
+				_eventBinder.addListener(renderer, MouseEvent.DOUBLE_CLICK, item_mouseEventHandler);
+			}
         }
+
 		/**
 		 * 项呈示器被移除
 		 */
 		protected function dataGroup_rendererRemoveHandler(event:RendererExistenceEvent):void
 		{
 			var renderer:DisplayObject = event.renderer as DisplayObject;
-
-			if (renderer == null)
-				return;
-
-			_eventBinder.removeListener(renderer, MouseEvent.ROLL_OVER, item_mouseEventHandler);
-			_eventBinder.removeListener(renderer, MouseEvent.ROLL_OUT, item_mouseEventHandler);
-            _eventBinder.removeListener(renderer, MouseEvent.CLICK, item_mouseEventHandler);
-            _eventBinder.removeListener(renderer, MouseEvent.DOUBLE_CLICK, item_mouseEventHandler);
+			if (renderer != null)
+			{
+				_eventBinder.removeListener(renderer, MouseEvent.ROLL_OVER, item_mouseEventHandler);
+				_eventBinder.removeListener(renderer, MouseEvent.ROLL_OUT, item_mouseEventHandler);
+				_eventBinder.removeListener(renderer, MouseEvent.DOUBLE_CLICK, item_mouseEventHandler);
+			}
         }
 
 		protected function dataGroup_rendererDataChangeHandler(event:RendererExistenceEvent):void
@@ -684,23 +680,22 @@ package org.flexlite.domUI.components.supportClasses
 
 		}
 
-		private static const TYPE_MAP:Object = {rollOver: ListEvent.ITEM_ROLL_OVER,
-			rollOut: ListEvent.ITEM_ROLL_OUT, click: ListEvent.ITEM_CLICK, doubleClick: ListEvent.ITEM_DOUBLE_CLICK};
+		private static const EVENTS_MAP:Object = {};
+		{
+			EVENTS_MAP[MouseEvent.DOUBLE_CLICK] = ListEvent.ITEM_DOUBLE_CLICK;
+			EVENTS_MAP[MouseEvent.ROLL_OVER] = ListEvent.ITEM_ROLL_OVER;
+			EVENTS_MAP[MouseEvent.ROLL_OUT] = ListEvent.ITEM_ROLL_OUT;
+		}
 
 		/**
 		 * 项呈示器鼠标事件
 		 */
 		private function item_mouseEventHandler(event:MouseEvent):void
 		{
-			var type:String = event.type;
-			type = TYPE_MAP[type];
-			if (hasEventListener(type))
-			{
-				var itemRenderer:IItemRenderer = event.currentTarget as IItemRenderer;
-                if (!(this is TabBar) || type != ListEvent.ITEM_CLICK && type != ListEvent.ITEM_DOUBLE_CLICK)
-				    dispatchListEvent(event,type,itemRenderer);
-			}
+			var listEventType:String = EVENTS_MAP[event.type];
+			if (listEventType != null && hasEventListener(listEventType)) dispatchListEvent(event, listEventType, event.currentTarget as IItemRenderer);
 		}
+
 		/**
 		 * 抛出列表事件
 		 * @param mouseEvent 相关联的鼠标事件

@@ -88,6 +88,7 @@ package org.flexlite.domUI.core
 		implements IUIComponent,IDisposable,ILayoutManagerClient,ILayoutElement,
 		IInvalidating,IVisualElement,IToolTipManagerClient
 	{
+		private var _disposed:Boolean;
 
 		protected var _eventBinder:EventBinder;
 
@@ -99,6 +100,7 @@ package org.flexlite.domUI.core
 			super();
 			focusRect = false;
 			_eventBinder = new EventBinder();
+			_disposed = false;
 			addEventListener(Event.ADDED_TO_STAGE,onAddedToStage);
 			addEventListener(Event.ADDED_TO_STAGE,checkInvalidateFlag);
 		}
@@ -1405,6 +1407,7 @@ package org.flexlite.domUI.core
 
         public function dispose():void
         {
+			_disposed = true;
 			if (_eventBinder != null)
 			{
 				_eventBinder.dispose();
@@ -1412,6 +1415,11 @@ package org.flexlite.domUI.core
 			}
 			Dispose.disposeDisplayObjectContainer(this);
         }
+
+		public function isDisposed():Boolean
+		{
+			return _disposed;
+		}
 
 		private static function invalidateChildren(container:DisplayObjectContainer):void
 		{

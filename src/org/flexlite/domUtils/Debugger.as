@@ -1,5 +1,8 @@
 package org.flexlite.domUtils
 {
+	import corelib.utils.ObjectUtils;
+	import corelib.utils.StringUtils;
+
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Graphics;
@@ -15,7 +18,9 @@ package org.flexlite.domUtils
 	import flash.ui.Keyboard;
 	import flash.utils.describeType;
 	import flash.utils.getQualifiedClassName;
-	
+
+	import mx.utils.StringUtil;
+
 	import org.flexlite.domUI.collections.XMLCollection;
 	import org.flexlite.domUI.components.Group;
 	import org.flexlite.domUI.components.Label;
@@ -24,7 +29,6 @@ package org.flexlite.domUtils
 	import org.flexlite.domUI.components.TitleWindow;
 	import org.flexlite.domUI.components.ToggleButton;
 	import org.flexlite.domUI.components.Tree;
-	import org.flexlite.domUI.core.UIComponent;
 	import org.flexlite.domUI.events.CloseEvent;
 	import org.flexlite.domUI.events.TreeEvent;
 	import org.flexlite.domUI.events.UIEvent;
@@ -36,8 +40,7 @@ package org.flexlite.domUtils
 	import org.flexlite.domUI.skins.vector.ToggleButtonSkin;
 	import org.flexlite.domUI.skins.vector.TreeItemRendererSkin;
 	import org.flexlite.domUI.skins.vector.VScrollBarSkin;
-	
-	
+
 	/**
 	 * 运行时显示列表调试工具。
 	 * 快捷键：F11开启或关闭调试;F12开启或结束选择;F2复制选中的属性名;F3复制选中属性值;
@@ -49,7 +52,7 @@ package org.flexlite.domUtils
 		/**
 		 * 初始化调试工具
 		 * @param stage 舞台引用
-		 */		
+		 */
 		public static function initialize(stage:Stage):void
 		{
 			if(!stage)
@@ -58,7 +61,7 @@ package org.flexlite.domUtils
 		}
 		/**
 		 * 构造函数
-		 */		
+		 */
 		public function Debugger(stage:Stage)
 		{
 			super();
@@ -68,22 +71,22 @@ package org.flexlite.domUtils
 			appStage.addEventListener(KeyboardEvent.KEY_DOWN,onKeyDown);
 			addEventListener(MouseEvent.MOUSE_WHEEL, mouseEventHandler, true, 1000);
 		}
-		
+
 		/**
 		 * 过滤鼠标事件为可以取消的
-		 */		
+		 */
 		private function mouseEventHandler(e:MouseEvent):void
 		{
 			if (!e.cancelable&&e.eventPhase!=EventPhase.BUBBLING_PHASE)
 			{
 				e.stopImmediatePropagation();
-				var cancelableEvent:MouseEvent = new MouseEvent(e.type, e.bubbles, true, e.localX, 
+				var cancelableEvent:MouseEvent = new MouseEvent(e.type, e.bubbles, true, e.localX,
 					e.localY, e.relatedObject, e.ctrlKey, e.altKey,
 					e.shiftKey, e.buttonDown, e.delta);
-				e.target.dispatchEvent(cancelableEvent);               
+				e.target.dispatchEvent(cancelableEvent);
 			}
 		}
-		
+
 		private var window:TitleWindow = new TitleWindow();
 		private var targetLabel:Label = new Label();
 		private var rectLabel:Label = new Label();
@@ -93,7 +96,7 @@ package org.flexlite.domUtils
 		private var hasInitialized:Boolean = false;
 		/**
 		 * 初始化
-		 */		
+		 */
 		private function init():void
 		{
 			window.skinName = TitleWindowSkin;
@@ -152,7 +155,7 @@ package org.flexlite.domUtils
 		}
 		/**
 		 * 双击一个节点
-		 */		
+		 */
 		private function onTreeDoubleClick(event:MouseEvent):void
 		{
 			var item:XML = infoTree.selectedItem;
@@ -168,7 +171,7 @@ package org.flexlite.domUtils
 		}
 		/**
 		 * 选择模式发生改变
-		 */		
+		 */
 		private function onSelectModeChange(event:Event):void
 		{
 			if(selectMode.selectedValue=="鼠标事件")
@@ -188,7 +191,7 @@ package org.flexlite.domUtils
 		}
 		/**
 		 * 树列表创建完成
-		 */		
+		 */
 		private function onTreeComp(event:UIEvent):void
 		{
 			infoTree.removeEventListener(UIEvent.CREATION_COMPLETE,onTreeComp);
@@ -199,7 +202,7 @@ package org.flexlite.domUtils
 		}
 		/**
 		 * 即将打开树的一个节点,生成子节点内容。
-		 */		
+		 */
 		private function onTreeOpening(event:TreeEvent):void
 		{
 			if(!event.opening)
@@ -217,7 +220,7 @@ package org.flexlite.domUtils
 		}
 		/**
 		 * 根据xml节点获取对应的对象引用
-		 */		
+		 */
 		private function getTargetByItem(item:XML):*
 		{
 			var keys:Array = [String(item.@key)];
@@ -261,7 +264,7 @@ package org.flexlite.domUtils
 		}
 		/**
 		 * 树列表项显示文本格式化函数
-		 */		
+		 */
 		private function labelFunc(item:Object):String
 		{
 			if(item.hasOwnProperty("@value"))
@@ -281,21 +284,21 @@ package org.flexlite.domUtils
 		}
 		/**
 		 * 窗口创建完成
-		 */		
+		 */
 		private function onWindowComp(event:Event):void
 		{
 			window.removeEventListener(UIEvent.CREATION_COMPLETE,onWindowComp);
 			window.moveArea.doubleClickEnabled = true;
 			window.moveArea.addEventListener(MouseEvent.DOUBLE_CLICK,onWindowDoubleClick);
 		}
-		
+
 		private var oldX:Number;
 		private var oldY:Number;
 		private var oldWidth:Number;
 		private var oldHeight:Number;
 		/**
 		 * 双击窗口放大或还原
-		 */		
+		 */
 		private function onWindowDoubleClick(event:MouseEvent=null):void
 		{
 			window.isPopUp = !window.isPopUp;
@@ -320,11 +323,11 @@ package org.flexlite.domUtils
 		}
 		/**
 		 * 舞台引用
-		 */		
+		 */
 		private var appStage:Stage;
 		/**
 		 * 键盘事件
-		 */		
+		 */
 		private function onKeyDown(event:KeyboardEvent):void
 		{
 			if(event.keyCode==Keyboard.F11)
@@ -390,7 +393,7 @@ package org.flexlite.domUtils
 		}
 		/**
 		 * 设置当前选中节点为根节点
-		 */		
+		 */
 		private function changeCurrentTarget():void
 		{
 			var item:XML = infoTree.selectedItem;
@@ -411,10 +414,10 @@ package org.flexlite.domUtils
 				item = item.parent();
 			}
 		}
-		
+
 		/**
 		 * 显示
-		 */		
+		 */
 		private function show():void
 		{
 			if(!hasInitialized)
@@ -445,10 +448,10 @@ package org.flexlite.domUtils
 			onResize();
 			window.x = width-window.width;
 		}
-		
+
 		/**
 		 * 关闭
-		 */		
+		 */
 		private function close(event:Event=null):void
 		{
 			stage.focus = root as InteractiveObject;
@@ -468,16 +471,16 @@ package org.flexlite.domUtils
 		}
 		/**
 		 * stage子项发生改变
-		 */		
+		 */
 		private function onAdded(event:Event):void
 		{
 			if(parent.getChildIndex(this)!=parent.numChildren-1)
 				parent.addChild(this);
 		}
-		
+
 		/**
 		 * 舞台尺寸改变
-		 */		
+		 */
 		private function onResize(event:Event=null):void
 		{
 			width = stage.stageWidth;
@@ -489,7 +492,7 @@ package org.flexlite.domUtils
 			}
 			window.maxHeight = height;
 		}
-		
+
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
@@ -517,20 +520,20 @@ package org.flexlite.domUtils
 						if(target)
 							break;
 					}
-					
-					
-					
+
+
+
 				}
-				
+
 				if(currentTarget != target)
 				{
 					currentTarget = target;
 					invalidateDisplayList();
 				}
-				
+
 			}
 		}
-		
+
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
 			super.updateDisplayList(w,h);
@@ -540,20 +543,17 @@ package org.flexlite.domUtils
 			g.drawRect(0,0,w,h);
 			if(currentTarget)
 			{
-				var pos:Point = currentTarget.localToGlobal(new Point());
-				var className:String = getQualifiedClassName(currentTarget);
-				targetLabel.text = "对象:";
-				if(className.indexOf("::")!=-1)
-					targetLabel.text += className.split("::")[1];
-				else
-					targetLabel.text += className;
-				targetLabel.text += "#"+currentTarget.name+" : ["+className+"]";;
-				rectLabel.text = "区域:["+pos.x+","+pos.y+","+currentTarget.width+","+currentTarget.height+"]";
-				g.drawRect(pos.x,pos.y,currentTarget.width,currentTarget.height);
+				var leftTop:Point = currentTarget.localToGlobal(new Point());
+				var rightBottom:Point = currentTarget.localToGlobal(new Point(currentTarget.width, currentTarget.height));
+				var rectWidth:Number = rightBottom.x - leftTop.x;
+				var rectHeight:Number = rightBottom.y - leftTop.y;
+				targetLabel.text = StringUtils.substitute('Object: {0}#{1}', ObjectUtils.getUnqualifiedClassName(currentTarget), currentTarget.name);
+				rectLabel.text = StringUtils.substitute('Rect: x={0}, y={1}, w={2}, h={3}', leftTop.x, leftTop.y, rectWidth, rectHeight);
+				g.drawRect(leftTop.x, leftTop.y, rectWidth, rectHeight);
 				g.endFill();
 				g.beginFill(0x009aff,0);
 				g.lineStyle(1,0xff0000);
-				g.drawRect(pos.x,pos.y,currentTarget.width,currentTarget.height);
+				g.drawRect(leftTop.x, leftTop.y, rectWidth, rectHeight);
 			}
 			else
 			{
@@ -564,35 +564,35 @@ package org.flexlite.domUtils
 		}
 		/**
 		 * 当前鼠标下的对象
-		 */		
+		 */
 		private var currentTarget:DisplayObject;
 		/**
 		 * 鼠标移动过的标志
-		 */		
+		 */
 		private var mouseMoved:Boolean = false;
 		/**
 		 * 鼠标移动
-		 */		
+		 */
 		private function onMouseMove(event:MouseEvent):void
 		{
 			if(mouseMoved||!selectBtn.selected)
 				return;
 			mouseMoved = true;
 			invalidateProperties();
-		}	
-		
+		}
+
 		/**
 		 * 鼠标经过
-		 */		
+		 */
 		private function onMouseOver(event:MouseEvent):void
 		{
 			if(!selectBtn.selected||contains(event.target as DisplayObject))
 				return;
 			currentTarget = event.target as DisplayObject;
-			
+
 			invalidateDisplayList();
 		}
-		
+
 		private function onMouseOut(event:MouseEvent):void
 		{
 			if(!selectBtn.selected||contains(event.target as DisplayObject))
@@ -600,7 +600,7 @@ package org.flexlite.domUtils
 			currentTarget = null;
 			invalidateDisplayList();
 		}
-		
+
 		private var infoDp:XMLCollection = new XMLCollection();
 		private function onMouseDown(event:MouseEvent):void
 		{
@@ -766,11 +766,11 @@ package org.flexlite.domUtils
 			{
 				xml.appendChild(items.shift());
 			}
-			
+
 			return xml;
 		}
-		
-		private var layoutProps:Vector.<String> = 
+
+		private var layoutProps:Vector.<String> =
 			new <String>["x","y","width","height","measuredWidth","measuredHeight",
 			"layoutBoundsWidth","layoutBoundsHeight","preferredWidth","preferredHeight",
 			"left","right","top","bottom","percentWidth","percentHeight","verticalCenter",
@@ -781,8 +781,8 @@ package org.flexlite.domUtils
 			"initialized","isPopUp","mouseEnabled","mouseChildren","focusEnabled"];
 		/**
 		 * 基本数据类型列表
-		 */		
-		private var basicTypes:Vector.<String> = 
+		 */
+		private var basicTypes:Vector.<String> =
 			new <String>["Number","int","String","Boolean","uint"];
 	}
 }

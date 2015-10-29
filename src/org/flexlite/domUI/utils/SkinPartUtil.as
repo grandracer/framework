@@ -1,57 +1,43 @@
 package org.flexlite.domUI.utils
 {
-	import flash.utils.Dictionary;
-	import flash.utils.describeType;
-	import flash.utils.getQualifiedClassName;
-	
-	import org.flexlite.domUI.components.SkinnableComponent;
+    import avmplus.DescribeTypeJSON;
 
-	[ExcludeClass]
-	
-	/**
-	 * 获取皮肤定义的公开属性名工具类
-	 * @author DOM
-	 */
-	public class SkinPartUtil
-	{
-		/**
-		 * skinPart缓存字典
-		 */		
-		private static var skinPartCache:Dictionary = new Dictionary();
-		/**
-		 * 基本数据类型列表
-		 */		
-		private static var basicTypes:Vector.<String> = 
-			new <String>["Number","int","String","Boolean","uint","Object"];
-		
-		/**
-		 * 从一个Skin或其子类的实例里获取皮肤定义的公开属性名列表
-		 * @param skin 皮肤实例
-		 * @param superClass 皮肤基类，在遍历属性时过滤基类以上类定义的属性。
-		 */		
-		public static function getSkinParts(host:SkinnableComponent):Vector.<String>
-		{
-			var key:String = getQualifiedClassName(host);
-			if(skinPartCache[key])
-			{
-				return skinPartCache[key];
-			}
-			
-			var info:XML = describeType(host);
-			var node:XML;
-			var skinParts:Vector.<String> = new Vector.<String>();
-			var partName:String;
-			for each(node in info.variable)
-			{
-				partName = node.@name.toString();
-				if(basicTypes.indexOf(node.@type)==-1)
-				{
-					skinParts.push(partName);
-				}
-			}
-			skinPartCache[key] = skinParts;
-			return skinParts;
-		}
-		
-	}
+    import corelib.utils.ObjectUtils;
+
+    import flash.utils.Dictionary;
+    import flash.utils.describeType;
+
+    import org.flexlite.domUI.components.SkinnableComponent;
+
+    [ExcludeClass]
+    public class SkinPartUtil
+    {
+        private static var skinPartCache:Dictionary = new Dictionary();
+        private static var basicTypesMap:Object = ObjectUtils.makeSingleValuedMapping(new <String>['int', 'uint', 'Number', 'String', 'Boolean', 'Object'], true);
+
+        public static function getSkinParts(object:SkinnableComponent):Vector.<String>
+        {
+            var key:Class = ObjectUtils.getObjectClass(object);
+            if (skinPartCache[key] == null)
+            {
+                var skinParts:Vector.<String> = new Vector.<String>();
+                if (DescribeTypeJSON.available)
+                {
+                    var tdJSON:Object = DescribeTypeJSON.describeType(object, DescribeTypeJSON.INCLUDE_TRAITS | DescribeTypeJSON.INCLUDE_VARIABLES);
+                    for each (var variable:Object in tdJSON.traits.variables)
+                        if (basicTypesMap[variable.type] == null)
+                            skinParts.push(variable.name);
+                }
+                else
+                {
+                    var tdXML:XML = describeType(object);
+                    for each (var node:XML in tdXML.variable)
+                        if (basicTypesMap[node.@type] == null)
+                            skinParts.push(node.@name.toString());
+                }
+                skinPartCache[key] = skinParts;
+            }
+            return skinPartCache[key];
+        }
+    }
 }

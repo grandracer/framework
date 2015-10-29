@@ -3,7 +3,7 @@ package org.flexlite.domUI.components
 
 	import flash.display.DisplayObject;
 	import flash.geom.Rectangle;
-	
+
 	import org.flexlite.domCore.IBitmapAsset;
 	import org.flexlite.domCore.IInvalidateDisplay;
 	import org.flexlite.domCore.Injector;
@@ -16,14 +16,14 @@ package org.flexlite.domUI.components
 	import org.flexlite.domUI.events.UIEvent;
 
 	use namespace dx_internal;
-	
+
 	/**
 	 * 皮肤发生改变事件。当给skinName赋值之后，皮肤有可能是异步获取的，在赋值之前监听此事件，可以确保在皮肤解析完成时回调。
-	 */	
+	 */
 	[Event(name="skinChanged", type="org.flexlite.domUI.events.UIEvent")]
-	
+
 	[DXML(show="true")]
-	
+
 	/**
 	 * 素材包装器。<p/>
 	 * 注意：UIAsset仅在添skin时测量一次初始尺寸， 请不要在外部直接修改skin尺寸，
@@ -37,19 +37,19 @@ package org.flexlite.domUI.components
 			super();
 			mouseChildren = false;
 		}
-		
+
 		private var skinNameChanged:Boolean = false;
 		/**
 		 * 外部显式设置了皮肤名
-		 */		
+		 */
 		dx_internal var skinNameExplicitlySet:Object = false;
-		
+
 		dx_internal var _skinName:Object;
 
 		/**
 		 * 皮肤标识符。可以为Class,String,或DisplayObject实例等任意类型，具体规则由项目注入的素材适配器决定，
 		 * 适配器根据此属性值解析获取对应的显示对象，并赋值给skin属性。
-		 */	
+		 */
 		public function get skinName():Object
 		{
 			return _skinName;
@@ -70,7 +70,7 @@ package org.flexlite.domUI.components
 				skinNameChanged = true;
 			}
 		}
-		
+
 		dx_internal var _skin:DisplayObject;
 		/**
 		 * 显示对象皮肤。
@@ -79,12 +79,12 @@ package org.flexlite.domUI.components
 		{
 			return _skin;
 		}
-		
+
 		/**
 		 * 皮肤适配器解析skinName后回调函数
 		 * @param skin 皮肤显示对象
 		 * @param skinName 皮肤标识符
-		 */		
+		 */
 		protected function onGetSkin(skin:Object,skinName:Object):void
 		{
 			if(_skin!==skin)//如果皮肤是重用的，就不用执行添加和移除操作。
@@ -105,7 +105,7 @@ package org.flexlite.domUI.components
 			if(stage)
 				validateNow();
 		}
-		
+
 		private var createChildrenCalled:Boolean = false;
 		/**
 		 * @inheritDoc
@@ -119,52 +119,45 @@ package org.flexlite.domUI.components
 			}
 			createChildrenCalled = true;
 		}
-		
+
 		/**
 		 * 皮肤解析适配器
-		 */		
+		 */
 		private static var skinAdapter:ISkinAdapter;
 		/**
 		 * 默认的皮肤解析适配器
-		 */	
+		 */
 		private static var defaultSkinAdapter:DefaultSkinAdapter;
-		
+
 		private var skinReused:Boolean = false;
 		/**
 		 * 解析skinName
-		 */		
+		 */
 		private function parseSkinName():void
 		{
 			skinNameChanged = false;
+
+			if (skinAdapter == null && Injector.hasMapRule(ISkinAdapter)) skinAdapter = Injector.getInstance(ISkinAdapter);
 			var adapter:ISkinAdapter = skinAdapter;
-			if(!adapter)
+			if (adapter == null)
 			{
-				try
-				{
-					adapter = skinAdapter = Injector.getInstance(ISkinAdapter);
-				}
-				catch(e:Error)
-				{
-					if(!defaultSkinAdapter)
-						defaultSkinAdapter = new DefaultSkinAdapter();
-					adapter = defaultSkinAdapter;
-				}
+				if (defaultSkinAdapter == null) defaultSkinAdapter = new DefaultSkinAdapter();
+				adapter = defaultSkinAdapter;
 			}
-			if(!_skinName)
-			{
-				skinChnaged(null,_skinName);
-			}
+
+			if (_skinName == null) skinChanged(null, null);
 			else
 			{
-				var reuseSkin:DisplayObject = skinReused?null:_skin;
+				var wasReused:Boolean = skinReused;
 				skinReused = true;
-				adapter.getSkin(_skinName,skinChnaged,reuseSkin);
+				adapter.getSkin(_skinName, skinChanged, wasReused ? null : _skin);
 			}
 		}
+
 		/**
 		 * 皮肤发生改变
-		 */		
-		private function skinChnaged(skin:Object,skinName:Object):void
+		 */
+		private function skinChanged(skin:Object,skinName:Object):void
 		{
 			if(skinName!==_skinName)
 				return;
@@ -176,7 +169,7 @@ package org.flexlite.domUI.components
 				dispatchEvent(event);
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -191,10 +184,10 @@ package org.flexlite.domUI.components
 			this.measuredWidth = rect.width;
 			this.measuredHeight = rect.height;
 		}
-		
+
 		/**
 		 * 获取测量大小
-		 */		
+		 */
 		private function getMeasuredSize():Rectangle
 		{
 			var rect:Rectangle = new Rectangle();
@@ -221,7 +214,7 @@ package org.flexlite.domUI.components
 			}
 			return rect;
 		}
-		
+
 		private var _maintainAspectRatio:Boolean = false;
 		/**
 		 * 是否保持皮肤的宽高比,默认为false。
@@ -238,10 +231,10 @@ package org.flexlite.domUI.components
 			_maintainAspectRatio = value;
 			invalidateDisplayList();
 		}
-		
+
 		/**
 		 * 皮肤宽高比
-		 */		
+		 */
 		dx_internal var aspectRatio:Number = NaN;
 
 		/**
@@ -279,7 +272,7 @@ package org.flexlite.domUI.components
 							layoutBoundsY = Math.round((unscaledHeight-newHeight)*0.5);
 							unscaledHeight = newHeight;
 						}
-						
+
 						if(_skin is ILayoutElement)
 						{
 							if((_skin as ILayoutElement).includeInLayout)
@@ -310,12 +303,12 @@ package org.flexlite.domUI.components
 				}
 			}
 		}
-		
-		
+
+
 		/**
 		 * 添加对象到显示列表,此接口仅预留给皮肤不为ISkin而需要内部创建皮肤子部件的情况,
 		 * 如果需要管理子项，若有，请使用容器的addElement()方法，非法使用有可能造成无法自动布局。
-		 */		
+		 */
 		final dx_internal function addToDisplayList(child:DisplayObject):DisplayObject
 		{
 			return super.addChild(child);
@@ -323,7 +316,7 @@ package org.flexlite.domUI.components
 		/**
 		 * 添加对象到指定的索引,此接口仅预留给皮肤不为ISkin而需要内部创建皮肤子部件的情况,
 		 * 如果需要管理子项，若有，请使用容器的addElementAt()方法，非法使用有可能造成无法自动布局。
-		 */		
+		 */
 		final dx_internal function addToDisplayListAt(child:DisplayObject,index:int):DisplayObject
 		{
 			return super.addChildAt(child,index);
@@ -331,7 +324,7 @@ package org.flexlite.domUI.components
 		/**
 		 * 从显示列表移除对象,此接口仅预留给皮肤不为ISkin而需要内部创建皮肤子部件的情况,
 		 * 如果需要管理子项，若有，请使用容器的removeElement()方法,非法使用有可能造成无法自动布局。
-		 */		
+		 */
 		final dx_internal function removeFromDisplayList(child:DisplayObject):DisplayObject
 		{
 			return super.removeChild(child);
@@ -346,7 +339,7 @@ package org.flexlite.domUI.components
 		{
 			throw(new Error("addChild()"+errorStr+"addElement()代替"));
 		}
-		[Deprecated] 
+		[Deprecated]
 		*//**
 		 * @copy org.flexlite.domUI.components.Group#addChildAt()
 		 *//*
@@ -354,7 +347,7 @@ package org.flexlite.domUI.components
 		{
 			throw(new Error("addChildAt()"+errorStr+"addElementAt()代替"));
 		}
-		[Deprecated] 
+		[Deprecated]
 		*//**
 		 * @copy org.flexlite.domUI.components.Group#removeChild()
 		 *//*
@@ -362,7 +355,7 @@ package org.flexlite.domUI.components
 		{
 			throw(new Error("removeChild()"+errorStr+"removeElement()代替"));
 		}
-		[Deprecated] 
+		[Deprecated]
 		*//**
 		 * @copy org.flexlite.domUI.components.Group#removeChildAt()
 		 *//*
@@ -370,7 +363,7 @@ package org.flexlite.domUI.components
 		{
 			throw(new Error("removeChildAt()"+errorStr+"removeElementAt()代替"));
 		}
-		[Deprecated] 
+		[Deprecated]
 		*//**
 		 * @copy org.flexlite.domUI.components.Group#setChildIndex()
 		 *//*
@@ -378,7 +371,7 @@ package org.flexlite.domUI.components
 		{
 			throw(new Error("setChildIndex()"+errorStr+"setElementIndex()代替"));
 		}
-		[Deprecated] 
+		[Deprecated]
 		*//**
 		 * @copy org.flexlite.domUI.components.Group#swapChildren()
 		 *//*
@@ -386,7 +379,7 @@ package org.flexlite.domUI.components
 		{
 			throw(new Error("swapChildren()"+errorStr+"swapElements()代替"));
 		}
-		[Deprecated] 
+		[Deprecated]
 		*//**
 		 * @copy org.flexlite.domUI.components.Group#swapChildrenAt()
 		 *//*

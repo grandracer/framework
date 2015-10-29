@@ -1,6 +1,7 @@
 package org.flexlite.domDisplay
 {
-	import flash.display.Bitmap;
+	import corelib.utils.MathUtils;
+
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
 	import flash.display.Shape;
@@ -8,10 +9,10 @@ package org.flexlite.domDisplay
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	
+
 	import org.flexlite.domCore.IInvalidateDisplay;
 	import org.flexlite.domCore.dx_internal;
-	
+
 	use namespace dx_internal;
 	/**
 	 * 具有九宫格缩放功能的位图显示对象
@@ -25,13 +26,13 @@ package org.flexlite.domDisplay
 		 * @param bitmapData 被引用的BitmapData对象。
 		 * @param target 要绘制到的目标Graphics对象，若不传入，则绘制到自身。
 		 * @param smoothing 在缩放时是否对位图进行平滑处理。
-		 */		
+		 */
 		public function Scale9GridBitmap(bitmapData:BitmapData=null,target:Graphics=null,smoothing:Boolean=false)
 		{
 			super();
 			if(target)
 				this.target = target;
-			else 
+			else
 				this.target = graphics;
 			this._smoothing = smoothing;
 			if(bitmapData)
@@ -39,9 +40,9 @@ package org.flexlite.domDisplay
 		}
 		/**
 		 * smoothing改变标志
-		 */		
+		 */
 		private var smoothingChanged:Boolean = false;
-		
+
 		private var _smoothing:Boolean;
 		/**
 		 * 在缩放时是否对位图进行平滑处理。
@@ -59,16 +60,16 @@ package org.flexlite.domDisplay
 			invalidateProperties();
 		}
 
-		
+
 		/**
 		 * 要绘制到的目标Graphics对象。
-		 */		
+		 */
 		private var target:Graphics;
 		/**
 		 * bitmapData发生改变
-		 */		
+		 */
 		private var bitmapDataChanged:Boolean = false;
-		
+
 		private var _bitmapData:BitmapData;
 		/**
 		 * 被引用的BitmapData对象。
@@ -103,9 +104,9 @@ package org.flexlite.domDisplay
 					_height = NaN;
 			}
 		}
-		
+
 		private var scale9GridChanged:Boolean = false;
-		
+
 		private var _scale9Grid:Rectangle;
 
 		/**
@@ -129,9 +130,9 @@ package org.flexlite.domDisplay
 			scale9GridChanged = true;
 			invalidateProperties();
 		}
-		
+
 		private var offsetPointChanged:Boolean = false;
-		
+
 		dx_internal var _offsetPoint:Point;
 
 		/**
@@ -155,22 +156,22 @@ package org.flexlite.domDisplay
 			offsetPointChanged = true;
 			invalidateProperties();
 		}
-		
+
 		private var widthChanged:Boolean = false;
 		/**
 		 * 宽度显式设置标记
-		 */		
+		 */
 		private var widthExplicitSet:Boolean = false;
-		
+
 		private var _width:Number;
 		/**
 		 * @inheritDoc
 		 */
 		override public function get width():Number
 		{
-			return escapeNaN(_width);
+			return MathUtils.escapeNaN(_width);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -183,23 +184,23 @@ package org.flexlite.domDisplay
 			widthChanged = true;
 			invalidateProperties();
 		}
-		
+
 		private var heightChanged:Boolean = false;
 		/**
 		 * 高度显式设置标志
-		 */		
+		 */
 		private var heightExplicitSet:Boolean = false;
-		
+
 		private var _height:Number;
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override public function get height():Number
 		{
-			return escapeNaN(_height);
+			return MathUtils.escapeNaN(_height);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -212,20 +213,11 @@ package org.flexlite.domDisplay
 			widthChanged = true;
 			invalidateProperties();
 		}
-		/**
-		 * 过滤NaN数字
-		 */		
-		private function escapeNaN(number:Number):Number
-		{
-			if(isNaN(number))
-				return 0;
-			return number;
-		}
-		
+
 		private var invalidateFlag:Boolean = false;
 		/**
 		 * 标记有属性变化需要延迟应用
-		 */		
+		 */
 		protected function invalidateProperties():void
 		{
 			if(!invalidateFlag)
@@ -241,24 +233,24 @@ package org.flexlite.domDisplay
 		}
 		/**
 		 * 延迟应用属性事件
-		 */		
+		 */
 		private function validateProperties(event:Event=null):void
 		{
 			removeEventListener(Event.ENTER_FRAME,validateProperties);
 			removeEventListener(Event.RENDER,validateProperties);
 			commitProperties();
 			invalidateFlag = false;
-		}	
-		
+		}
+
 		/**
 		 * 立即应用所有标记为延迟验证的属性
-		 */		
+		 */
 		public function validateNow():void
 		{
 			if(invalidateFlag)
 				validateProperties();
 		}
-		
+
 		/**
 		 * 延迟应用属性
 		 */
@@ -277,23 +269,23 @@ package org.flexlite.domDisplay
 
 		/**
 		 * 滤镜宽度,在子类中赋值
-		 */		
+		 */
 		dx_internal var filterWidth:Number = 0;
 		/**
 		 * 滤镜高度,在子类中赋值
-		 */		
+		 */
 		dx_internal var filterHeight:Number = 0;
 		/**
 		 * 缓存的源九宫格网格坐标数据
-		 */		
+		 */
 		private var cachedSourceGrid:Array;
 		/**
 		 * 缓存的目标九宫格网格坐标数据
-		 */		
+		 */
 		private var cachedDestGrid:Array;
 		/**
 		 * 应用bitmapData属性
-		 */		
+		 */
 		private function applyBitmapData():void
 		{
 			target.clear();
@@ -319,7 +311,7 @@ package org.flexlite.domDisplay
 				matrix.identity();
 				matrix.scale((_width+filterWidth)/_bitmapData.width,(_height+filterHeight)/_bitmapData.height);
 				matrix.translate(offset.x,offset.y);
-				
+
 				target.beginBitmapFill(bitmapData,matrix,false,_smoothing);
 				target.drawRect(offset.x,offset.x,(_width+filterWidth),(_height+filterHeight));
 				target.endFill();
@@ -329,7 +321,7 @@ package org.flexlite.domDisplay
 		private static var matrix:Matrix = new Matrix();
 		/**
 		 * 应用具有九宫格缩放规则的位图数据
-		 */		
+		 */
 		private static function applyScaledBitmapData(target:Scale9GridBitmap):void
 		{
 			var bitmapData:BitmapData = target.bitmapData;
@@ -373,7 +365,7 @@ package org.flexlite.domDisplay
 				cachedSourceGrid.push([new Point(0, bitmapData.height), new Point(s9g.left, bitmapData.height),
 					new Point(s9g.right, bitmapData.height), new Point(bitmapData.width, bitmapData.height)]);
 			}
-			
+
 			var cachedDestGrid:Array = target.cachedDestGrid;
 			if (cachedDestGrid == null)
 			{
@@ -401,20 +393,20 @@ package org.flexlite.domDisplay
 				cachedDestGrid.push([new Point(0, height), new Point(s9g.left, height),
 					new Point(destScaleGridRight, height), new Point(width, height)]);
 			}
-			
+
 			var sourceSection:Rectangle = new Rectangle();
 			var destSection:Rectangle = new Rectangle();
-			
+
 			var g:Graphics = target.target;
 			g.clear();
-			
+
 			for (var rowIndex:int=0; rowIndex < 3; rowIndex++)
 			{
 				for (var colIndex:int = 0; colIndex < 3; colIndex++)
 				{
 					sourceSection.topLeft = cachedSourceGrid[rowIndex][colIndex];
 					sourceSection.bottomRight = cachedSourceGrid[rowIndex+1][colIndex+1];
-					
+
 					destSection.topLeft = cachedDestGrid[rowIndex][colIndex];
 					destSection.bottomRight = cachedDestGrid[rowIndex+1][colIndex+1];
 					if(destSection.width==0||destSection.height==0||
@@ -424,7 +416,7 @@ package org.flexlite.domDisplay
 					matrix.scale(destSection.width / sourceSection.width,destSection.height / sourceSection.height);
 					matrix.translate(destSection.x - sourceSection.x * matrix.a, destSection.y - sourceSection.y * matrix.d);
 					matrix.translate(roundedDrawX, roundedDrawY);
-					
+
 					g.beginBitmapFill(bitmapData, matrix,false,target._smoothing);
 					g.drawRect(destSection.x + roundedDrawX, destSection.y + roundedDrawY, destSection.width, destSection.height);
 					g.endFill();

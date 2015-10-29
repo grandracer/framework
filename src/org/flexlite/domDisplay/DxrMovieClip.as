@@ -1,5 +1,7 @@
 package org.flexlite.domDisplay
 {
+	import corelib.utils.MathUtils;
+
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.FrameLabel;
@@ -7,46 +9,45 @@ package org.flexlite.domDisplay
 	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
-	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
-	
+
 	import org.flexlite.domCore.IBitmapAsset;
 	import org.flexlite.domCore.IInvalidateDisplay;
 	import org.flexlite.domCore.IMovieClip;
 	import org.flexlite.domCore.dx_internal;
 	import org.flexlite.domDisplay.events.MovieClipPlayEvent;
-	
+
 	use namespace dx_internal;
-	
+
 	/**
 	 * 一次播放完成事件
-	 */	
+	 */
 	[Event(name="playComplete", type="org.flexlite.domDisplay.events.MovieClipPlayEvent")]
-	
+
 	/**
 	 * DXR影片剪辑。
 	 * 请根据实际需求选择最佳的IDxrDisplay呈现DxrData。
 	 * @author DOM
-	 */	
-	public class DxrMovieClip extends Sprite implements 
+	 */
+	public class DxrMovieClip extends Sprite implements
 		IMovieClip,IBitmapAsset,IDxrDisplay,IInvalidateDisplay
 	{
 		/**
 		 * 所有DxrMovieClip初始化时默认的帧率。默认24。
-		 */		
+		 */
 		public static var defaultFrameRate:int = 24;
 		/**
 		 * Timer字典,每种帧率对应一个Timer实例。
-		 */		
+		 */
 		private static var timerDic:Array = [];
 		/**
 		 * 每种帧率的Timer实例被添加监听的次数。
-		 */		
+		 */
 		private static var timerEventCount:Array = [];
 		/**
 		 * 零坐标点
-		 */		
+		 */
 		private static var zeroPoint:Point = new Point;
 		/**
 		 * 构造函数
@@ -65,7 +66,7 @@ package org.flexlite.domDisplay
 			if(data)
 				dxrData = data;
 		}
-		
+
 		private var _frameRate:int = 24;
 		/**
 		 * 播放帧率，即每秒钟播放的次数。有效值为1~60。
@@ -89,13 +90,13 @@ package org.flexlite.domDisplay
 			if(isPlaying)
 				attachTimerEventListener();
 		}
-		
-		
+
+
 		/**
 		 * smoothing改变标志
-		 */		
+		 */
 		private var smoothingChanged:Boolean = true;
-		
+
 		private var _smoothing:Boolean;
 		/**
 		 * 在缩放时是否对位图进行平滑处理。
@@ -104,7 +105,7 @@ package org.flexlite.domDisplay
 		{
 			return _smoothing;
 		}
-		
+
 		public function set smoothing(value:Boolean):void
 		{
 			if(_smoothing==value)
@@ -115,27 +116,27 @@ package org.flexlite.domDisplay
 		}
 		/**
 		 * 是否在舞台上的标志。
-		 */		
+		 */
 		private var inStage:Boolean = false;
 		/**
 		 * 被添加到显示列表时
-		 */		
+		 */
 		private function onAddedOrRemoved(event:Event):void
 		{
 			inStage = Boolean(event.type==Event.ADDED_TO_STAGE);
 			checkEventListener();
-		}		
+		}
 		/**
 		 * 位图显示对象
-		 */		
+		 */
 		private var bitmapContent:Bitmap;
 		/**
 		 * 具有九宫格缩放功能的位图显示对象
-		 */		
+		 */
 		private var s9gBitmapContent:Scale9GridBitmap;
-		
+
 		private var useScale9Grid:Boolean = false;
-		
+
 		private var _dxrData:DxrData;
 		/**
 		 * 被引用的DxrData对象
@@ -144,7 +145,7 @@ package org.flexlite.domDisplay
 		{
 			return _dxrData;
 		}
-		
+
 		public function set dxrData(value:DxrData):void
 		{
 			if(_dxrData==value)
@@ -184,7 +185,7 @@ package org.flexlite.domDisplay
 		}
 		/**
 		 * 当使用九宫格缩放时的x方向缩放值
-		 */		
+		 */
 		private var frameScaleX:Number = 1;
 		/**
 		 * 当使用九宫格缩放时的y方向缩放值
@@ -192,15 +193,15 @@ package org.flexlite.domDisplay
 		private var frameScaleY:Number = 1;
 		/**
 		 * 0帧的滤镜水平偏移量。
-		 */		
+		 */
 		private var initFilterWidth:Number = 0;
 		/**
 		 * 0帧的滤镜竖直偏移量
-		 */		
+		 */
 		private var initFilterHeight:Number = 0;
 		/**
 		 * 初始化显示对象实体
-		 */		
+		 */
 		private function initContent():void
 		{
 			frameScaleX = 1;
@@ -242,12 +243,12 @@ package org.flexlite.domDisplay
 				}
 			}
 		}
-		
+
 		private var eventListenerAdded:Boolean = false;
 		/**
 		 * 检测是否需要添加事件监听
 		 * @param remove 强制移除事件监听标志
-		 */			
+		 */
 		private function checkEventListener(remove:Boolean=false):void
 		{
 			var needAddEventListener:Boolean = (!remove&&inStage&&!isStop&&totalFrames>1&&visible);
@@ -264,7 +265,7 @@ package org.flexlite.domDisplay
 		}
 		/**
 		 * 移除当前的Timer事件监听
-		 */		
+		 */
 		private function removeTimerEventListener():void
 		{
 			if(!eventListenerAdded)
@@ -296,10 +297,10 @@ package org.flexlite.domDisplay
 			timerEventCount[_frameRate] ++;
 			eventListenerAdded = true;
 		}
-		
+
 		/**
 		 * 执行一次渲染
-		 */		
+		 */
 		private function render(evt:TimerEvent):void
 		{
 			var total:int = totalFrames;
@@ -327,7 +328,7 @@ package org.flexlite.domDisplay
 				callBack();
 			}
 			if(lastFrame)
-			{	
+			{
 				if(hasEventListener(MovieClipPlayEvent.PLAY_COMPLETE))
 				{
 					var event:MovieClipPlayEvent = new MovieClipPlayEvent(MovieClipPlayEvent.PLAY_COMPLETE);
@@ -335,10 +336,10 @@ package org.flexlite.domDisplay
 				}
 			}
 		}
-		
+
 		/**
 		 * 应用当前帧的位图数据
-		 */		
+		 */
 		private function applyCurrentFrameData():void
 		{
 			var bitmapData:BitmapData = dxrData.getBitmapData(_currentFrame);
@@ -386,23 +387,23 @@ package org.flexlite.domDisplay
 				bitmapContent.height = _height+sizeOffset.y;
 			}
 		}
-		
+
 		private var widthChanged:Boolean = false;
 		/**
 		 * 显式设置的宽度
-		 */		
+		 */
 		private var widthExplicitSet:Boolean;
-		
+
 		private var _width:Number;
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override public function get width():Number
 		{
-			return escapeNaN(_width);
+			return MathUtils.escapeNaN(_width);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -421,27 +422,27 @@ package org.flexlite.domDisplay
 			{
 				frameScaleX = 1;
 			}
-			
+
 			widthChanged = true;
 			invalidateProperties();
 		}
-		
+
 		private var heightChanged:Boolean = false;
 		/**
 		 * 显式设置的高度
-		 */		
+		 */
 		private var heightExplicitSet:Boolean;
-		
+
 		private var _height:Number;
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override public function get height():Number
 		{
-			return escapeNaN(_height);
+			return MathUtils.escapeNaN(_height);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -456,28 +457,18 @@ package org.flexlite.domDisplay
 				if(_dxrData)
 					frameScaleY = _height/(_dxrData.getBitmapData(0).height-initFilterHeight);
 			}
-			else 
+			else
 			{
 				frameScaleY = 1;
 			}
 			widthChanged = true;
 			invalidateProperties();
 		}
-		
-		/**
-		 * 过滤NaN数字
-		 */		
-		private function escapeNaN(number:Number):Number
-		{
-			if(isNaN(number))
-				return 0;
-			return number;
-		}
-		
+
 		private var invalidateFlag:Boolean = false;
 		/**
 		 * 标记有属性变化需要延迟应用
-		 */		
+		 */
 		protected function invalidateProperties():void
 		{
 			if(!invalidateFlag)
@@ -491,26 +482,26 @@ package org.flexlite.domDisplay
 				}
 			}
 		}
-		
+
 		/**
 		 * 立即应用所有标记为延迟验证的属性
-		 */		
+		 */
 		public function validateNow():void
 		{
 			if(invalidateFlag)
 				validateProperties();
 		}
-		
+
 		/**
 		 * 延迟应用属性事件
-		 */		
+		 */
 		private function validateProperties(event:Event=null):void
 		{
 			removeEventListener(Event.RENDER,validateProperties);
 			removeEventListener(Event.ENTER_FRAME,validateProperties);
 			commitProperties();
 			invalidateFlag = false;
-		}	
+		}
 		/**
 		 * 延迟应用属性
 		 */
@@ -524,7 +515,7 @@ package org.flexlite.domDisplay
 				}
 			}
 		}
-		
+
 		private var _currentFrame:int = 0;
 		/**
 		 * @inheritDoc
@@ -533,7 +524,7 @@ package org.flexlite.domDisplay
 		{
 			return _currentFrame;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -541,20 +532,20 @@ package org.flexlite.domDisplay
 		{
 			return dxrData?dxrData.totalFrames:0;
 		}
-		
+
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function get frameLabels():Array
 		{
 			return dxrData?dxrData.frameLabels:[];
 		}
-		
+
 		/**
 		 * 是否停止播放
-		 */		
+		 */
 		private var isStop:Boolean = false;
-		
+
 		private var _repeatPlay:Boolean = true;
 		/**
 		 * @inheritDoc
@@ -579,7 +570,7 @@ package org.flexlite.domDisplay
 		}
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function gotoAndStop(frame:Object):void
 		{
 			gotoFrame(frame);
@@ -603,7 +594,7 @@ package org.flexlite.domDisplay
 		}
 		/**
 		 * 帧回调函数列表
-		 */		
+		 */
 		private var callBackList:Array = [];
 		/**
 		 * @inheritDoc
@@ -612,14 +603,14 @@ package org.flexlite.domDisplay
 		{
 			callBackList[frame] = callBack;
 		}
-		
+
 		/**
 		 * 帧标签字典索引
-		 */		
+		 */
 		private var frameLabelDic:Dictionary;
 		/**
 		 * 跳到指定帧
-		 */		
+		 */
 		private function gotoFrame(frame:Object):void
 		{
 			if(_dxrData==null)
@@ -642,7 +633,7 @@ package org.flexlite.domDisplay
 				_currentFrame = totalFrames-1;
 			applyCurrentFrameData();
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -652,11 +643,11 @@ package org.flexlite.domDisplay
 		}
 		/**
 		 * 滤镜宽度
-		 */		
+		 */
 		private var filterWidth:Number = 0;
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function get measuredWidth():Number
 		{
 			if(bitmapData)
@@ -665,7 +656,7 @@ package org.flexlite.domDisplay
 		}
 		/**
 		 * 滤镜高度
-		 */		
+		 */
 		private var filterHeight:Number = 0;
 		/**
 		 * @inheritDoc

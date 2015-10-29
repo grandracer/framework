@@ -3,6 +3,7 @@ package org.flexlite.domUI.core
 	import corelib.event.EventBinder;
 	import corelib.utils.Dispose;
 	import corelib.utils.IDisposable;
+	import corelib.utils.MathUtils;
 
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -560,7 +561,7 @@ package org.flexlite.domUI.core
         {
             if( isNaN(_width))
                 return super.width;
-            return escapeNaN(_width);
+            return MathUtils.escapeNaN(_width);
         }
 
 
@@ -603,17 +604,9 @@ package org.flexlite.domUI.core
         {
             if( isNaN(_height))
                 return super.height;
-            return escapeNaN(_height);
+            return MathUtils.escapeNaN(_height);
         }
-		/**
-		 * 过滤NaN数字
-		 */
-		private function escapeNaN(number:Number):Number
-		{
-			if(isNaN(number))
-				return 0;
-			return number;
-		}
+
 		/**
 		 * @inheritDoc
 		 */
@@ -1358,7 +1351,7 @@ package org.flexlite.domUI.core
 			{
 				w = measuredWidth;
 			}
-			return escapeNaN(w*scaleX);
+			return MathUtils.escapeNaN(w*scaleX);
 		}
 		/**
 		 * 组件的布局高度,常用于父级的updateDisplayList()方法中
@@ -1379,7 +1372,7 @@ package org.flexlite.domUI.core
 			{
 				h = measuredHeight;
 			}
-			return escapeNaN(h*scaleY);
+			return MathUtils.escapeNaN(h*scaleY);
 		}
 
 		private var _focusEnabled:Boolean = false;

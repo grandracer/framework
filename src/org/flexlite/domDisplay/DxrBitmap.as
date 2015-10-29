@@ -1,12 +1,13 @@
 package org.flexlite.domDisplay
 {
+	import corelib.utils.MathUtils;
+
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.geom.Point;
-	
+
 	import org.flexlite.domCore.IBitmapAsset;
-	import org.flexlite.domCore.dx_internal;
-	
+
 	/**
 	 * DXR位图显示对象。
 	 * 请根据实际需求选择最佳的IDxrDisplay呈现DxrData。
@@ -19,14 +20,14 @@ package org.flexlite.domDisplay
 		/**
 		 * 构造函数,注意：DxrBitmap需要在外部手动添加起始坐标偏移量。
 		 * @param data 被引用的DxrData对象
-		 */		
+		 */
 		public function DxrBitmap(data:DxrData=null)
 		{
 			super();
 			if(data)
 				dxrData = data;
 		}
-		
+
 		private var _dxrData:DxrData;
 		/**
 		 * 被引用的DxrData对象
@@ -35,7 +36,7 @@ package org.flexlite.domDisplay
 		{
 			return _dxrData;
 		}
-		
+
 		public function set dxrData(value:DxrData):void
 		{
 			if(value==_dxrData)
@@ -72,22 +73,22 @@ package org.flexlite.domDisplay
 		}
 		/**
 		 * 滤镜宽度
-		 */		
+		 */
 		private var filterWidth:Number = 0;
 		/**
 		 * 宽度显式设置标记
-		 */		
+		 */
 		private var widthExplicitSet:Boolean = false;
-		
+
 		private var _width:Number;
 		/**
 		 * @inheritDoc
 		 */
 		override public function get width():Number
 		{
-			return escapeNaN(_width);
+			return MathUtils.escapeNaN(_width);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -102,13 +103,13 @@ package org.flexlite.domDisplay
 				if(_width==0)
 					super.width = 0;
 				else
-					super.width = escapeNaN(_width) + filterWidth;
+					super.width = MathUtils.escapeNaN(_width) + filterWidth;
 			}
 		}
-		
+
 		/**
 		 * 素材的默认宽度（以像素为单位）。
-		 */		
+		 */
 		public function get measuredWidth():Number
 		{
 			if(bitmapData)
@@ -124,25 +125,25 @@ package org.flexlite.domDisplay
 				return bitmapData.height-filterHeight;
 			return 0;
 		}
-		
+
 		/**
 		 * 滤镜高度
-		 */		
+		 */
 		private var filterHeight:Number = 0;
 		/**
 		 * 高度显式设置标志
-		 */		
+		 */
 		private var heightExplicitSet:Boolean = false;
-		
+
 		private var _height:Number;
 		/**
 		 * @inheritDoc
 		 */
 		override public function get height():Number
 		{
-			return escapeNaN(_height);
+			return MathUtils.escapeNaN(_height);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -157,27 +158,19 @@ package org.flexlite.domDisplay
 				if(_height==0)
 					super.height = 0;
 				else
-					super.height = escapeNaN(_height)+filterHeight;
+					super.height = MathUtils.escapeNaN(_height)+filterHeight;
 			}
 		}
-		
-		/**
-		 * 过滤NaN数字
-		 */		
-		private function escapeNaN(number:Number):Number
-		{
-			if(isNaN(number))
-				return 0;
-			return number;
-		}
+
 		/**
 		 * 被引用的BitmapData对象。注意:此属性被改为只读，对其赋值无效。
 		 * IDxrDisplay只能通过设置dxrData属性来显示位图数据。
-		 */		
+		 */
 		override public function get bitmapData():BitmapData
 		{
 			return super.bitmapData;
 		}
+
 		override public function set bitmapData(value:BitmapData):void
 		{
 		}

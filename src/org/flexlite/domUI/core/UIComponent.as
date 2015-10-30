@@ -21,8 +21,9 @@ package org.flexlite.domUI.core
 	import org.flexlite.domUI.managers.ISystemManager;
 	import org.flexlite.domUI.managers.IToolTipManagerClient;
 	import org.flexlite.domUI.managers.ToolTipManager;
+    import org.flexlite.domUI.utils.callLater;
 
-	use namespace dx_internal;
+    use namespace dx_internal;
 
 	/**
 	 * 组件尺寸发生改变
@@ -140,17 +141,33 @@ package org.flexlite.domUI.core
 		{
 			return _toolTip;
 		}
+
+        private var _tooltipUpdateScheduled:Boolean = false;
+        private var _tooltipUpdateOldValue:Object;
+
 		public function set toolTip(value:Object):void
 		{
+            if (value == null) value = '';
 			if(value==_toolTip)
 				return;
 			var oldValue:Object = _toolTip;
 			_toolTip = value;
 
-			ToolTipManager.registerToolTip(this, oldValue, value);
-
+            if (!_tooltipUpdateScheduled)
+            {
+                _tooltipUpdateScheduled = true;
+                _tooltipUpdateOldValue = oldValue;
+                callLater(_updateToolTip);
+            }
 			dispatchEvent(new Event("toolTipChanged"));
 		}
+
+        private function _updateToolTip():void
+        {
+            _tooltipUpdateScheduled = false;
+            if (_tooltipUpdateOldValue != _toolTip)
+                ToolTipManager.registerToolTip(this, _tooltipUpdateOldValue, _toolTip);
+        }
 
 		private var _toolTipClass:Class;
 		/**

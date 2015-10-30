@@ -147,9 +147,12 @@ package org.flexlite.domUI.core
 
 		public function set toolTip(value:Object):void
 		{
-            if (value == null) value = '';
-			if(value==_toolTip)
-				return;
+            var a:String = String(value);
+            if (a == null) a = '';
+            var b:String = String(_toolTip);
+            if (b == null) b = '';
+			if (a == b) return;
+
 			var oldValue:Object = _toolTip;
 			_toolTip = value;
 

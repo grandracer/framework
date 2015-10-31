@@ -20,7 +20,7 @@ package org.flexlite.domCore
             {
                 var cls:Class = null;
                 if (object is Class) cls = Class(object);
-                if (cls == null) cls = ObjectUtils.getObjectClass(object);
+                if (cls == null) cls = ObjectUtils.getClass(object);
                 if (__getKey$classNames[cls] == null) __getKey$classNames[cls] = getQualifiedClassName(object);
                 key = __getKey$classNames[cls];
             }

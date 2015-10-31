@@ -14,7 +14,7 @@ package org.flexlite.domUI.utils
 
         public static function getSkinParts(object:SkinnableComponent):Vector.<String>
         {
-            var key:Class = ObjectUtils.getObjectClass(object);
+            var key:Class = ObjectUtils.getClass(object);
             if (skinPartCache[key] == null) skinPartCache[key] = ObjectUtils.getNonDynamicPublicVariablesNames(object, basicTypesMap);
             return skinPartCache[key];
         }

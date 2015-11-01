@@ -162,7 +162,6 @@ package org.flexlite.domUI.core
                 _tooltipUpdateOldValue = oldValue;
                 callLater(_updateToolTip);
             }
-			dispatchEvent(new Event("toolTipChanged"));
 		}
 
         private function _updateToolTip():void

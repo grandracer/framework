@@ -220,7 +220,7 @@ package org.flexlite.domUI.components
 					elementRemoved(_elementsContent[i], i);
 				}
 
-				_elementsContent = value.slice();
+				_elementsContent = value.concat();
 
 				var n:int = _elementsContent.length;
 				for (i = 0; i < n; i++)
@@ -236,7 +236,7 @@ package org.flexlite.domUI.components
 			}
 			else
 			{
-				_elementsContent = value.slice();
+				_elementsContent = value.concat();
 			}
 		}
 

@@ -150,7 +150,7 @@ package org.flexlite.domUI.components
 		 */
 		public function get frameLabels():Array
 		{
-			return _frameLabels.slice();
+			return _frameLabels.concat();
 		}
 
 		private var _repeatPlay:Boolean = true;

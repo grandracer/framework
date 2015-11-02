@@ -80,11 +80,11 @@ package org.flexlite.domUI.collections
 		 */
 		public function get openNodes():Array
 		{
-			return _openNodes.slice();
+			return _openNodes.concat();
 		}
 		public function set openNodes(value:Array):void
 		{
-			_openNodes = value?value.slice():[];
+			_openNodes = value?value.concat():[];
 			refresh();
 		}
 

@@ -37,7 +37,7 @@ package org.flexlite.domUI.managers.impl
 		 */
 		public function get popUpList():Array
 		{
-			return _popUpList.slice();
+			return _popUpList.concat();
 		}
 		/**
 		 * 模态窗口列表

@@ -117,7 +117,7 @@ package org.flexlite.domDisplay
 		 */
 		public function get frameLabels():Array
 		{
-			return _frameLabels.slice();
+			return _frameLabels.concat();
 		}
 		/**
 		 * 要绘制的目标显示对象

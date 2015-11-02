@@ -30,7 +30,7 @@ package org.flexlite.domUI.collections
 			super();
 			if(openNodes)
 			{
-				_openNodes = openNodes.concat();
+				_openNodes = openNodes.slice();
 			}
 			if(source)
 			{
@@ -84,11 +84,11 @@ package org.flexlite.domUI.collections
 		 */
 		public function get openNodes():Array
 		{
-			return _openNodes.concat();
+			return _openNodes.slice();
 		}
 		public function set openNodes(value:Array):void
 		{
-			_openNodes = value?value.concat():[];
+			_openNodes = value?value.slice():[];
 			refresh();
 		}
 

@@ -5,7 +5,7 @@ package org.flexlite.domUI.managers.impl
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
-	
+
 	import org.flexlite.domUI.components.Rect;
 	import org.flexlite.domUI.core.DomGlobals;
 	import org.flexlite.domUI.core.IContainer;
@@ -17,7 +17,7 @@ package org.flexlite.domUI.managers.impl
 	import org.flexlite.domUI.managers.ISystemManager;
 
 	[ExcludeClass]
-	
+
 	/**
 	 * 窗口弹出管理器实现类
 	 * @author DOM
@@ -26,26 +26,26 @@ package org.flexlite.domUI.managers.impl
 	{
 		/**
 		 * 构造函数
-		 */		
+		 */
 		public function PopUpManagerImpl()
 		{
 		}
-		
+
 		private var _popUpList:Array = [];
 		/**
 		 * 已经弹出的窗口列表
-		 */		
+		 */
 		public function get popUpList():Array
 		{
-			return _popUpList.concat();
+			return _popUpList.slice();
 		}
 		/**
 		 * 模态窗口列表
-		 */		
+		 */
 		private var popUpDataList:Vector.<PopUpData> = new Vector.<PopUpData>();
 		/**
 		 * 根据popUp获取对应的popUpData
-		 */		
+		 */
 		private function findPopUpData(popUp:IVisualElement):PopUpData
 		{
 			for each(var data:PopUpData in popUpDataList)
@@ -55,7 +55,7 @@ package org.flexlite.domUI.managers.impl
 			}
 			return null;
 		}
-		
+
 		private static const REMOVE_FROM_SYSTEMMANAGER:String = "removeFromSystemManager";
 		/**
 		 * 弹出一个窗口。<br/>
@@ -63,7 +63,7 @@ package org.flexlite.domUI.managers.impl
 		 * @param modal 是否启用模态。即禁用弹出窗口所在层以下的鼠标事件。默认false。
 		 * @param center 是否居中窗口。等效于在外部调用centerPopUp()来居中。默认true。
 		 * @param systemManager 要弹出到的系统管理器。若项目中只含有一个系统管理器，则可以留空。
-		 */		
+		 */
 		public function addPopUp(popUp:IVisualElement,modal:Boolean=false,
 								 center:Boolean=true,systemManager:ISystemManager=null):void
 		{
@@ -94,10 +94,10 @@ package org.flexlite.domUI.managers.impl
 			}
 			popUp.addEventListener(REMOVE_FROM_SYSTEMMANAGER,onRemoved);
 		}
-		
+
 		/**
 		 * 从舞台移除
-		 */		
+		 */
 		private function onRemoved(event:Event):void
 		{
 			var index:int = 0;
@@ -116,8 +116,8 @@ package org.flexlite.domUI.managers.impl
 				index++;
 			}
 		}
-		
-		
+
+
 		private var _modalColor:uint = 0x000000;
 		/**
 		 * 模态遮罩的填充颜色
@@ -133,7 +133,7 @@ package org.flexlite.domUI.managers.impl
 			_modalColor = value;
 			invalidateModal(DomGlobals.systemManager);
 		}
-		
+
 		private var _modalAlpha:Number = 0.5;
 		/**
 		 * 模态遮罩的透明度
@@ -149,16 +149,16 @@ package org.flexlite.domUI.managers.impl
 			_modalAlpha = value;
 			invalidateModal(DomGlobals.systemManager);
 		}
-		
+
 		/**
 		 * 模态层失效的SystemManager列表
-		 */		
+		 */
 		private var invalidateModalList:Vector.<ISystemManager> = new Vector.<ISystemManager>();
-		
+
 		private var invalidateModalFlag:Boolean = false;
 		/**
 		 * 标记一个SystemManager的模态层失效
-		 */		
+		 */
 		private function invalidateModal(systemManager:ISystemManager):void
 		{
 			if(!systemManager)
@@ -173,7 +173,7 @@ package org.flexlite.domUI.managers.impl
 				DomGlobals.stage.invalidate();
 			}
 		}
-		
+
 		private function validateModal(event:Event):void
 		{
 			invalidateModalFlag = false;
@@ -185,11 +185,11 @@ package org.flexlite.domUI.managers.impl
 			}
 			invalidateModalList.length = 0;
 		}
-		
+
 		private var modalMaskDic:Dictionary = new Dictionary(true);
 		/**
 		 * 更新窗口模态效果
-		 */		
+		 */
 		private function updateModal(systemManager:ISystemManager):void
 		{
 			var popUpContainer:IContainer = systemManager.popUpContainer;
@@ -230,11 +230,11 @@ package org.flexlite.domUI.managers.impl
 				popUpContainer.removeElement(modalMask);
 			}
 		}
-		
+
 		/**
 		 * 移除由addPopUp()方法弹出的窗口。
 		 * @param popUp 要移除的窗口
-		 */		
+		 */
 		public function removePopUp(popUp:IVisualElement):void
 		{
 			if(popUp && popUp.parent&&findPopUpData(popUp))
@@ -245,7 +245,7 @@ package org.flexlite.domUI.managers.impl
 					popUp.parent.removeChild(DisplayObject(popUp));
 			}
 		}
-		
+
 		/**
 		 * 将指定窗口居中显示
 		 * @param popUp 要居中显示的窗口
@@ -263,11 +263,11 @@ package org.flexlite.domUI.managers.impl
 				popUp.y = (parent.height-popUp.layoutBoundsHeight)*0.5;
 			}
 		}
-		
+
 		/**
 		 * 将指定窗口的层级调至最前
 		 * @param popUp 要最前显示的窗口
-		 */		
+		 */
 		public function bringToFront(popUp:IVisualElement):void
 		{
 			var data:PopUpData = findPopUpData(popUp);
@@ -289,8 +289,8 @@ class PopUpData
 		this.popUp = popUp;
 		this.modal = modal;
 	}
-	
+
 	public var popUp:IVisualElement;
-	
+
 	public var modal:Boolean;
 }

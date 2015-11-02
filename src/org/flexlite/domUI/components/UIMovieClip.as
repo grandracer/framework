@@ -1,15 +1,15 @@
 package org.flexlite.domUI.components
 {
 	import flash.display.MovieClip;
-	
+
 	import org.flexlite.domCore.IMovieClip;
 	import org.flexlite.domUI.events.UIEvent;
-	
+
 	[DXML(show="true")]
-	
+
 	/**
-	 * UIMoveClip一次播放完成事件。仅当UIMovieClip.totalFrames>1时会抛出此事件。 
-	 */	
+	 * UIMoveClip一次播放完成事件。仅当UIMovieClip.totalFrames>1时会抛出此事件。
+	 */
 	[Event(name="playComplete", type="org.flexlite.domUI.events.UIEvent")]
 	/**
 	 * 影片剪辑素材包装器,通常用于在UI中控制动画素材的播放。
@@ -19,18 +19,18 @@ package org.flexlite.domUI.components
 	{
 		/**
 		 * 构造函数
-		 */		
+		 */
 		public function UIMovieClip()
 		{
 			super();
 		}
-		
+
 		private var movieClip:Object;
 		/**
 		 * 皮肤是MovieClip对象的标志
-		 */		
+		 */
 		private var isMovieClip:Boolean = false;
-		
+
 		override protected function onGetSkin(skin:Object, skinName:Object):void
 		{
 			super.onGetSkin(skin,skinName);
@@ -51,19 +51,19 @@ package org.flexlite.domUI.components
 				attachMovieClip(movieClip);
 			actionCache = [];
 		}
-		
+
 		private var actionCache:Array = [];
 		/**
 		 * 缓存一条动画操作记录
-		 */		
+		 */
 		private function pushAction(func:Function,args:Array=null):void
 		{
 			actionCache.push({func:func,args:args});
 		}
-		
+
 		/**
 		 * 附加影片剪辑
-		 */		
+		 */
 		protected function attachMovieClip(movieClip:Object):void
 		{
 			_totalFrames = movieClip.totalFrames;
@@ -97,10 +97,10 @@ package org.flexlite.domUI.components
 					ac.func.apply(null,ac.args);
 			}
 		}
-		
+
 		/**
 		 * 卸载影片剪辑
-		 */		
+		 */
 		protected function detachMovieClip(movieClip:Object):void
 		{
 			for(var frame:* in frameMarkList)
@@ -111,15 +111,15 @@ package org.flexlite.domUI.components
 			if(_totalFrames>1)
 				removeCallBackAtFrame(_totalFrames-1);
 		}
-		
+
 		/**
 		 * 是否含有实体动画显示对象。若为false，则currentFrame，totalFrames和frameLabels属性无效。
-		 */		
+		 */
 		public function get hasContent():Boolean
 		{
 			return Boolean(movieClip);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -134,7 +134,7 @@ package org.flexlite.domUI.components
 			}
 			return frame;
 		}
-		
+
 		private var _totalFrames:int = 0;
 		/**
 		 * @inheritDoc
@@ -143,16 +143,16 @@ package org.flexlite.domUI.components
 		{
 			return _totalFrames;
 		}
-		
+
 		private var _frameLabels:Array = [];
 		/**
 		 * @inheritDoc
-		 */		
+		 */
 		public function get frameLabels():Array
 		{
-			return _frameLabels.concat();
+			return _frameLabels.slice();
 		}
-		
+
 		private var _repeatPlay:Boolean = true;
 		/**
 		 * @inheritDoc
@@ -174,7 +174,7 @@ package org.flexlite.domUI.components
 				}
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -189,7 +189,7 @@ package org.flexlite.domUI.components
 			else
 				pushAction(gotoAndPlay,[frame]);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -204,10 +204,10 @@ package org.flexlite.domUI.components
 			else
 				pushAction(gotoAndStop,[frame]);
 		}
-		
+
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function play():void
 		{
 			if(movieClip)
@@ -215,10 +215,10 @@ package org.flexlite.domUI.components
 			else
 				pushAction(play);
 		}
-		
+
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function stop():void
 		{
 			if(movieClip)
@@ -226,14 +226,14 @@ package org.flexlite.domUI.components
 			else
 				pushAction(stop);
 		}
-		
+
 		/**
 		 * 添加过回调函数的帧列表
-		 */		
+		 */
 		private var frameMarkList:Array = [];
 		/**
 		 * 帧回调函数列表
-		 */		
+		 */
 		private var callBackList:Array = [];
 		/**
 		 * @inheritDoc
@@ -253,7 +253,7 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 标记某一帧需要回调
-		 */		
+		 */
 		private function addCallBackAtFrame(frame:int):void
 		{
 			if(frameMarkList[frame])
@@ -269,7 +269,7 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 移除某一帧的回调
-		 */		
+		 */
 		private function removeCallBackAtFrame(frame:int):void
 		{
 			if(!frameMarkList[frame])
@@ -284,7 +284,7 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 回调函数
-		 */		
+		 */
 		private function callBackFunction():void
 		{
 			var func:Function = callBackList[currentFrame];
@@ -295,7 +295,7 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 帧末回调函数
-		 */		
+		 */
 		private function endCallBackFunction():void
 		{
 			if(!_repeatPlay&&isMovieClip)
@@ -303,13 +303,13 @@ package org.flexlite.domUI.components
 				movieClip.stop();
 			}
 			callBackFunction();
-			
+
 			if(hasEventListener(UIEvent.PLAY_COMPLETE))
 			{
 				var event:UIEvent = new UIEvent(UIEvent.PLAY_COMPLETE);
 				dispatchEvent(event);
 			}
 		}
-		
+
 	}
 }

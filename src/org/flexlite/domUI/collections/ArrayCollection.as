@@ -159,7 +159,7 @@ package org.flexlite.domUI.collections
 		 */
 		public function removeAll():void
 		{
-			var items:Array = _source.concat();
+			var items:Array = _source.slice();
 			_source.length = 0;
 			dispatchCoEvent(CollectionEventKind.REMOVE,0,-1,items);
 		}

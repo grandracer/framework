@@ -216,7 +216,7 @@ package org.flexlite.domUI.components
 						ElementExistenceEvent.ELEMENT_ADD, contentGroup_elementAddedHandler);
 					_placeHolderGroup.removeEventListener(
 						ElementExistenceEvent.ELEMENT_REMOVE, contentGroup_elementRemovedHandler);
-					var sourceContent:Array = _placeHolderGroup.getElementsContent().concat();
+					var sourceContent:Array = _placeHolderGroup.getElementsContent().slice();
 					for (var i:int = _placeHolderGroup.numElements; i > 0; i--)
 					{
 						var element:IVisualElement = _placeHolderGroup.removeElementAt(0);

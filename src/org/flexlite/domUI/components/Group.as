@@ -243,7 +243,7 @@ package org.flexlite.domUI.components
 				elementRemoved(_elementsContent[i], i);
 			}
 
-			_elementsContent = value.concat();
+			_elementsContent = value.slice();
 
 			var n:int = _elementsContent.length;
 			for (i = 0; i < n; i++)

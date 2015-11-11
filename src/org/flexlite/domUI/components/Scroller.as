@@ -1,7 +1,5 @@
 package org.flexlite.domUI.components
 {
-	import corelib.utils.Dispose;
-
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 
@@ -58,7 +56,7 @@ package org.flexlite.domUI.components
 		/**
 		 * 实体容器
 		 */
-		private var contentGroup:Group
+		private var contentGroup:Group;
 		/**
 		 * @inheritDoc
 		 */

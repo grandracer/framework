@@ -6,62 +6,62 @@ package org.flexlite.domUI.states
 	import org.flexlite.domUI.core.ISkinnableClient;
 	import org.flexlite.domUI.core.IStateClient;
 	import org.flexlite.domUI.core.IVisualElement;
-	
+
 	use namespace dx_internal;
-	
+
 	/**
 	 * 添加显示元素
 	 * @author DOM
-	 */	
-	public class AddItems extends OverrideBase 
+	 */
+	public class AddItems extends OverrideBase
 	{
 		/**
 		 * 添加父级容器的底层
-		 */		
+		 */
 		public static const FIRST:String = "first";
 		/**
-		 * 添加在父级容器的顶层 
-		 */		
+		 * 添加在父级容器的顶层
+		 */
 		public static const LAST:String = "last";
 		/**
-		 * 添加在相对对象之前 
-		 */		
+		 * 添加在相对对象之前
+		 */
 		public static const BEFORE:String = "before";
 		/**
-		 * 添加在相对对象之后 
-		 */		
+		 * 添加在相对对象之后
+		 */
 		public static const AFTER:String = "after";
-		
+
 		/**
 		 * 构造函数
-		 */		
+		 */
 		public function AddItems()
 		{
 			super();
 		}
-		
+
 		/**
-		 * 要添加到的属性 
-		 */		
+		 * 要添加到的属性
+		 */
 		public var propertyName:String = "";
-		
+
 		/**
-		 * 添加的位置 
-		 */		
+		 * 添加的位置
+		 */
 		public var position:String = AddItems.LAST;
-		
+
 		/**
 		 * 相对的显示元素的实例名
-		 */		
+		 */
 		public var relativeTo:String;
-		
+
 		/**
 		 * 目标实例名
-		 */		
+		 */
 		public var target:String;
-		
-		private var INITIALIZE_FUNCTION:QName = new QName(dx_internal, "initialize")
-		
+
+		private var INITIALIZE_FUNCTION:QName = new QName(dx_internal, "initialize");
+
 		override public function initialize(parent:IStateClient):void
 		{
 			var targetElement:IVisualElement = parent[target] as IVisualElement;
@@ -79,7 +79,7 @@ package org.flexlite.domUI.states
 				}
 			}
 		}
-		
+
 		override public function apply(parent:IContainer):void
 		{
 			var index:int;
@@ -109,12 +109,12 @@ package org.flexlite.domUI.states
 				case AFTER:
 					index = dest.getElementIndex(relative) + 1;
 					break;
-			}    
+			}
 			if (index == -1)
 				index = dest.numElements;
 			dest.addElementAt(targetElement,index);
 		}
-		
+
 		override public function remove(parent:IContainer):void
 		{
 			var dest:IContainer = propertyName==null||propertyName==""?
@@ -128,5 +128,5 @@ package org.flexlite.domUI.states
 			}
 		}
 	}
-	
+
 }

@@ -689,7 +689,7 @@ package org.flexlite.domUI.layouts
                         childInfo = new ChildInfo();
                         childInfo.layoutElement = layoutElement;
                         childInfo.percent    = layoutElement.percentWidth;
-                        childInfo.min        = layoutElement.minWidth
+                        childInfo.min        = layoutElement.minWidth;
                         childInfo.max        = layoutElement.maxWidth;
                         childInfoArray.push(childInfo);
 
@@ -723,7 +723,6 @@ package org.flexlite.domUI.layouts
                         {
                             widthToDistribute -= preferredWidth;
                             largeChildrenCount--;
-                            continue;
                         }
                     }
                     widthToDistribute = widthToDistribute>0?widthToDistribute:0;

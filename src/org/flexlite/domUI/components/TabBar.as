@@ -2,7 +2,7 @@ package org.flexlite.domUI.components
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
+
 	import org.flexlite.domCore.dx_internal;
 	import org.flexlite.domUI.collections.ICollection;
 	import org.flexlite.domUI.components.supportClasses.ListBase;
@@ -13,29 +13,29 @@ package org.flexlite.domUI.components
 	import org.flexlite.domUI.layouts.HorizontalAlign;
 	import org.flexlite.domUI.layouts.HorizontalLayout;
 	import org.flexlite.domUI.layouts.VerticalAlign;
-	
-	use namespace dx_internal;  
-	
+
+	use namespace dx_internal;
+
 	[DXML(show="true")]
-	
+
 	/**
 	 * 选项卡组件
 	 * @author DOM
-	 */	
+	 */
 	public class TabBar extends ListBase
 	{
 		/**
 		 * 构造函数
-		 */		
+		 */
 		public function TabBar()
 		{
 			super();
-			
+
 			tabChildren = false;
 			tabEnabled = true;
 			requireSelection = true;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -47,7 +47,7 @@ package org.flexlite.domUI.components
 		 * requireSelection改变标志
 		 */
 		private var requireSelectionChanged:Boolean;
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -55,12 +55,12 @@ package org.flexlite.domUI.components
 		{
 			if (value == requireSelection)
 				return;
-			
+
 			super.requireSelection = value;
 			requireSelectionChanged = true;
 			invalidateProperties();
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -71,7 +71,7 @@ package org.flexlite.domUI.components
 				dataProvider.removeEventListener("IndexChanged",onViewStackIndexChange);
 				removeEventListener(IndexChangeEvent.CHANGE,onIndexChanged);
 			}
-			
+
 			if(value is ViewStack)
 			{
 				value.addEventListener("IndexChanged",onViewStackIndexChange);
@@ -81,28 +81,28 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 鼠标点击的选中项改变
-		 */		
+		 */
 		private function onIndexChanged(event:IndexChangeEvent):void
 		{
 			ViewStack(dataProvider).setSelectedIndex(event.newIndex,false);
 		}
-		
+
 		/**
 		 * ViewStack选中项发生改变
-		 */		
+		 */
 		private function onViewStackIndexChange(event:Event):void
 		{
 			setSelectedIndex(ViewStack(dataProvider).selectedIndex, false);
 		}
-		
-		
+
+
 		/**
 		 * @inheritDoc
 		 */
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
-			
+
 			if (requireSelectionChanged && dataGroup)
 			{
 				requireSelectionChanged = false;
@@ -114,16 +114,16 @@ package org.flexlite.domUI.components
 						renderer.allowDeselection = !requireSelection;
 				}
 			}
-		}  
-		
+		}
+
 		/**
 		 * @inheritDoc
 		 */
 		override protected function dataGroup_rendererAddHandler(event:RendererExistenceEvent):void
 		{
 			super.dataGroup_rendererAddHandler(event);
-			
-			const renderer:IItemRenderer = event.renderer; 
+
+			const renderer:IItemRenderer = event.renderer;
 			if (renderer)
 			{
 				renderer.addEventListener(MouseEvent.CLICK, item_clickHandler);
@@ -131,30 +131,30 @@ package org.flexlite.domUI.components
 					TabBarButton(renderer).allowDeselection = !requireSelection;
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override protected function dataGroup_rendererRemoveHandler(event:RendererExistenceEvent):void
-		{   
+		{
 			super.dataGroup_rendererRemoveHandler(event);
-			
+
 			const renderer:IItemRenderer = event.renderer;
 			if (renderer)
 				renderer.removeEventListener(MouseEvent.CLICK, item_clickHandler);
 		}
 		/**
 		 * 鼠标在条目上按下
-		 */		
+		 */
 		private function item_clickHandler(event:MouseEvent):void
 		{
 			var itemRenderer:IItemRenderer = event.currentTarget as IItemRenderer;
-			var newIndex:int
+			var newIndex:int;
 			if (itemRenderer)
 				newIndex = itemRenderer.itemIndex;
 			else
 				newIndex = dataGroup.getElementIndex(event.currentTarget as IVisualElement);
-			
+
 			if (newIndex == selectedIndex)
 			{
 				if (!requireSelection)
@@ -164,7 +164,7 @@ package org.flexlite.domUI.components
 				setSelectedIndex(newIndex, true);
 			dispatchListEvent(event,ListEvent.ITEM_CLICK,itemRenderer);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */

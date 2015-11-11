@@ -21,9 +21,9 @@ package org.flexlite.domUI.core
 	import org.flexlite.domUI.managers.ISystemManager;
 	import org.flexlite.domUI.managers.IToolTipManagerClient;
 	import org.flexlite.domUI.managers.ToolTipManager;
-    import org.flexlite.domUI.utils.callLater;
+	import org.flexlite.domUI.utils.callLater;
 
-    use namespace dx_internal;
+	use namespace dx_internal;
 
 	/**
 	 * 组件尺寸发生改变
@@ -1378,7 +1378,7 @@ package org.flexlite.domUI.core
 		 */
 		public function get layoutBoundsHeight():Number
 		{
-			var h:Number =  0
+			var h:Number = 0;
 			if(layoutHeightExplicitlySet)
 			{
 				h = _height;

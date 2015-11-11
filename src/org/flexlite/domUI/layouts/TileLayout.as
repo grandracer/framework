@@ -468,8 +468,7 @@ package org.flexlite.domUI.layouts
 			var verticalGap:Number = isNaN(_verticalGap)?0:_verticalGap;
 			_rowCount = _columnCount = -1;
 			var numElements:int = target.numElements;
-			var count:int = numElements;
-			for(var index:int = 0;index<count;index++)
+			for (var index:int = 0; index < numElements; index++)
 			{
 				var elt:ILayoutElement = target.getElementAt(index) as ILayoutElement;
 				if(elt&&!elt.includeInLayout)

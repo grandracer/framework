@@ -2,34 +2,33 @@ package org.flexlite.domUI.components
 {
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	
+
+	import org.flexlite.domCore.dx_internal;
 	import org.flexlite.domUI.components.supportClasses.ScrollBarBase;
 	import org.flexlite.domUI.core.IInvalidating;
 	import org.flexlite.domUI.core.IViewport;
 	import org.flexlite.domUI.core.NavigationUnit;
-	import org.flexlite.domCore.dx_internal;
 	import org.flexlite.domUI.events.PropertyChangeEvent;
 	import org.flexlite.domUI.events.ResizeEvent;
-	
-	
+
 	use namespace dx_internal;
-	
+
 	[DXML(show="true")]
-	
+
 	/**
 	 * 水平滚动条组件
 	 * @author DOM
-	 */	
+	 */
 	public class HScrollBar extends ScrollBarBase
 	{
 		/**
 		 * 构造函数
-		 */		
+		 */
 		public function HScrollBar()
 		{
 			super();
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -37,10 +36,10 @@ package org.flexlite.domUI.components
 		{
 			return HScrollBar;
 		}
-		
+
 		/**
 		 * 更新最大值和分页大小
-		 */		
+		 */
 		private function updateMaximumAndPageSize():void
 		{
 			var hsp:Number = viewport.horizontalScrollPosition;
@@ -49,34 +48,34 @@ package org.flexlite.domUI.components
 			maximum = (cWidth == 0) ? hsp : cWidth - viewportWidth;
 			pageSize = viewportWidth;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override public function set viewport(newViewport:IViewport):void
 		{
-			
+
 			const oldViewport:IViewport = super.viewport;
 			if (oldViewport == newViewport)
 				return;
-			
+
 			if (oldViewport)
 			{
 				oldViewport.removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
 				removeEventListener(MouseEvent.MOUSE_WHEEL, hsb_mouseWheelHandler, true);
 			}
-			
+
 			super.viewport = newViewport;
-			
+
 			if (newViewport)
 			{
-				updateMaximumAndPageSize()
+				updateMaximumAndPageSize();
 				value = newViewport.horizontalScrollPosition;
 				newViewport.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, false, -50);
-				addEventListener(MouseEvent.MOUSE_WHEEL, hsb_mouseWheelHandler, true); 
+				addEventListener(MouseEvent.MOUSE_WHEEL, hsb_mouseWheelHandler, true);
 			}
-		}    
-		
+		}
+
 		/**
 		 * @inheritDoc
 		 */
@@ -84,11 +83,11 @@ package org.flexlite.domUI.components
 		{
 			if (!thumb || !track)
 				return 0;
-			
+
 			var r:Number = track.layoutBoundsWidth - thumb.layoutBoundsWidth;
-			return minimum + ((r != 0) ? (x / r) * (maximum - minimum) : 0); 
+			return minimum + ((r != 0) ? (x / r) * (maximum - minimum) : 0);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -96,10 +95,10 @@ package org.flexlite.domUI.components
 		{
 			if (!thumb || !track)
 				return;
-			
+
 			var trackSize:Number = track.layoutBoundsWidth;
 			var range:Number = maximum - minimum;
-			
+
 			var thumbPos:Point;
 			var thumbPosTrackX:Number = 0;
 			var thumbPosParentX:Number = 0;
@@ -108,7 +107,7 @@ package org.flexlite.domUI.components
 			{
 				if (fixedThumbSize === false)
 				{
-					thumbSize = Math.min((pageSize / (range + pageSize)) * trackSize, trackSize)
+					thumbSize = Math.min((pageSize / (range + pageSize)) * trackSize, trackSize);
 					thumbSize = Math.max(thumb.minWidth, thumbSize);
 				}
 				else
@@ -117,17 +116,17 @@ package org.flexlite.domUI.components
 				}
 				thumbPosTrackX = (value - minimum) * ((trackSize - thumbSize) / range);
 			}
-			
+
 			if (fixedThumbSize === false)
 				thumb.width = Math.ceil(thumbSize);
 			if (autoThumbVisibility === true)
 				thumb.visible = thumbSize < trackSize;
 			thumbPos = track.localToGlobal(new Point(thumbPosTrackX, 0));
 			thumbPosParentX = thumb.parent.globalToLocal(thumbPos).x;
-			
+
 			thumb.setLayoutBoundsPosition(Math.round(thumbPosParentX), thumb.layoutBoundsY);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -137,7 +136,7 @@ package org.flexlite.domUI.components
 			if (viewport)
 				viewport.horizontalScrollPosition = value;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -154,7 +153,7 @@ package org.flexlite.domUI.components
 			if (viewport)
 				pageSize = oldPageSize;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -166,10 +165,10 @@ package org.flexlite.domUI.components
 					(newValue > value) ? NavigationUnit.PAGE_RIGHT : NavigationUnit.PAGE_LEFT));
 				super.animatePaging(newValue, vpPageSize);
 				return;
-			}        
+			}
 			super.animatePaging(newValue, pageSize);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -185,7 +184,7 @@ package org.flexlite.domUI.components
 			super.changeValueByStep(increase);
 			if (viewport)
 				stepSize = oldStepSize;
-		}   
+		}
 		/**
 		 * @inheritDoc
 		 */
@@ -196,11 +195,11 @@ package org.flexlite.domUI.components
 				thumb.left = undefined;
 				thumb.right = undefined;
 				thumb.horizontalCenter = undefined;
-			}      
-			
+			}
+
 			super.partAdded(partName, instance);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -208,8 +207,8 @@ package org.flexlite.domUI.components
 		{
 			if (viewport)
 				value = viewport.horizontalScrollPosition;
-		} 
-		
+		}
+
 		/**
 		 * @inheritDoc
 		 */
@@ -218,7 +217,7 @@ package org.flexlite.domUI.components
 			if (viewport)
 				updateMaximumAndPageSize();
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -226,20 +225,20 @@ package org.flexlite.domUI.components
 		{
 			if (viewport)
 			{
-				var viewportWidth:Number = isNaN(viewport.width) ? 0 : viewport.width;        
+				var viewportWidth:Number = isNaN(viewport.width) ? 0 : viewport.width;
 				maximum = viewport.contentWidth - viewportWidth;
 			}
 		}
-		
+
 		/**
 		 * 根据event.delta滚动指定步数的距离。这个事件处理函数优先级比垂直滚动条的低。
-		 */		
+		 */
 		dx_internal function mouseWheelHandler(event:MouseEvent):void
 		{
 			const vp:IViewport = viewport;
 			if (event.isDefaultPrevented() || !vp || !vp.visible||!visible)
 				return;
-			
+
 			var nSteps:uint = useMouseWheelDelta?Math.abs(event.delta):1;
 			var navigationUnit:uint;
 			navigationUnit = (event.delta < 0) ? NavigationUnit.RIGHT : NavigationUnit.LEFT;
@@ -253,18 +252,18 @@ package org.flexlite.domUI.components
 						IInvalidating(vp).validateNow();
 				}
 			}
-			
+
 			event.preventDefault();
 		}
-		
+
 		private function hsb_mouseWheelHandler(event:MouseEvent):void
 		{
 			const vp:IViewport = viewport;
 			if (event.isDefaultPrevented() || !vp || !vp.visible)
 				return;
-			
-			event.stopImmediatePropagation();            
-			vp.dispatchEvent(event);        
+
+			event.stopImmediatePropagation();
+			vp.dispatchEvent(event);
 		}
 	}
 }

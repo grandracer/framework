@@ -278,7 +278,7 @@ package org.flexlite.domUI.components
 					newDataGroupProperties.itemRendererSkinName = dataGroup.itemRendererSkinName;
 				if(dataGroupProperties.itemRendererFunction)
 					newDataGroupProperties.itemRendererFunction = dataGroup.itemRendererFunction;
-				dataGroupProperties = newDataGroupProperties
+				dataGroupProperties = newDataGroupProperties;
 				dataGroup.rendererOwner = null;
 				dataGroup.dataProvider = null;
 				dataGroup.layout = null;

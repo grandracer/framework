@@ -11,18 +11,18 @@ package org.flexlite.domUI.effects.animation
 		 * @param property 正在设置动画的属性的名称。
 		 * @param valueFrom 缓动的起始值
 		 * @param valueTo 缓动的结束值
-		 */		
+		 */
 		public function MotionPath(property:String=null, valueFrom:Number=0, valueTo:Number=1)
 		{
 			_property = property;
 			_valueFrom = valueFrom;
 			_valueTo = valueTo;
 		}
-		
+
 		private var _property:String;
 		/**
 		 * 正在设置动画的属性的名称。
-		 */		
+		 */
 		public function get property():String
 		{
 			return _property;
@@ -32,8 +32,8 @@ package org.flexlite.domUI.effects.animation
 		{
 			_property = value;
 		}
-		
-		private var _valueFrom:Number
+
+		private var _valueFrom:Number;
 		/**
 		 * 缓动的起始值
 		 */
@@ -47,7 +47,7 @@ package org.flexlite.domUI.effects.animation
 			_valueFrom = value;
 		}
 
-		private var _valueTo:Number
+		private var _valueTo:Number;
 		/**
 		 * 缓动的结束值
 		 */

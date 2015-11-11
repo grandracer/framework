@@ -88,7 +88,7 @@ package org.flexlite.domUI.components
 			return SkinnableComponent;
 		}
 
-		private var _skinObject:Object
+		private var _skinObject:Object;
 		/**
 		 * 存储皮肤适配器解析skinName得到的原始皮肤对象，包括非显示对象皮肤的实例。
 		 */

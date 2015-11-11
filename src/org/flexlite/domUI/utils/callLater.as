@@ -6,7 +6,7 @@ package org.flexlite.domUI.utils
 	 * @param args 函数参数列表
 	 * @param delayFrames 延迟的帧数，0表示在当前帧的屏幕重绘前(Render事件)执行；
 	 * 1表示下一帧EnterFrame事件时执行,2表示两帧后的EnterFrame事件时执行，以此类推。默认值0。
-	 */		
+	 */
 	public function callLater(method:Function,args:Array=null,delayFrames:int=0):void
 	{
 		DelayCall.getInstance().callLater(method,args,delayFrames);
@@ -17,7 +17,6 @@ import flash.display.Shape;
 import flash.events.Event;
 import flash.events.UncaughtErrorEvent;
 
-import org.flexlite.domCore.dx_internal;
 import org.flexlite.domUI.core.DomGlobals;
 
 /**
@@ -26,11 +25,11 @@ import org.flexlite.domUI.core.DomGlobals;
  */
 class DelayCall extends Shape
 {
-	
+
 	private static var _instance:DelayCall;
 	/**
 	 * 获取单例
-	 */	
+	 */
 	public static function getInstance():DelayCall
 	{
 		if(!_instance)
@@ -38,29 +37,29 @@ class DelayCall extends Shape
 		return _instance;
 	}
 	/**
-	 * 延迟函数队列 
-	 */		
+	 * 延迟函数队列
+	 */
 	private var methodQueue:Vector.<MethodQueueElement> = new Vector.<MethodQueueElement>();
 	/**
-	 * 是否添加过EnterFrame事件监听标志 
-	 */		
+	 * 是否添加过EnterFrame事件监听标志
+	 */
 	private var listenForEnterFrame:Boolean = false;
 	/**
-	 * 是否添加过Render事件监听标志 
-	 */	
+	 * 是否添加过Render事件监听标志
+	 */
 	private var listenForRender:Boolean = false;
-	
+
 	/**
 	 * 延迟函数到屏幕重绘前执行。
 	 * @param method 要延迟执行的函数
 	 * @param args 函数参数列表
 	 * @param delayFrames 延迟的帧数，0表示在当前帧的屏幕重绘前(Render事件)执行；
 	 * 1表示下一帧EnterFrame事件时执行,2表示两帧后的EnterFrame事件时执行，以此类推。默认值0。
-	 */		
+	 */
 	public function callLater(method:Function,args:Array=null,delayFrames:int=0):void
 	{
-		var element:MethodQueueElement = 
-			new MethodQueueElement(method,args,delayFrames,delayFrames==0)
+		var element:MethodQueueElement =
+			new MethodQueueElement(method,args,delayFrames,delayFrames==0);
 		methodQueue.push(element);
 		if(!listenForEnterFrame)
 		{
@@ -79,7 +78,7 @@ class DelayCall extends Shape
 	}
 	/**
 	 * 执行延迟函数
-	 */		
+	 */
 	private function onCallBack(event:Event):void
 	{
 		if(DomGlobals.catchCallLaterExceptions)
@@ -101,9 +100,9 @@ class DelayCall extends Shape
 		{
 			doCallBackFunction(event);
 		}
-		
+
 	}
-	
+
 	private function doCallBackFunction(event:Event):void
 	{
 		var element:MethodQueueElement;
@@ -143,7 +142,7 @@ class DelayCall extends Shape
 		if(!hasOnRender&&listenForRender)
 		{
 			DomGlobals.stage.removeEventListener(Event.RENDER,onCallBack);
-			listenForRender = false; 
+			listenForRender = false;
 		}
 		if(methodQueue.length==0)
 		{
@@ -152,7 +151,7 @@ class DelayCall extends Shape
 				removeEventListener(Event.ENTER_FRAME,onCallBack);
 				listenForEnterFrame = false;
 			}
-			
+
 		}
 	}
 }
@@ -162,7 +161,7 @@ class DelayCall extends Shape
  */
 class MethodQueueElement
 {
-	
+
 	public function MethodQueueElement(method:Function,args:Array = null,delayFrames:int=0,onRender:Boolean=true)
 	{
 		this.method = method;
@@ -170,14 +169,14 @@ class MethodQueueElement
 		this.delayFrames = delayFrames;
 		this.onRender = onRender;
 	}
-	
+
 	public var method:Function;
-	
+
 	public var args:Array;
-	
+
 	public var delayFrames:int;
 	/**
 	 * 在render事件触发
-	 */	
+	 */
 	public var onRender:Boolean;
 }

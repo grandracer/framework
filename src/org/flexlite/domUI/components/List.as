@@ -3,7 +3,7 @@ package org.flexlite.domUI.components
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
+
 	import org.flexlite.domCore.dx_internal;
 	import org.flexlite.domUI.components.supportClasses.ItemRenderer;
 	import org.flexlite.domUI.components.supportClasses.ListBase;
@@ -15,9 +15,9 @@ package org.flexlite.domUI.components
 	import org.flexlite.domUI.events.UIEvent;
 
 	use namespace dx_internal;
-	
+
 	[DXML(show="true")]
-	
+
 	/**
 	 * 列表组件
 	 * @author DOM
@@ -29,7 +29,7 @@ package org.flexlite.domUI.components
 			super();
 			useVirtualLayout = true;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -39,7 +39,7 @@ package org.flexlite.domUI.components
 				itemRenderer = ItemRenderer;
 			super.createChildren();
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -47,15 +47,15 @@ package org.flexlite.domUI.components
 		{
 			return List;
 		}
-		
+
 		/**
 		 * 是否使用虚拟布局,默认true
-		 */		
+		 */
 		override public function get useVirtualLayout():Boolean
 		{
 			return super.useVirtualLayout;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -63,8 +63,8 @@ package org.flexlite.domUI.components
 		{
 			super.useVirtualLayout = value;
 		}
-		
-		
+
+
 		private var _allowMultipleSelection:Boolean = false;
 		/**
 		 * 是否允许同时选中多项
@@ -80,11 +80,11 @@ package org.flexlite.domUI.components
 		}
 
 		private var _selectedIndices:Vector.<int> = new Vector.<int>();
-		
-		private var _proposedSelectedIndices:Vector.<int>; 
+
+		private var _proposedSelectedIndices:Vector.<int>;
 		/**
 		 * 当前选中的一个或多个项目的索引列表
-		 */		
+		 */
 		public function get selectedIndices():Vector.<int>
 		{
 			if(_proposedSelectedIndices)
@@ -109,10 +109,10 @@ package org.flexlite.domUI.components
 			}
 			return super.selectedIndex;
 		}
-		
+
 		/**
 		 * 当前选中的一个或多个项目的数据源列表
-		 */		
+		 */
 		public function get selectedItems():Vector.<Object>
 		{
 			var result:Vector.<Object> = new Vector.<Object>();
@@ -120,33 +120,33 @@ package org.flexlite.domUI.components
 			if (list)
 			{
 				var count:int = list.length;
-				
+
 				for (var i:int = 0; i < count; i++)
-					result[i] = dataProvider.getItemAt(list[i]);  
+					result[i] = dataProvider.getItemAt(list[i]);
 			}
-			
+
 			return result;
 		}
-		
+
 		public function set selectedItems(value:Vector.<Object>):void
 		{
 			var indices:Vector.<int> = new Vector.<int>();
-			
+
 			if (value)
 			{
 				var count:int = value.length;
-				
+
 				for (var i:int = 0; i < count; i++)
 				{
 					var index:int = dataProvider.getItemIndex(value[i]);
 					if (index != -1)
-					{ 
-						indices.splice(0, 0, index);   
+					{
+						indices.splice(0, 0, index);
 					}
 					if (index == -1)
 					{
 						indices = new Vector.<int>();
-						break;  
+						break;
 					}
 				}
 			}
@@ -159,14 +159,14 @@ package org.flexlite.domUI.components
 		{
 			if (dispatchChangeEvent)
 				dispatchChangeAfterSelection = (dispatchChangeAfterSelection || dispatchChangeEvent);
-			
+
 			if (value)
 				_proposedSelectedIndices = value;
 			else
 				_proposedSelectedIndices = new Vector.<int>();
 			invalidateProperties();
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -187,12 +187,12 @@ package org.flexlite.domUI.components
 			if(_proposedSelectedIndices)
 			{
 				_proposedSelectedIndices = _proposedSelectedIndices.filter(isValidIndex);
-				
+
 				if (!allowMultipleSelection && _proposedSelectedIndices.length>0)
 				{
-					var temp:Vector.<int> = new Vector.<int>(); 
-					temp.push(_proposedSelectedIndices[0]); 
-					_proposedSelectedIndices = temp;  
+					var temp:Vector.<int> = new Vector.<int>();
+					temp.push(_proposedSelectedIndices[0]);
+					_proposedSelectedIndices = temp;
 				}
 				if (_proposedSelectedIndices.length>0)
 				{
@@ -203,15 +203,15 @@ package org.flexlite.domUI.components
 					_proposedSelectedIndex = -1;
 				}
 			}
-			
-			var retVal:Boolean = super.commitSelection(false); 
-			
+
+			var retVal:Boolean = super.commitSelection(false);
+
 			if (!retVal)
 			{
 				_proposedSelectedIndices = null;
-				return false; 
+				return false;
 			}
-			
+
 			if (selectedIndex > NO_SELECTION)
 			{
 				if (_proposedSelectedIndices)
@@ -224,18 +224,18 @@ package org.flexlite.domUI.components
 					_proposedSelectedIndices = new <int>[selectedIndex];
 				}
 			}
-			
+
 			if(_proposedSelectedIndices)
 			{
 				if(_proposedSelectedIndices.indexOf(oldSelectedIndex)!=-1)
 					itemSelected(oldSelectedIndex,true);
-				commitMultipleSelection(); 
+				commitMultipleSelection();
 			}
-			
+
 			if (dispatchChangedEvents && retVal)
 			{
-				var e:IndexChangeEvent; 
-				
+				var e:IndexChangeEvent;
+
 				if (dispatchChangeAfterSelection)
 				{
 					e = new IndexChangeEvent(IndexChangeEvent.CHANGE);
@@ -244,29 +244,29 @@ package org.flexlite.domUI.components
 					dispatchEvent(e);
 					dispatchChangeAfterSelection = false;
 				}
-				
+
 				dispatchEvent(new UIEvent(UIEvent.VALUE_COMMIT));
 			}
-			
-			return retVal; 
+
+			return retVal;
 		}
 		/**
 		 * 是否是有效的索引
-		 */		
+		 */
 		private function isValidIndex(item:int, index:int, v:Vector.<int>):Boolean
 		{
-			return dataProvider && (item >= 0) && (item < dataProvider.length); 
+			return dataProvider && (item >= 0) && (item < dataProvider.length);
 		}
 		/**
 		 * 提交多项选中项属性
-		 */			
+		 */
 		protected function commitMultipleSelection():void
 		{
 			var removedItems:Vector.<int> = new Vector.<int>();
 			var addedItems:Vector.<int> = new Vector.<int>();
 			var i:int;
 			var count:int;
-			
+
 			if (_selectedIndices.length>0&& _proposedSelectedIndices.length>0)
 			{
 				count = _proposedSelectedIndices.length;
@@ -275,7 +275,7 @@ package org.flexlite.domUI.components
 					if (_selectedIndices.indexOf(_proposedSelectedIndices[i]) == -1)
 						addedItems.push(_proposedSelectedIndices[i]);
 				}
-				count = _selectedIndices.length; 
+				count = _selectedIndices.length;
 				for (i = 0; i < count; i++)
 				{
 					if (_proposedSelectedIndices.indexOf(_selectedIndices[i]) == -1)
@@ -290,9 +290,9 @@ package org.flexlite.domUI.components
 			{
 				addedItems = _proposedSelectedIndices;
 			}
-			
+
 			_selectedIndices = _proposedSelectedIndices;
-			
+
 			if (removedItems.length > 0)
 			{
 				count = removedItems.length;
@@ -301,7 +301,7 @@ package org.flexlite.domUI.components
 					itemSelected(removedItems[i], false);
 				}
 			}
-			
+
 			if (addedItems.length>0)
 			{
 				count = addedItems.length;
@@ -310,10 +310,10 @@ package org.flexlite.domUI.components
 					itemSelected(addedItems[i], true);
 				}
 			}
-			
+
 			_proposedSelectedIndices = null;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -321,7 +321,7 @@ package org.flexlite.domUI.components
 		{
 			if (_allowMultipleSelection)
 				return _selectedIndices.indexOf(index) != -1;
-			
+
 			return super.isItemIndexSelected(index);
 		}
 
@@ -331,47 +331,47 @@ package org.flexlite.domUI.components
 		override protected function dataGroup_rendererAddHandler(event:RendererExistenceEvent):void
 		{
 			super.dataGroup_rendererAddHandler(event);
-			
+
 			var renderer:DisplayObject = event.renderer as DisplayObject;
 			if (renderer == null)
 				return;
-			
+
 			_eventBinder.addListener(renderer, MouseEvent.MOUSE_DOWN, item_mouseDownHandler);
 			//由于ItemRenderer.mouseChildren有可能不为false，在鼠标按下时会出现切换素材的情况，
 			//导致target变化而无法抛出原生的click事件,所以此处监听MouseUp来抛出ItemClick事件。
 			_eventBinder.addListener(renderer, MouseEvent.MOUSE_UP, item_mouseUpHandler);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override protected function dataGroup_rendererRemoveHandler(event:RendererExistenceEvent):void
 		{
 			super.dataGroup_rendererRemoveHandler(event);
-			
+
 			var renderer:DisplayObject = event.renderer as DisplayObject;
 			if (renderer == null)
 				return;
-			
+
 			_eventBinder.addListener(renderer, MouseEvent.MOUSE_DOWN, item_mouseDownHandler);
 			_eventBinder.addListener(renderer, MouseEvent.MOUSE_UP, item_mouseUpHandler);
 		}
 		/**
 		 * 是否捕获ItemRenderer以便在MouseUp时抛出ItemClick事件
-		 */		
+		 */
 		dx_internal var captureItemRenderer:Boolean = true;
-		
+
 		private var mouseDownItemRenderer:IItemRenderer;
 		/**
 		 * 鼠标在项呈示器上按下
-		 */		
+		 */
 		protected function item_mouseDownHandler(event:MouseEvent):void
 		{
 			if (event.isDefaultPrevented())
 				return;
-			
+
 			var itemRenderer:IItemRenderer = event.currentTarget as IItemRenderer;
-			var newIndex:int
+			var newIndex:int;
 			if (itemRenderer)
 				newIndex = itemRenderer.itemIndex;
 			else
@@ -392,11 +392,11 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 计算当前的选中项列表
-		 */		
+		 */
 		private function calculateSelectedIndices(index:int, shiftKey:Boolean, ctrlKey:Boolean):Vector.<int>
 		{
-			var i:int; 
-			var interval:Vector.<int> = new Vector.<int>();  
+			var i:int;
+			var interval:Vector.<int> = new Vector.<int>();
 			if (!shiftKey)
 			{
 				if(ctrlKey)
@@ -406,65 +406,65 @@ package org.flexlite.domUI.components
 						if (_selectedIndices.length == 1 && (_selectedIndices[0] == index))
 						{
 							if (!requireSelection)
-								return interval; 
-							
-							interval.splice(0, 0, _selectedIndices[0]); 
-							return interval; 
+								return interval;
+
+							interval.splice(0, 0, _selectedIndices[0]);
+							return interval;
 						}
 						else
 						{
-							var found:Boolean = false; 
+							var found:Boolean = false;
 							for (i = 0; i < _selectedIndices.length; i++)
 							{
 								if (_selectedIndices[i] == index)
-									found = true; 
+									found = true;
 								else if (_selectedIndices[i] != index)
 									interval.splice(0, 0, _selectedIndices[i]);
 							}
 							if (!found)
 							{
-								interval.splice(0, 0, index);   
+								interval.splice(0, 0, index);
 							}
-							return interval; 
-						} 
+							return interval;
+						}
 					}
 					else
-					{ 
-						interval.splice(0, 0, index); 
-						return interval; 
+					{
+						interval.splice(0, 0, index);
+						return interval;
 					}
 				}
-				else 
-				{ 
-					interval.splice(0, 0, index); 
-					return interval; 
+				else
+				{
+					interval.splice(0, 0, index);
+					return interval;
 				}
 			}
-			else 
+			else
 			{
-				var start:int = _selectedIndices.length>0 ? _selectedIndices[_selectedIndices.length - 1] : 0; 
-				var end:int = index; 
+				var start:int = _selectedIndices.length>0 ? _selectedIndices[_selectedIndices.length - 1] : 0;
+				var end:int = index;
 				if (start < end)
 				{
 					for (i = start; i <= end; i++)
 					{
-						interval.splice(0, 0, i); 
+						interval.splice(0, 0, i);
 					}
 				}
-				else 
+				else
 				{
 					for (i = start; i >= end; i--)
 					{
-						interval.splice(0, 0, i); 
+						interval.splice(0, 0, i);
 					}
 				}
-				return interval; 
+				return interval;
 			}
 		}
 
 		/**
 		 * 鼠标在项呈示器上弹起，抛出ItemClick事件。
-		 */	
+		 */
 		protected function item_mouseUpHandler(event:MouseEvent):void
 		{
 			var itemRenderer:IItemRenderer = event.currentTarget as IItemRenderer;
@@ -472,10 +472,10 @@ package org.flexlite.domUI.components
 				return;
 			dispatchListEvent(event,ListEvent.ITEM_CLICK,itemRenderer);
 		}
-		
+
 		/**
 		 * 鼠标在舞台上弹起
-		 */		
+		 */
 		private function stage_mouseUpHandler(event:Event):void
 		{
 			_eventBinder.removeListener(DomGlobals.stage, MouseEvent.MOUSE_UP,stage_mouseUpHandler);

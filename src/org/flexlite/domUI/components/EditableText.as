@@ -3,34 +3,34 @@ package org.flexlite.domUI.components
 	import flash.events.Event;
 	import flash.events.TextEvent;
 	import flash.text.TextFieldType;
-	
+
+	import org.flexlite.domCore.dx_internal;
 	import org.flexlite.domUI.components.supportClasses.TextBase;
 	import org.flexlite.domUI.core.IDisplayText;
 	import org.flexlite.domUI.core.IEditableText;
 	import org.flexlite.domUI.core.IViewport;
 	import org.flexlite.domUI.core.NavigationUnit;
-	import org.flexlite.domCore.dx_internal;
-	
+
 	use namespace dx_internal;
-	
+
 	/**
-	 * 当控件中的文本通过用户输入发生更改后分派。使用代码更改文本时不会引发此事件。 
-	 */	
+	 * 当控件中的文本通过用户输入发生更改后分派。使用代码更改文本时不会引发此事件。
+	 */
 	[Event(name="change", type="flash.events.Event")]
-	
+
 	/**
 	 * 当控件中的文本通过用户输入发生更改之前分派。但是当用户按 Delete 键或 Backspace 键时，不会分派任何事件。
-	 * 可以调用preventDefault()方法阻止更改。  
-	 */	
+	 * 可以调用preventDefault()方法阻止更改。
+	 */
 	[Event(name="textInput", type="flash.events.TextEvent")]
-	
+
 	[DXML(show="true")]
-	
+
 	/**
 	 * 可编辑文本控件
 	 * @author DOM
 	 */
-	public class EditableText extends TextBase 
+	public class EditableText extends TextBase
 		implements IEditableText,IDisplayText,IViewport
 	{
 		public function EditableText()
@@ -38,9 +38,9 @@ package org.flexlite.domUI.components
 			super();
 			selectable = true;
 		}
-		
+
 		private var _displayAsPassword:Boolean = false;
-		
+
 		private var displayAsPasswordChanged:Boolean = true;
 		/**
 		 * @inheritDoc
@@ -49,23 +49,23 @@ package org.flexlite.domUI.components
 		{
 			return _displayAsPassword;
 		}
-		
+
 		public function set displayAsPassword(value:Boolean):void
 		{
 			if(value == _displayAsPassword)
 				return;
 			_displayAsPassword = value;
 			displayAsPasswordChanged = true;
-			
+
 			invalidateProperties();
 			invalidateSize();
 			invalidateDisplayList();
 		}
-		
+
 		private var pendingEditable:Boolean = true;
-		
+
 		private var _editable:Boolean = true;
-		
+
 		private var editableChanged:Boolean = false;
 		/**
 		 * @inheritDoc
@@ -76,7 +76,7 @@ package org.flexlite.domUI.components
 				return _editable;
 			return pendingEditable;
 		}
-		
+
 		public function set editable(value:Boolean):void
 		{
 			if(_editable==value)
@@ -92,15 +92,15 @@ package org.flexlite.domUI.components
 				pendingEditable = value;
 			}
 		}
-		
+
 		/**
 		 * @inheritDoc
-		 */		
+		 */
 		override public function set enabled(value:Boolean):void
 		{
 			if (value == super.enabled)
 				return;
-			
+
 			super.enabled = value;
 			if(enabled)
 			{
@@ -117,9 +117,9 @@ package org.flexlite.domUI.components
 			}
 			invalidateProperties();
 		}
-		
+
 		private var _maxChars:int = 0;
-		
+
 		private var maxCharsChanged:Boolean = false;
 		/**
 		 * @inheritDoc
@@ -128,7 +128,7 @@ package org.flexlite.domUI.components
 		{
 			return _maxChars;
 		}
-		
+
 		public function set maxChars(value:int):void
 		{
 			if(value==_maxChars)
@@ -137,9 +137,9 @@ package org.flexlite.domUI.components
 			maxCharsChanged = true;
 			invalidateProperties();
 		}
-		
+
 		private var _multiline:Boolean = true;
-		
+
 		private var multilineChanged:Boolean = false;
 		/**
 		 * @inheritDoc
@@ -148,7 +148,7 @@ package org.flexlite.domUI.components
 		{
 			return _multiline;
 		}
-		
+
 		public function set multiline(value:Boolean):void
 		{
 			if(value==multiline)
@@ -157,10 +157,10 @@ package org.flexlite.domUI.components
 			multilineChanged = true;
 			invalidateProperties();
 		}
-		
-		
+
+
 		private var _restrict:String = null;
-		
+
 		private var restrictChanged:Boolean = false;
 		/**
 		 * @inheritDoc
@@ -169,21 +169,21 @@ package org.flexlite.domUI.components
 		{
 			return _restrict;
 		}
-		
+
 		public function set restrict(value:String):void
 		{
 			if (value == _restrict)
 				return;
-			
+
 			_restrict = value;
 			restrictChanged = true;
-			
+
 			invalidateProperties();
 		}
-		
+
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		override public function set size(value:uint):void
 		{
 			if(size==value)
@@ -192,7 +192,7 @@ package org.flexlite.domUI.components
 			heightInLinesChanged = true;
 			widthInCharsChanged = true;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -203,18 +203,18 @@ package org.flexlite.domUI.components
 			super.leading = value;
 			heightInLinesChanged = true;
 		}
-		
+
 		private var _heightInLines:Number = NaN;
-		
+
 		private var heightInLinesChanged:Boolean = false;
 
 		/**
 		 * 控件的默认高度（以行为单位测量）。 若设置了multiline属性为false，则忽略此属性。
-		 */		
+		 */
 		public function get heightInLines():Number
 		{
 			return _heightInLines;
-			
+
 		}
 
 		public function set heightInLines(value:Number):void
@@ -223,18 +223,18 @@ package org.flexlite.domUI.components
 				return;
 			_heightInLines = value;
 			heightInLinesChanged = true;
-			
+
 			invalidateProperties();
 		}
 
-		
+
 		private var _widthInChars:Number = NaN;
-		
+
 		private var widthInCharsChanged:Boolean = false;
 
 		/**
 		 * 控件的默认宽度（使用字号：size为单位测量）。 若同时设置了maxChars属性，将会根据两者测量结果的最小值作为测量宽度。
-		 */		
+		 */
 		public function get widthInChars():Number
 		{
 			return _widthInChars;
@@ -246,44 +246,44 @@ package org.flexlite.domUI.components
 				return;
 			_widthInChars = value;
 			widthInCharsChanged = true;
-			
+
 			invalidateProperties();
 		}
 
-		
+
 		private var _contentWidth:Number = 0;
-		
+
 		public function get contentWidth():Number
 		{
 			return _contentWidth;
 		}
-		
+
 		private function setContentWidth(value:Number):void
 		{
 			if (value == _contentWidth)
 				return;
 			var oldValue:Number = _contentWidth;
 			_contentWidth = value;
-			dispatchPropertyChangeEvent("contentWidth", oldValue, value); 
+			dispatchPropertyChangeEvent("contentWidth", oldValue, value);
 		}
-		
+
 		private var _contentHeight:Number = 0;
-		
+
 		public function get contentHeight():Number
 		{
 			return _contentHeight;
 		}
-		
+
 		private function setContentHeight(value:Number):void
 		{
 			if (value == _contentHeight)
 				return;
 			var oldValue:Number = _contentHeight;
 			_contentHeight = value;
-			dispatchPropertyChangeEvent("contentHeight", oldValue, value); 
+			dispatchPropertyChangeEvent("contentHeight", oldValue, value);
 		}
-		
-		
+
+
 		private var _horizontalScrollPosition:Number = 0;
 		/**
 		 * @inheritDoc
@@ -292,7 +292,7 @@ package org.flexlite.domUI.components
 		{
 			return _horizontalScrollPosition;
 		}
-		
+
 		public function set horizontalScrollPosition(value:Number):void
 		{
 			if(_horizontalScrollPosition == value)
@@ -307,8 +307,8 @@ package org.flexlite.domUI.components
 				dispatchPropertyChangeEvent("horizontalScrollPosition",oldValue,value);
 			}
 		}
-		
-		private var _verticalScrollPosition:Number = 0
+
+		private var _verticalScrollPosition:Number = 0;
 		/**
 		 * @inheritDoc
 		 */
@@ -316,7 +316,7 @@ package org.flexlite.domUI.components
 		{
 			return _verticalScrollPosition;
 		}
-		
+
 		public function set verticalScrollPosition(value:Number):void
 		{
 			if(_verticalScrollPosition == value)
@@ -331,10 +331,10 @@ package org.flexlite.domUI.components
 				dispatchPropertyChangeEvent("verticalScrollPosition",oldValue,value);
 			}
 		}
-		
+
 		/**
 		 * 根据垂直像素位置获取对应的垂直滚动位置
-		 */		
+		 */
 		private function getScrollVByVertitcalPos(value:Number):int
 		{
 			if(textField.numLines==0)
@@ -344,7 +344,7 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 根据垂直滚动位置获取对应的垂直像位置
-		 */		
+		 */
 		private function getVerticalPosByScrollV(scrollV:int):Number
 		{
 			if(scrollV == 1||textField.numLines == 0)
@@ -363,10 +363,10 @@ package org.flexlite.domUI.components
 		public function getHorizontalScrollPositionDelta(navigationUnit:uint):Number
 		{
 			var delta:Number = 0;
-			
+
 			var maxDelta:Number = _contentWidth - _horizontalScrollPosition - width;
 			var minDelta:Number = -_horizontalScrollPosition;
-			
+
 			switch(navigationUnit)
 			{
 				case NavigationUnit.LEFT:
@@ -396,10 +396,10 @@ package org.flexlite.domUI.components
 		public function getVerticalScrollPositionDelta(navigationUnit:uint):Number
 		{
 			var delta:Number = 0;
-			
+
 			var maxDelta:Number = _contentHeight - _verticalScrollPosition - height;
 			var minDelta:Number = -_verticalScrollPosition;
-			
+
 			switch(navigationUnit)
 			{
 				case NavigationUnit.UP:
@@ -423,10 +423,10 @@ package org.flexlite.domUI.components
 			}
 			return delta;
 		}
-		
+
 		/**
 		 * 返回指定偏移行数的滚动条偏移量
-		 */		
+		 */
 		private function getVScrollDelta(offsetLine:int):Number
 		{
 			if(!textField)
@@ -438,7 +438,7 @@ package org.flexlite.domUI.components
 			var delta:int = startPos-_verticalScrollPosition;
 			return delta;
 		}
-		
+
 		private var _clipAndEnableScrolling:Boolean = false;
 		/**
 		 * @inheritDoc
@@ -447,13 +447,13 @@ package org.flexlite.domUI.components
 		{
 			return _clipAndEnableScrolling;
 		}
-		
+
 		public function set clipAndEnableScrolling(value:Boolean):void
 		{
 			if(_clipAndEnableScrolling == value)
 				return;
 			_clipAndEnableScrolling = value;
-			
+
 			if(textField)
 			{
 				if(value)
@@ -469,8 +469,8 @@ package org.flexlite.domUI.components
 				}
 			}
 		}
-		
-		
+
+
 		/**
 		 * @inheritDoc
 		 */
@@ -484,41 +484,41 @@ package org.flexlite.domUI.components
 				multilineChanged = true;
 				restrictChanged = true;
 			}
-			
+
 			super.commitProperties();
-			
+
 			if(editableChanged)
 			{
 				textField.type = _editable?TextFieldType.INPUT:TextFieldType.DYNAMIC;
 				editableChanged = false;
 			}
-			
+
 			if (displayAsPasswordChanged)
 			{
 				textField.displayAsPassword = _displayAsPassword;
 				displayAsPasswordChanged = false;
 			}
-			
+
 			if(maxCharsChanged)
 			{
 				textField.maxChars = _maxChars;
 				maxCharsChanged = false;
 			}
-			
+
 			if(multilineChanged)
 			{
 				textField.multiline = _multiline;
 				textField.wordWrap = _multiline;
 				multilineChanged = false;
 			}
-			
+
 			if (restrictChanged)
 			{
 				textField.restrict = _restrict;
-				
+
 				restrictChanged = false;
 			}
-			
+
 			if(heightInLinesChanged)
 			{
 				heightInLinesChanged = false;
@@ -543,7 +543,7 @@ package org.flexlite.domUI.components
 					defaultHeight = hInLine*lineHeight+4;
 				}
 			}
-			
+
 			if(widthInCharsChanged)
 			{
 				widthInCharsChanged = false;
@@ -558,8 +558,8 @@ package org.flexlite.domUI.components
 				}
 			}
 		}
-		
-		
+
+
 		/**
 		 * @inheritDoc
 		 */
@@ -569,17 +569,17 @@ package org.flexlite.domUI.components
 			var oldScrollH:int = textField.scrollH;
 			var oldScrollV:int = textField.scrollV;
 			super.updateDisplayList(unscaledWidth,unscaledHeight);
-			
+
 			updateContentSize();
-			
+
 			textField.scrollH = oldScrollH;
 			textField.scrollV = oldScrollV;
 			isValidating = false;
 		}
-		
+
 		/**
 		 * 更新内容尺寸大小
-		 */		
+		 */
 		private function updateContentSize():void
 		{
 			if(!clipAndEnableScrolling)
@@ -599,7 +599,7 @@ package org.flexlite.domUI.components
 			}
 			setContentHeight(contentHeight);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -652,23 +652,23 @@ package org.flexlite.domUI.components
 				textField.setSelection(0,textField.length-1);
 			}
 		}
-		
+
 		/**
-		 * heightInLines计算出来的默认高度。 
-		 */		
+		 * heightInLines计算出来的默认高度。
+		 */
 		private var defaultHeight:Number = NaN;
 		/**
 		 * widthInChars计算出来的默认宽度。
-		 */		
+		 */
 		private var defaultWidth:Number = NaN;
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override protected function measure():void
 		{
 			measuredWidth = isNaN(defaultWidth)? DEFAULT_MEASURED_WIDTH:defaultWidth;
-			
+
 			if(_maxChars!=0)
 			{
 				measuredWidth = Math.min(measuredWidth,textField.textWidth);
@@ -684,14 +684,14 @@ package org.flexlite.domUI.components
 		}
 		/**
 		 * 创建文本显示对象
-		 */		
+		 */
 		override protected function createTextField():void
-		{   
+		{
 			super.createTextField();
 			textField.type = _editable?TextFieldType.INPUT:TextFieldType.DYNAMIC;
 			textField.multiline = _multiline;
 			textField.wordWrap = _multiline;
-			
+
 			textField.addEventListener(Event.CHANGE, textField_changeHandler);
 			textField.addEventListener(Event.SCROLL, textField_scrollHandler);
 			textField.addEventListener(TextEvent.TEXT_INPUT,
@@ -702,7 +702,7 @@ package org.flexlite.domUI.components
 				textField.scrollV = getScrollVByVertitcalPos(_verticalScrollPosition);
 			}
 		}
-		
+
 		private function textField_changeHandler(event:Event):void
 		{
 			textFieldChanged(false);
@@ -712,10 +712,10 @@ package org.flexlite.domUI.components
 			invalidateDisplayList();
 			updateContentSize();
 		}
-		
-		
+
+
 		private var isValidating:Boolean = false;
-		
+
 		/**
 		 *  @private
 		 */
@@ -725,21 +725,21 @@ package org.flexlite.domUI.components
 				return;
 			horizontalScrollPosition = textField.scrollH;
 			verticalScrollPosition = getVerticalPosByScrollV(textField.scrollV);
-			
+
 		}
-		
+
 		/**
 		 * 即将输入文字
 		 */
 		private function textField_textInputHandler(event:TextEvent):void
 		{
 			event.stopImmediatePropagation();
-			
+
 			var newEvent:TextEvent =
 				new TextEvent(TextEvent.TEXT_INPUT, false, true);
 			newEvent.text = event.text;
 			dispatchEvent(newEvent);
-			
+
 			if (newEvent.isDefaultPrevented())
 				event.preventDefault();
 		}

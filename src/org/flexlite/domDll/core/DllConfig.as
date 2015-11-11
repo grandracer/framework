@@ -2,9 +2,9 @@ package org.flexlite.domDll.core
 {
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
-	
+
 	import org.flexlite.domCore.dx_internal;
-	
+
 	use namespace dx_internal;
 	/**
 	 * Dll配置文件解析器
@@ -14,11 +14,11 @@ package org.flexlite.domDll.core
 	{
 		/**
 		 * 构造函数
-		 */		
+		 */
 		public function DllConfig()
 		{
 		}
-		
+
 		private var _language:String;
 		/**
 		 * @inheritDoc
@@ -30,7 +30,7 @@ package org.flexlite.domDll.core
 
 		/**
 		 * @inheritDoc
-		 */		
+		 */
 		public function getGroupByName(name:String):Vector.<DllItem>
 		{
 			var group:Vector.<DllItem> = new Vector.<DllItem>();
@@ -44,7 +44,7 @@ package org.flexlite.domDll.core
 		}
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function createGroup(name:String,keys:Array,override:Boolean=false):Boolean
 		{
 			if((!override&&groupDic[name])||!keys||keys.length==0)
@@ -63,15 +63,15 @@ package org.flexlite.domDll.core
 		}
 		/**
 		 * 一级键名字典
-		 */		
+		 */
 		private var keyMap:Dictionary = new Dictionary();
 		/**
 		 * 加载组字典
-		 */		
+		 */
 		private var groupDic:Dictionary = new Dictionary();
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function parseConfig(data:Object,folder:String):void
 		{
 			if(!data)
@@ -80,7 +80,6 @@ package org.flexlite.domDll.core
 			if(data is XML)
 			{
 				var xmlConfig:XML = data as XML;
-				data = {};
 				for each(var item:XML in xmlConfig.children())
 				{
 					var name:String = String(item.@name);
@@ -119,7 +118,7 @@ package org.flexlite.domDll.core
 		}
 		/**
 		 * 从xml里解析加载项
-		 */		
+		 */
 		private function getItemFromXML(xml:XML,folder:String,group:Array = null):void
 		{
 			for each(var item:XML in xml.children())
@@ -138,7 +137,7 @@ package org.flexlite.domDll.core
 		}
 		/**
 		 * 从Object里解析加载项
-		 */		
+		 */
 		private function getItemFromObject(list:Array,folder:String,group:Array = null):void
 		{
 			for each(var item:Object in list)
@@ -155,7 +154,7 @@ package org.flexlite.domDll.core
 		}
 		/**
 		 * 添加一个加载项数据到列表
-		 */		
+		 */
 		private function addItemToKeyMap(item:Object):void
 		{
 			if(!keyMap[item.name])
@@ -174,7 +173,7 @@ package org.flexlite.domDll.core
 		}
 		/**
 		 * @inheritDoc
-		 */		
+		 */
 		public function getType(key:String):String
 		{
 			var data:Object = keyMap[key];
@@ -182,7 +181,7 @@ package org.flexlite.domDll.core
 		}
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function getName(key:String):String
 		{
 			var data:Object = keyMap[key];
@@ -190,7 +189,7 @@ package org.flexlite.domDll.core
 		}
 		/**
 		 * @inheritDoc
-		 */	
+		 */
 		public function getDllItem(key:String):DllItem
 		{
 			var data:Object = keyMap[key];
@@ -200,13 +199,13 @@ package org.flexlite.domDll.core
 		}
 		/**
 		 * 转换Object数据为DllItem对象
-		 */		
+		 */
 		private function parseDllItem(data:Object):DllItem
 		{
 			var dllItem:DllItem = new DllItem(data.name,data.url,data.type,data.size);
 			dllItem.data = data;
 			return dllItem;
 		}
-		
+
 	}
 }

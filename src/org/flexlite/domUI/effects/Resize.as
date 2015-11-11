@@ -7,9 +7,9 @@ package org.flexlite.domUI.effects
 	import org.flexlite.domUI.effects.supportClasses.Effect;
 
 	use namespace dx_internal;
-	
+
 	[DXML(show="false")]
-	
+
 	/**
 	 * 尺寸调整特效。此动画作用于对象的width，height以及x，y属性。
 	 * @author DOM
@@ -19,36 +19,36 @@ package org.flexlite.domUI.effects
 		/**
 		 * 构造函数
 		 * @param target 要应用此动画特效的对象
-		 */		
+		 */
 		public function Resize(target:Object=null)
 		{
 			super(target);
 		}
-		
+
 		/**
-		 * 缩放中心点x坐标。默认值为0 
-		 */		
+		 * 缩放中心点x坐标。默认值为0
+		 */
 		public var originX:Number = 0;
 		/**
-		 * 缩放中心点y坐标。默认值为0 
-		 */		
+		 * 缩放中心点y坐标。默认值为0
+		 */
 		public var originY:Number = 0;
-		
+
 		/**
 		 * height起始值。若不设置，则使用目标对象的当前height或根据其他值计算出此值。
-		 */		
+		 */
 		public var heightFrom:Number;
 		/**
 		 * height结束值。若不设置，则使用目标对象的当前height或根据其他值计算出此值。
-		 */		
+		 */
 		public var heightTo:Number;
 		/**
 		 * height要增加的量，负值代表减小。
-		 */		
+		 */
 		public var heightBy:Number;
 		/**
 		 *  width起始值。若不设置，则使用目标对象的当前width或根据其他值计算出此值。
-		 */	
+		 */
 		public var widthFrom:Number;
 		/**
 		 * width结束值。若不设置，则使用目标对象的当前width或根据其他值计算出此值。
@@ -56,11 +56,11 @@ package org.flexlite.domUI.effects
 		public var widthTo:Number;
 		/**
 		 * width要增加的量，负值代表减小。
-		 */	
+		 */
 		public var widthBy:Number;
 		/**
 		 * @inheritDoc
-		 */		
+		 */
 		override public function reset():void
 		{
 			super.reset();
@@ -77,12 +77,12 @@ package org.flexlite.domUI.effects
 			var widthToSet:Boolean = !isNaN(widthTo);
 			var heightFromSet:Boolean = !isNaN(heightFrom);
 			var heightToSet:Boolean = !isNaN(heightTo);
-			
+
 			var widthFromUseTarget:Boolean = !widthFromSet&&(isNaN(widthTo)||isNaN(widthBy));
 			var widthToUseTarget:Boolean = !widthToSet&&isNaN(widthBy);
 			var heightFromUseTarget:Boolean = !heightFromSet&&(isNaN(heightTo)||isNaN(heightBy));
 			var heightToUseTarget:Boolean = !heightToSet&&isNaN(heightBy);
-			
+
 			var widthStart:Number = widthFromSet?widthFrom:widthTo - widthBy;
 			var heightStart:Number = heightFromSet?heightFrom:heightTo - heightBy;
 			var widthEnd:Number;
@@ -100,7 +100,7 @@ package org.flexlite.domUI.effects
 				else
 					widthEnd = widthStart+widthBy;
 				motionPaths.push(new MotionPath("width"+index,widthStart,widthEnd));
-				
+
 				if(heightFromUseTarget)
 					heightStart = target["height"];
 				if(heightToUseTarget)
@@ -110,11 +110,11 @@ package org.flexlite.domUI.effects
 				else
 					heightEnd = heightStart+heightBy;
 				motionPaths.push(new MotionPath("height"+index,heightStart,heightEnd));
-				
-				var xStart:Number = target["x"]+(target["width"]-widthStart)*originX/target["width"];;
+
+				var xStart:Number = target["x"]+(target["width"]-widthStart)*originX/target["width"];
 				var xEnd:Number = target["x"]+(widthEnd-target["width"])*originX/target["width"];
 				motionPaths.push(new MotionPath("x"+index,xStart,xEnd));
-				
+
 				var yStart:Number = target["y"]+(target["height"]-heightStart)*originY/target["height"];
 				var yEnd:Number = target["y"]+(heightEnd-target["height"])*originY/target["height"];
 				motionPaths.push(new MotionPath("y"+index,yStart,yEnd));
@@ -122,7 +122,7 @@ package org.flexlite.domUI.effects
 			}
 			return motionPaths;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */

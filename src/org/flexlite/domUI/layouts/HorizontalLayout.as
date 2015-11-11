@@ -220,7 +220,7 @@ package org.flexlite.domUI.layouts
                 var preferredWidth:Number = layoutElement.preferredWidth;
                 var preferredHeight:Number = layoutElement.preferredHeight;
                 measuredWidth += preferredWidth;
-                measuredWidth -= isNaN(elementSizeTable[i])?typicalWidth:elementSizeTable[i];;
+                measuredWidth -= isNaN(elementSizeTable[i])?typicalWidth:elementSizeTable[i];
                 measuredHeight = Math.max(measuredHeight,preferredHeight);
             }
             var padding:Number = isNaN(_padding)?0:_padding;

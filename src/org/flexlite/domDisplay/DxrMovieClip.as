@@ -79,7 +79,7 @@ package org.flexlite.domDisplay
 		public function set frameRate(value:int):void
 		{
 			if(value<1)
-				value==1;
+				value=1;
 			if(value>60)
 				value = 60;
 			if(value==_frameRate)

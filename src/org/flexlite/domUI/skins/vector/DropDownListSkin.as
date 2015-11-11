@@ -3,7 +3,7 @@ package org.flexlite.domUI.skins.vector
 	import flash.display.GradientType;
 	import flash.display.Graphics;
 	import flash.events.Event;
-	
+
 	import org.flexlite.domCore.dx_internal;
 	import org.flexlite.domUI.components.Button;
 	import org.flexlite.domUI.components.DataGroup;
@@ -19,7 +19,7 @@ package org.flexlite.domUI.skins.vector
 	import org.flexlite.domUI.layouts.HorizontalAlign;
 	import org.flexlite.domUI.layouts.VerticalLayout;
 	import org.flexlite.domUI.skins.VectorSkin;
-	
+
 	use namespace dx_internal;
 	/**
 	 * DropDownList默认皮肤
@@ -32,30 +32,30 @@ package org.flexlite.domUI.skins.vector
 			super();
 			this.states = ["normal","open","disabled"];
 		}
-		
+
 		public var dataGroup:DataGroup;
-		
+
 		public var dropDown:Group;
-		
+
 		public var openButton:Button;
-		
+
 		public var popUp:PopUpAnchor;
-		
+
 		public var scroller:Scroller;
 		/**
 		 * 滚动条皮肤
-		 */		
+		 */
 		public var scrollerSkinName:Object;
-		
+
 		public var labelDisplay:Label;
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		override protected function createChildren():void
 		{
 			super.createChildren();
-			
+
 			openButton = new Button();
 			openButton.left = 0;
 			openButton.right = 0;
@@ -65,7 +65,7 @@ package org.flexlite.domUI.skins.vector
 			openButton.skinName = DropDownListButtonSkin;
 			openButton.addEventListener("stateChanged",onStateChange);
 			addElement(openButton);
-			
+
 			labelDisplay = new Label();
 			labelDisplay.verticalAlign = "middle";
 			labelDisplay.maxDisplayedLines = 1;
@@ -80,7 +80,7 @@ package org.flexlite.domUI.skins.vector
 		}
 		/**
 		 * 状态改变
-		 */		
+		 */
 		private function onStateChange(event:Event):void
 		{
 			var state:String = (openButton.skin as IStateClient).currentState;
@@ -93,15 +93,15 @@ package org.flexlite.domUI.skins.vector
 			else
 			{
 				labelDisplay.textColor = themeColors[0];
-				labelDisplay.applyTextFormatNow();;
+				labelDisplay.applyTextFormatNow();
 				labelDisplay.filters = null;
 			}
 		}
-		
+
 		private var backgroud:UIComponent;
 		/**
 		 * dropDown尺寸发生改变
-		 */		
+		 */
 		private function onResize(event:ResizeEvent=null):void
 		{
 			var w:Number = isNaN(dropDown.width)?0:dropDown.width;
@@ -113,15 +113,15 @@ package org.flexlite.domUI.skins.vector
 				0, 0, w, h, cornerRadius,
 				borderColors[0], 1,
 				verticalGradientMatrix(0, 0, w, h ),
-				GradientType.LINEAR, null, 
-				{ x: 1, y: 1, w: w - 2, h: h - 2, r: crr1},g); 
+				GradientType.LINEAR, null,
+				{ x: 1, y: 1, w: w - 2, h: h - 2, r: crr1},g);
 			//绘制填充
 			drawRoundRect(
 				1, 1, w - 2, h - 2, crr1,
 				0xFFFFFF, 1,
-				verticalGradientMatrix(1, 1, w - 2, h - 2),"linear",null,null,g); 
+				verticalGradientMatrix(1, 1, w - 2, h - 2),"linear",null,null,g);
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -142,13 +142,13 @@ package org.flexlite.domUI.skins.vector
 						popUp.displayPopUp = false;
 					break;
 				case "disabled":
-					
+
 					break;
 			}
 		}
 		/**
 		 * 创建popUp
-		 */		
+		 */
 		private function createPopUp():void
 		{
 			//dataGroup
@@ -201,6 +201,6 @@ package org.flexlite.domUI.skins.vector
 			if(hostComponent)
 				hostComponent.findSkinParts();
 		}
-		
+
 	}
 }

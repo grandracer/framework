@@ -233,7 +233,7 @@ package org.flexlite.domUI.components.supportClasses
 			value -= minimum;
 			if (interval != Math.round(interval))
 			{
-				const parts:Array = (new String(1 + interval)).split(".");
+				const parts:Array = (1 + interval).toString().split(".");
 				scale = Math.pow(10, parts[1].length);
 				maxValue *= scale;
 				value = Math.round(value * scale);
